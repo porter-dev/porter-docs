@@ -13,7 +13,7 @@ The infrastructure provisioned by Porter depends on which application source you
 
 If you're connecting an existing image registry, Porter will only provision the Kubernetes cluster without an image registry. You can deploy your existing images directly from the connected registry, and any image that Porter builds from your Git repositories will be pushed to the registry that you've connected to Porter.
 
-# Connecting to Github
+## Connecting to Github
 
 Porter uses a GitHub App to authorize and gain access to your GitHub repositories. In order to be able to deploy applications through GitHub repositories, you must first authorize the Porter GitHub App to have access to them.
 
@@ -29,7 +29,7 @@ Once the Porter Github App is authorized, you can see a list of accounts and org
 
 You can install the app into more repositories by clicking on "Install Porter in more repositories". Note that if you are part of an organization, Porter will show you access to every repository that the app is installed into regardless of who it was installed by. So, if your organization does not grant you access to install applications, having an admin install the application into the appropriate repositories is sufficient.
 
-# Connecting an Existing Image Registry
+## Connecting an Existing Image Registry
 
 If you already have an existing image registry, you can connect your existing registry during project creation. If you don't have an image registry or don't know what that means, skip this step. Porter will handle the rest.
 

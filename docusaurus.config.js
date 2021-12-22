@@ -14,10 +14,8 @@ module.exports = {
       disableSwitch: true,
       respectPrefersColorScheme: false,
     },
-    image: "/img/logo.png",
-    metaImage: "/img/logo.png",
     navbar: {
-      hideOnScroll: true,
+      hideOnScroll: false,
       title: "Porter Documentation",
       logo: {
         alt: "Porter",
@@ -39,7 +37,7 @@ module.exports = {
       },
     ],
   ],
-  scripts: [{ src: "/scripts/telemetry.js" }],
+  scripts: [],
   plugins: [
     [
       "@docusaurus/plugin-content-docs",

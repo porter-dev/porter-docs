@@ -4,7 +4,7 @@ slug: /getting-started/provisioning-on-aws
 title: Provisioning on AWS
 ---
 
-# Quick Installation
+## Quick Installation
 
 Porter runs on a Kubernetes cluster in your own AWS account. You can provision a cluster through Porter by inputting the credentials of your AWS IAM account. You can also delete all resources provided by Porter with one-click.
 
@@ -26,7 +26,7 @@ Porter runs on a Kubernetes cluster in your own AWS account. You can provision a
 
 Optionally, if you don't want to grant Porter **AdministratorAccess**, you can follow these additional steps to configure the minimum required policy **(otherwise, skip to step 3).**
 
-## Permissions for EKS
+### Permissions for EKS
 
 To instead specify the minimum required policy, select **Attach existing policies directly**, and click on **Create Policy**.
 
@@ -193,48 +193,21 @@ Click on **Create a Policy** and give it a name to create a custom policy.
 
 3. After creating the user, you will be shown an **Access key ID** and **Secret access key**. Copy both of these directly into Porter's AWS Credentials form along with your preferred AWS region:
 
+![image](https://files.readme.io/d346040-Screen_Shot_2021-10-25_at_10.18.23_PM.png)
+
 > 📘
 >
 > You can find your default AWS region by navigating to [console.aws.amazon.com](https://console.aws.amazon.com). After being automatically redirected, your region will appear at the start of the URL.
-> [block:image]
-> {
-> "images": [
-
-    {
-      "image": [
-        "https://files.readme.io/d346040-Screen_Shot_2021-10-25_at_10.18.23_PM.png",
-        "Screen Shot 2021-10-25 at 10.18.23 PM.png",
-        1126,
-        713,
-        "#222428"
-      ]
-    }
-
-]
-}
-[/block]
 
 <br />
 
 After clicking **Continue**, you will be prompted to name your cluster and select the instance types you want to provision your cluster with. If you are uncertain about which instance type to select, please see [this answer](https://docs.porter.run/docs/provisioning-infrastructure#which-instance-type-should-i-select).
-[block:image]
-{
-"images": [
-{
-"image": [
-"https://files.readme.io/8c0d8db-Screen_Shot_2021-10-25_at_10.22.53_PM.png",
-"Screen Shot 2021-10-25 at 10.22.53 PM.png",
-872,
-611,
-"#24252a"
-]
-}
-]
-}
-[/block]
+
+![image](https://files.readme.io/8c0d8db-Screen_Shot_2021-10-25_at_10.22.53_PM.png)
+
 Once you click **Provision Resources**, Porter will install all the requisite resources in your AWS account using the IAM credentials you have created. This may take up to 30 minutes.
 
-# Deleting Provisioned Resources
+## Deleting Provisioned Resources
 
 > 🚧 AWS Deletion Instability
 >

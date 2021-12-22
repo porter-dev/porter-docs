@@ -202,6 +202,15 @@ const sidebars = {
       items: ["preview-environments/overview"],
       collapsible: false,
     },
+    {
+      type: "category",
+      label: "Other Guides",
+      items: [
+        "other/team-management-and-authorization",
+        "other/kubernetes-101",
+      ],
+      collapsible: false,
+    },
   ],
 };
 

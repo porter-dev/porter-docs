@@ -4,4 +4,28 @@ slug: /getting-started/deploying-first-application
 title: Deploying your First Application
 ---
 
-TODO: Instructions for deploying a first application.
+Now that you've deployed your Porter cluster, you can deploy your first application to the cluster! In this example, we'll deploy a pre-built `hello-world` application to verify that everything is working correctly.
+
+## Launch your Application
+
+On the Porter dashboard, navigate to the **Launch** tab. From here, click on the **Web** option and click **Launch template**. On the next screen, name your application `porter-hello-world` and select **Docker registry** as the application type. When asked to select a container image, simply input `public.ecr.aws/o1j4x7p4/porter-hello-world:latest` as follows:
+
+![image](https://files.readme.io/b776b78-Screen_Shot_2021-12-22_at_3.47.33_PM.png)
+
+On the following screen, simply hit **Deploy**, and you'll see the application show up in the dashboard!
+
+## View your Application
+
+After clicking on the application `porter-hello-world` on the dashboard, the application will have a link to a public URL:
+
+![image](https://files.readme.io/b523ef1-hello_world.png)
+
+Clicking on this URL will render the following page:
+
+![image](https://files.readme.io/502165e-Screen_Shot_2021-12-22_at_3.55.23_PM.png)
+
+The demo application was successfully deployed!
+
+## Application Cleanup
+
+To delete this application, click on the **Settings** tab of the application, scroll to the bottom, and click **Delete porter-hello-world**.
