@@ -1,0 +1,67 @@
+---
+id: adding-updating-gh-app
+slug: /deploying-applications/deploying-from-github/adding-updating-gh-app
+title: Adding/Updating the Porter Github App
+---
+
+In order to be able to deploy applications through GitHub repositories, you must first authorize the Porter GitHub App to access your repositories.
+
+# Adding the Porter Github App
+
+## When Creating a New Project
+
+When you're creating a new project, you will be guided through several steps to get the project set up correctly. The first step is connecting your Github repositories, which looks like the following:
+
+![image](https://files.readme.io/5c53fba-Screen_Shot_2021-12-17_at_12.33.32_PM.png)
+
+Clicking on "Connect to Github" will redirect you to a Github authorization and installation screen. From this screen, you can select which repositories Porter can access, and you can add or request installation in organization repositories:
+
+![image](https://files.readme.io/ab3457c-Screen_Shot_2021-12-17_at_12.37.16_PM.png)
+
+After clicking "Install and Authorize," you will be redirected back to the Porter dashboard. You can view which accounts the Porter Github App is able to access by clicking on "Account Settings" through the dropdown on the top right:
+
+![image](https://files.readme.io/bf21922-Screen_Shot_2021-12-17_at_12.39.02_PM.png)
+
+## When Joining an Existing Project
+
+After you've logged in to the Porter dashboard and joined an existing project, you can click on "Account Settings" through the dropdown on the top right, and then click "Connect your Github account":
+
+![image](https://user-images.githubusercontent.com/25856165/125105942-0acb6d00-e0ad-11eb-8254-6660d390daea.png)
+
+The rest of the steps are identical to the [when creating a new project](#when-creating-a-new-project) section above.
+
+# Requesting Installation
+
+If you are trying to install the Github app into an organization repository, but you do not have full permissions for a repository, the Github installation will result in a **requested installation** for the Porter Github App. Your organization admin will be requested to approve this Github App Installation. If you request Github installation for this organization, you can direct users to this document, which should answer any questions that your organization admin may have.
+
+**Approving the Installation as an Organization Admin**
+
+As the organization admin, you should receive an email when a new Github App installation is requested. You can also navigate to your organization settings page and click on the Installed Github Apps tab, where you will see a request as follows:
+
+![image](https://files.readme.io/f650eb6-Screen_Shot_2021-12-17_at_1.02.29_PM.png)
+
+# Verifying Installation
+
+After you have installed the Porter Github App, you can verify that the Github app in the correct repositories by navigating to the "Launch" tab, selecting "Git repository" as the application source, and viewing the linked repositories (**note:** you must have provisioned a cluster in order to view this screen):
+
+![image](https://files.readme.io/2e42bee-Screen_Shot_2021-12-17_at_1.06.46_PM.png)
+
+# Updating the Porter Github App
+
+If the Porter Github App is not installed in the correct repositories, you should navigate to "Account Settings" through the dropdown on the top right, and then click **Install Porter in more repositories**.
+
+![image](https://files.readme.io/af2daf2-account_settings.png)
+
+# Porter Github App Permissions
+
+Note that when you grant access to the Porter Github App, you are granting access through your account, which means that other users invited to your project will **not** be able to view or use any of the personal repositories that you have linked. However, if the user has access to a Github organization, they will be able to use same the Github App installation in the organization, and thus the same organization repositories.
+
+The Porter Github App requires several Github permissions in order to operate properly:
+
+**Repository permissions**
+
+**Actions (Read & write):** required for Porter to write Github actions YAML files to the repository.
+**Contents (Read & write):** required for Porter to write Github actions YAML files to the repository.
+**Metadata (Read-only):** mandatory, required for Github apps that integrate with repositories.
+**Secrets (Read & write):** required for Porter to write a `PORTER_TOKEN` secret to the repository automatically. We **do not** read any secrets from the repository beyond those prefixed with `PORTER_`.
+**Workflows (Read & write):** required for Porter to write Github actions YAML files to the repository.

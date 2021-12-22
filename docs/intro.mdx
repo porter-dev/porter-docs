@@ -1,0 +1,79 @@
+---
+id: home-doc
+slug: /
+title: Introduction
+---
+
+import Link from "@docusaurus/Link";
+
+Welcome to Porter's documentation!
+
+<div class="container" style={{ padding: 0 }}>
+  <div class="row is-multiline">
+    <div class="col col--6">
+      <Link className="card" to="/" style={{ height: "100%" }}>
+        <div class="card__body">
+          <h4>Getting Started</h4>
+          <p class="card__body__small">
+            Getting started with your first project on Porter.
+          </p>
+        </div>
+      </Link>
+    </div>
+    <div class="col col--6">
+      <Link className="card" to="/hello" style={{ height: "100%" }}>
+        <div class="card__body">
+          <h4>Deploying Applications</h4>
+          <p class="card__body__small">
+            Deploy from a Github repository, Docker registry, or write your own
+            workflow.
+          </p>
+        </div>
+      </Link>
+    </div>
+    <div class="col col--6">
+      <Link className="card" to="/" style={{ height: "100%" }}>
+        <div class="card__body">
+          <h4>Managing Applications</h4>
+          <p class="card__body__small">
+            View application metrics, logs, and troubleshoot your deployments.
+          </p>
+        </div>
+      </Link>
+    </div>
+    <div class="col col--6">
+      <Link className="card" to="/" style={{ height: "100%" }}>
+        <div class="card__body">
+          <h4>Deploying Addons</h4>
+          <p class="card__body__small">
+            Deploy Postgres, Redis, Mongo and more on Porter.
+          </p>
+        </div>
+      </Link>
+    </div>
+  </div>
+</div>
+
+## What is Porter?
+
+Porter is a platform as a service (PaaS) that runs in your own cloud. It brings the magical experience of deploying an application with just a few clicks into a cloud provider of your choice, whether that is AWS, GCP, or Digital Ocean. Porter will provision and manage the underlying infrastructure for you - simply point at your repository and Porter will handle the rest, from building your application to autoscaling it.
+
+## Why Porter?
+
+Many companies that start building on a PaaS eventually migrate away from it as they scale due to technical and economic constraints. While the simplicity of these PaaS's may be appealing at first for companies that want to focus on application logic, it comes at the risk of being locked into inflexible infrastructure. Companies are thus faced with the following dilemma: build on a PaaS to move fast or run their own infrastructure to prevent problems in the future.
+
+**But what if running your own infrastructure was just as easy as, if not easier than, building on a PaaS?**
+
+Porter gives you the best of both worlds by bringing the simplicity of a PaaS into your own infrastructure that you can fully control. If necessary, you can always directly interact with the infrastructure Porter is managing through your cloud provider and it is even possible to eject your infrastructure from Porter. There is no vendor lock-in.
+
+**Simply put, Porter is a PaaS that you can't outgrow.**
+
+## Relationship with Kubernetes
+
+Under the hood, Porter runs on top of Kubernetes. Porter provisions and manages each cloud provider's native Kubernetes offering (i.e. EKS on AWS, GKE on GCP, and Digital Ocean Kubernetes) while abstracting away all its complexity.
+
+Some find it daunting that Porter runs on top of Kubernetes. For teams who don't know Kubernetes, **Kubernetes is an incidental implementation detail**. You don't need to know anything about Kubernetes other than a few basic concepts to use Porter. It just _happens_ that Kubernetes is the best underlying layer to deliver the PaaS experience on. In fact, most PaaS's actually run on top of Kubernetes although that detail is hidden away from the end user. Many of our users who have migrated from another PaaS experience no learning curve.
+
+## Internal Deployment Platform
+
+If your team is already familiar with Kubernetes, Porter can be an internal deployment platform that simplifies your existing operations. If you are looking to simplify your existing Kubernetes setup for your team, [contact us](mailto:contact@porter.run) for a demo.

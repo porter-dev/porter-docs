@@ -1,0 +1,39 @@
+---
+id: overview
+slug: /deploying-applications/overview
+title: Overview
+description: An overview of deploying applications on Porter.
+---
+
+# Deployment Options
+
+Porter supports multiple deployment options for different types of applications. These deployment methods are as follows:
+
+- [Deploying from a Github Repository](doc:deploying-from-a-github-repository) - Porter will automatically update your applications on a push to a specific branch in a Github repository.
+- [Deploying from a Docker Registry](doc:deploying-from-a-docker-registry) - you can create and update applications from an existing Docker registry that you manage.
+- [Deploying from the CLI](doc:deploying-from-the-cli-1) - you can create and update applications directly from the CLI.
+- [Using your own CI Tool](doc:using-your-own-ci-tool) - you can configure your CI tools, such as CircleCI, TravisCI, or Gitlab, to deploy to Porter.
+
+**Which Deployment Method Should I Use?**
+
+If you're unsure of which deployment method to use, we highly recommend deploying from a Github repository.
+
+# Types of Applications
+
+There are three types of applications you can deploy on Porter: **web services**, **workers**, and **jobs**.
+
+# Web Service
+
+Web services are processes that are constantly running and are exposed to either external or internal traffic. This includes any servers or web applications - most of your deployments should fall into this category.
+
+You can choose to expose your application to external traffic on a custom domain - Porter will automatically [secure your endpoints with SSL certificates](https://docs.porter.run/v2.0/docs/https-certificates). Alternatively, you can expose your web service to only internal traffic (i.e. accessible only by other deployments in the same cluster).
+
+# Worker
+
+Worker processes are constantly running processes that are exposed to neither external nor internal traffic. Workers have no URLs or ports - they're best suited for background processes, queuing systems, etc. Most of the configuration options are identical to web applications, excluding the options that manage the endpoint.
+
+# Jobs and Cron Jobs
+
+Jobs are processes that run to completion. They're best suited for ephemeral tasks such as database migration or clean up scripts.
+
+On Porter, you can run either **one-off jobs** or **cron jobs**. One-off jobs can be triggered manually through the dashboard or using the CLI. Cron jobs run periodically on a schedule specified as a cron expression. Please see the [Running Jobs and Cron Jobs](doc:overview-3) documentation section for more information.

@@ -1,0 +1,60 @@
+---
+id: tailscale
+slug: /deploying-addons/tailscale
+title: Tailscale
+---
+
+# About
+
+Tailscale is a [VPN](https://cybernews.com/what-is-vpn/#how-does-a-vpn-work) that creates a secure network between your servers, computers, and cloud instances. You can deploy a Tailscale <a href="https://tailscale.com/kb/1019/subnets/" target="_blank">relay node</a> to Porter to directly connect to services on your cluster by IP from your local machine.
+
+# Deployment
+
+If you don't already have Tailscale installed on your local device, head to the official <a href="https://tailscale.com/download" target="_blank">downloads</a> page and then create a new account. Once you have created your account and installed Tailscale locally, head to the **Community Add-ons** tab on Porter and select the **Tailscale** add-on.
+
+You will be prompted to enter a **Tailscale Auth Key** to connect to your VPN. To generate an auth key, navigate to the Tailscale <a href="https://login.tailscale.com/admin/settings/" target="_blank">admin panel</a> and go to **Settings** -> **Auth Keys** and select **Generate one-off key**:
+
+![image](https://files.readme.io/d586304-Screen_Shot_2021-06-23_at_4.05.37_PM.png)
+
+Copy the generated auth key and paste it into the **Tailscale Auth Key** field on Porter.
+
+> Note: Tailscale auth keys expire after 90 days by default. To disable key expiry, consult the [Tailscale docs](https://tailscale.com/kb/1028/key-expiry/).
+
+# Subnet Routes
+
+In order to route traffic from your local device to services on the cluster, it is necessary to specify the IP range of the subnet that will be advertised to your Tailscale VPN. If you don't know your cluster IP range, you can follow these steps:
+
+First, enter a placeholder for the **Subnet Routes** field (ex: "blank") and deploy the Tailscale add-on. Note, you won't be able to connect to any services through your VPN yet. Navigate to your deployed Tailscale instance and view the **Services** tab:
+
+![image](https://files.readme.io/3ce31de-Screen_Shot_2021-06-23_at_5.01.50_PM.png)
+
+The first two IP address blocks of all your listed services should be the same (for instance, 10.123.xxx.xxx or 123.45.xxx.xxx). Navigate to the **Tailscale Settings** tab and set your **Subnet Routes** field to "**<YOUR_IP_PREFIX>**.0.0/16" where **<YOUR_IP_PREFIX>** is the first two IP address blocks shared by your services.
+
+For example, if all your services begin with 10.123.xxx.xxx, the subnet range you enter should be 10.123.0.0/16.
+
+After setting your IP range, select **Deploy**.
+
+# Enable Subnet Routes
+
+The final step is to enable your subnet routes from the Tailscale admin panel. Navigate to the Tailscale <a href="https://login.tailscale.com/admin/machines">admin panel</a> and go to the **Machines** tab. You should see your deployed relay node with a gray subnet IP range. Under your machine settings, select **Review route settings...** and then enable your subnet routes:
+
+![image](https://files.readme.io/8a215dd-Screen_Shot_2021-06-23_at_4.49.58_PM.png)
+
+![image](https://files.readme.io/254fc6b-Screen_Shot_2021-06-23_at_4.55.02_PM.png)
+
+After enabling your subnet routes, you will be able to connect to services running on Porter by IP from your local machine!
+
+# Example Connection Test
+
+To confirm that the Tailscale relay node is working, we will connect to a Redis instance deployed through Porter from our local machine. First, ensure that Tailscale is running on your local device and that you are connected to your Tailscale VPN.
+
+![image](https://files.readme.io/a2a68e9-Screen_Shot_2021-06-23_at_5.02.55_PM.png)
+
+From the Tailscale add-on, we can see that the cluster IP of our Redis instance is 10.147.248.69. We can connect to this Redis instance by IP using the Redis CLI:
+
+```
+$ redis-cli -h 10.147.248.69 -p 6379\n10.147.248.69:6379> ping
+PONG
+```
+
+Ping successful!
