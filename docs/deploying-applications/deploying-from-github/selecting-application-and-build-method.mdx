@@ -4,58 +4,44 @@ slug: /deploying-applications/deploying-from-github/selecting-application-and-bu
 title: Selecting an Application and Build Method
 ---
 
-To deploy your application, first navigate to the "Launch" tab, where you will see three types of applications to deploy: web, worker, or job. To understand the difference between these three application types, see the [Overview](doc:overview-1).
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
-# Selecting an Application and Build Method
+To deploy your application, first navigate to the "Launch" tab, where you will see three types of applications to deploy: web, worker, or job. To understand the difference between these three application types, see the description of the [types of applications](../overview#types-of-applications). Then follow the four steps below to get your application linked up.
 
-## Step 1: Selecting an application
+## Selecting an Application and Build Method
+
+### Step 1: Selecting an application
 
 After selecting an application type and clicking "Launch template," you should see two options for launching your application: **Git Repository** and **Docker Registry**. Select **Git Repository**. You should then be able to search for your connected repositories: if you are not seeing your desired repository, see the [Adding/Updating the Porter Github App](doc:adding-the-porter-github-app) guide.
 
-## Step 2: Selecting a Branch
+### Step 2: Selecting a Branch
 
 Once you click on a repository, you will be asked to select a branch for that repository. This branch is **the source branch where you want your application to be deployed from on pushes to that branch.** For example, if you are setting up a production cluster, you might want your applications to be deployed on pushes to the `production` branch. If your branches are protected using Github's branch protection rules, see the [working with protected branches](#working-with-protected-branches) section below.
 
-## Step 3: Selecting a Build Method
+### Step 3: Selecting a Build Method
 
 After you select a branch, you will see your repository contents listed. What you select in this case depends on if you already have a Dockerfile, or if you'd like for Porter to detect and build your application automatically using a buildpack.
 
-### Deploying from a Dockerfile
+import DockerfileSection from "./_dockerfile-section.mdx";
+import BuildpackSection from "./_buildpack-section.mdx";
 
-If you already have a Dockerfile, you should locate the Dockerfile in your repository and select it. Once you click on the Dockerfile, you will be asked if you'd like to set the Docker build context to a different directory. The Docker build context is the current working directory of your Dockerfile -- in other words, where your Dockerfile assumes your application should be built from. For example, if your application code and entrypoint exist in the root of your repository, but your Dockerfile exists under the path `./docker/Dockerfile`, you should select the root of the repository as the Docker build context.
+<Tabs>
+  <TabItem value="dockerfile" label="Dockerfile" default>
+    <DockerfileSection />
+  </TabItem>
+  <TabItem value="buildpack" label="Buildpack">
+    <BuildpackSection />
+  </TabItem>
+</Tabs>
 
-Once you have selected a Dockerfile and your Docker build context, clicking **Continue** will bring you your application's runtime configuration section. See [step 4](#step-4-deploy-your-application) for details.
-
-### Deploying using a Buildpack
-
-If you do not have a Dockerfile, Porter can detect and build your application automatically. First, select the path to your application directory, and then select **Continue**.
-
-> **`Procfile` Support:** If you have a `Procfile` in the root of your repository, Porter will detect this and ask which process you'd like to run for your application. Porter will not run all processes in the Procfile per application: it will only run a single process.
-
-After this step, you will see a summary of your selected settings, with an unexpanded **Buildpack Settings** section. If you expand this section, you will see the runtime that Porter detected automatically, along with the builder that Porter will use. For example:
-
-![image](https://files.readme.io/34fc154-Screen_Shot_2021-12-20_at_7.46.02_AM.png)
-
-By default, Porter uses the `Heroku-20` stack to build your application. Documentation for common runtimes can be found here:
-
-| Buildpack                                                                        | Requirements                                                         |
-| :------------------------------------------------------------------------------- | :------------------------------------------------------------------- |
-| [Ruby](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-ruby)      | [Requirements](https://devcenter.heroku.com/articles/ruby-support)   |
-| [Node.js](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-nodejs) | [Requirements](https://devcenter.heroku.com/articles/nodejs-support) |
-| [Python](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-python)  | [Requirements](https://devcenter.heroku.com/articles/python-support) |
-| [Java](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-java)      | [Requirements](https://devcenter.heroku.com/articles/java-support)   |
-| [PHP](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-php)        | [Requirements](https://devcenter.heroku.com/articles/php-support)    |
-| [Go](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-go)          | [Requirements](https://devcenter.heroku.com/articles/go-support)     |
-
-For understanding how to customize your buildpack settings, see the [customizing buildpacks](#customizing-buildpacks) section of the docs.
-
-## Step 4: Deploy your Application
+### Step 4: Deploy your Application
 
 The last step is to set the runtime configuration for your application, and deploy it to your Porter cluster! This configuration varies by application type -- for example, for web applications you can set the port that the application should be listening on, whether to expose this application to external traffic on a custom domain, and override the start command. For a detailed explanation of these configuration options for each application type, see the following guides:
 
-- [Web Applications](doc:web-applications)
-- [Worker Applications](doc:worker-applications)
-- [Jobs and Cron Jobs](doc:overview-3)
+- [Web Applications](../runtime-configuration-options/web-applications)
+- [Worker Applications](../runtime-configuration-options/worker-applications)
+- [Jobs and Cron Jobs](../../running-jobs/overview)
 
 After clicking **Deploy**, you can navigate to your application, your deployment will use a placeholder Docker image until the Github Action that deploys your application has completed for the first time:
 
@@ -63,11 +49,11 @@ After clicking **Deploy**, you can navigate to your application, your deployment
 
 You can monitor the status of the generated GitHub Action by checking the **Actions** tab in your linked repository.
 
-# Working with Protected Branches
+## Working with Protected Branches
 
 At the moment, it is recommended that you turn off the branch protection rule so that Porter can write the file to the repository, and then turn it back on immediately afterwards. Porter will have built-in support for working with protected branches in a future version.
 
-# Customizing Buildpacks
+## Customizing Buildpacks
 
 Porter has built-in support `Heroku` and `Paketo` builders. The `Heroku` builder can use either the [`Heroku-18`](https://devcenter.heroku.com/articles/heroku-18-stack) stack or the [`Heroku-20`](https://devcenter.heroku.com/articles/heroku-20-stack), while the `Paketo` builder uses the [Paketo Full Builder](https://paketo.io/docs/concepts/builders/#full) to build your application. If your application fails to build using one builder, it is recommended that you attempt the other builders which may detect configuration parameters slightly differently.
 

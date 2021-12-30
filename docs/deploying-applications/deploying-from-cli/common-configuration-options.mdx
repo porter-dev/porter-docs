@@ -1,0 +1,39 @@
+---
+id: common-configuration-options
+slug: /deploying-applications/deploying-from-cli/common-configuration-options
+title: Common Configuration Options
+---
+
+## Set Container Port
+
+```yaml
+container:
+  port: 3000
+```
+
+## Set Container Start Command
+
+```yaml
+container:
+  command: npm start
+```
+
+## Private Application
+
+This configuration only applies to `web` applications.
+
+```yaml
+ingress:
+  enabled: false
+```
+
+## Custom Domain
+
+This configuration only applies to `web` applications.
+
+```yaml
+ingress:
+  custom_domain: true
+  hosts:
+    - my-app.example.com
+```

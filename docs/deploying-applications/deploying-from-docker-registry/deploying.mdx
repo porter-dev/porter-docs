@@ -1,0 +1,55 @@
+---
+id: deploying
+slug: /deploying-applications/deploying-from-docker-registry/deploying
+title: Deploying from an Existing Docker Registry
+---
+
+## Deploying your Docker Image
+
+:::info Prerequisites
+
+If you would like to deploy from a private Docker registry, make sure that you've following the guide for [linking an existing registry](./linking-existing-registry).
+
+:::
+
+To deploy your application, first navigate to the **Launch** tab, where you will see three types of applications to deploy: web, worker, or job. To understand the difference between these three application types, see the description of the [types of applications](../overview#types-of-applications). After selecting your application type and selecting **Launch Template**, you should select the **Docker Registry** option:
+
+INSERT IMAGE
+
+Next, you can either select a public or private Docker image to deploy from:
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import DeployPublicSection from "./_deploy-public-section.mdx";
+import DeployPrivateSection from "./_deploy-private-section.mdx";
+
+<Tabs>
+  <TabItem value="private" label="Private" default>
+    <DeployPrivateSection />
+  </TabItem>
+  <TabItem value="public" label="Public">
+    <DeployPublicSection />
+  </TabItem>
+</Tabs>
+
+Under **Additional Settings**, you can configure remaining options like your service's port and computing resources. Once you're ready, click the **Deploy** button to launch. You will be redirected to the cluster dashboard where you should see your newly deployed service.
+
+## Updating your Docker Image
+
+### Manual Updates
+
+To update the Docker image which your application is running, open the application on the Porter dashboard. If your Docker image has a unique image tag, you can navigate to the **Settings** tab and select a new tag for your image:
+
+If your Docker image tag is `latest` (or you re-use the same image tag for different images), there are different options depending on if you are running an web/worker or a job:
+
+- If running a **web or worker** application, navigate to the **Main** tab and hit "Deploy" with no configuration changes. This will re-pull the image by default. (TODO IMAGE AND TAB)
+- If running a **job** application, set the configuration option in the Advanced section! (TODO IMAGE AND TAB)
+
+### Programmatic Updates
+
+To programmatically redeploy your service (for instance, from a CI pipeline), you will need to call your service's custom webhook. You can find your webhook by expanding your deployed service and going to the **Settings** tab.
+
+![Webhook](https://user-images.githubusercontent.com/11699655/120046959-ac25c480-c013-11eb-8b2f-e6bfd704d7fc.png "webhook in the settings tab")
+
+Make sure to replace the `YOUR_COMMIT_HASH` field with the tag of your Docker image.

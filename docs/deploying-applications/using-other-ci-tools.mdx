@@ -1,7 +1,79 @@
 ---
 id: using-other-ci-tools
 slug: /deploying-applications/using-other-ci-tools
-title: Using other CI Tools
+title: Using Other CI Tools
 ---
 
-TODO
+You can easily use other CI tools to deploy your application.
+
+Add section on env variables and porter CLI + public image.
+
+## Advanced Options
+
+This section provides an overview of how you might use certain subcommands to fully customize your deployment pipeline. By default, the command `porter update` performs four steps: gets the environment variables for the application, builds a new Docker container from the source files, pushes a new Docker image to the remote registry, and calls a Porter endpoint to re-deploy the application. However, we designed this command to be modular: if you would like to add intermediate steps in your own build process, you can call different `porter update` sub-commands separately:
+
+- [`porter update get-env`](#porter-update-get-env) - prints the build environment variables to the terminal or a file.
+- [`porter update build`](#porter-update-build) - builds the Docker container used for deployment.
+- [`porter update push`](#porter-update-push) - pushes the Docker container used for deployment to a remote registry.
+- [`porter update config`](#porter-update-config) - calls a Porter endpoint to re-deploy the application with new configuration.
+
+### `porter update get-env`
+
+Gets environment variables for a deployment for a specified application given by the `--app` flag. By default, env variables are printed via stdout for use in downstream commands:
+
+```sh
+porter update get-env --app example-app | xargs
+```
+
+Output can also be written to a dotenv file via the `--file` flag, which should specify the destination path for a `.env` file. For example:
+
+```sh
+porter update get-env --app example-app --file .env
+```
+
+### `porter update build`
+
+Builds a new version of the application specified by the `--app` flag. Depending on the configured settings, this command may work automatically or will require a specified `--method` flag.
+
+If you have configured the Dockerfile path and/or a build context for this application, this command will by default use those settings, so you just need to specify the `--app` flag:
+
+```sh
+porter update build --app example-app
+```
+
+If you have not linked the build-time requirements for this application, the command will use a local build. By default, the cloud-native buildpacks builder will automatically be run from the current directory. If you would like to change the build method, you can do so by using the `--method` flag, for example:
+
+```sh
+porter update build --app example-app --method docker
+```
+
+When using `--method docker`, you can specify the path to the Dockerfile using the `--dockerfile` flag. This will also override the Dockerfile path that you may have linked for the application:
+
+```sh
+porter update build --app example-app --method docker --dockerfile ./prod.Dockerfile
+```
+
+### `porter update push`
+
+Pushes a new image for an application specified by the --app flag. This command uses the image repository saved in the application config by default. For example, if an application "nginx" was created from the image repo "gcr.io/snowflake-123456/nginx", the following command would push the image "gcr.io/snowflake-123456/nginx:new-tag":
+
+```sh
+porter update push --app nginx --tag new-tag
+```
+
+This command will not use your pre-saved authentication set up via `docker login`, so if you are using an image registry that was created outside of Porter, make sure that you have linked it via `porter connect`.
+
+### `porter update config`
+
+Updates the configuration for an application specified by the --app flag, using the configuration given by the --values flag. This will trigger a new deployment for the application with new configuration set. Note that this will merge your existing configuration with configuration specified in the --values file. For example:
+
+```sh
+porter update config --app example-app --values my-values.yaml
+```
+
+You can update the configuration with only a new tag with the --tag flag, which will only update
+the image that the application uses if no --values file is specified:
+
+```sh
+porter update config --app example-app --tag custom-tag
+```

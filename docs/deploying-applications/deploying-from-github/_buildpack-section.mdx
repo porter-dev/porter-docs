@@ -1,0 +1,24 @@
+If you do not have a Dockerfile, Porter can detect and build your application automatically. First, select the path to your application directory, and then select **Continue**.
+
+:::info Procfile Support
+
+If you have a `Procfile` in the root of your repository, Porter will detect this and ask which process you'd like to run for your application. Porter will not run all processes in the Procfile per application: it will only run a single process.
+
+:::
+
+After this step, you will see a summary of your selected settings, with an unexpanded **Buildpack Settings** section. If you expand this section, you will see the runtime that Porter detected automatically, along with the builder that Porter will use. For example:
+
+![image](https://files.readme.io/34fc154-Screen_Shot_2021-12-20_at_7.46.02_AM.png)
+
+By default, Porter uses the `Heroku-20` stack to build your application. Documentation for common runtimes can be found here:
+
+| Buildpack                                                                        | Requirements                                                         |
+| :------------------------------------------------------------------------------- | :------------------------------------------------------------------- |
+| [Ruby](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-ruby)      | [Requirements](https://devcenter.heroku.com/articles/ruby-support)   |
+| [Node.js](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-nodejs) | [Requirements](https://devcenter.heroku.com/articles/nodejs-support) |
+| [Python](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-python)  | [Requirements](https://devcenter.heroku.com/articles/python-support) |
+| [Java](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-java)      | [Requirements](https://devcenter.heroku.com/articles/java-support)   |
+| [PHP](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-php)        | [Requirements](https://devcenter.heroku.com/articles/php-support)    |
+| [Go](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-go)          | [Requirements](https://devcenter.heroku.com/articles/go-support)     |
+
+For understanding how to customize your buildpack settings, see the [customizing buildpacks](#customizing-buildpacks) section of the docs.

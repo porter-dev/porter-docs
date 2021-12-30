@@ -1,0 +1,22 @@
+Run the following command on the Porter CLI:
+
+```sh
+porter connect ecr
+```
+
+You will be prompted for the region your ECR instance belongs to. For example:
+
+```sh
+Please provide the AWS region where the ECR instance is located.
+AWS Region: us-east-2
+```
+
+The CLI will then ask if you'd like to set up an IAM user in your AWS account automatically, or if you'd like to enter your credentials manually. If you specify yes, Porter will create a user with the policy `AmazonEC2ContainerRegistryFullAccess` that can push/pull images from ECR. If you'd like more fine-grained access control, specify no and create an IAM user with custom permissions, and generate an access key/secret for this user and input this information into the CLI.
+
+Finally, the CLI will prompt you to enter a name for the registry. Here you may enter any name you like.
+
+```sh
+Give this registry a name: my-awesome-registry
+```
+
+That's it! If you navigate to the "Launch" tab in the dashboard, you should see your existing ECR images in the "Registry" section.

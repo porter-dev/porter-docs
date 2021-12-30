@@ -24,6 +24,7 @@ const sidebars = {
         {
           type: "category",
           label: "Provisioning Infrastructure",
+          collapsible: true,
           className: "expandable-subdoc",
           link: {
             type: "doc",
@@ -44,7 +45,11 @@ const sidebars = {
       type: "category",
       label: "Deploying Applications",
       items: [
-        "deploying-applications/overview",
+        {
+          type: "doc",
+          label: "Overview",
+          id: "deploying-applications/overview",
+        },
         {
           type: "category",
           label: "Deploying from a Github Repository",
@@ -69,6 +74,7 @@ const sidebars = {
           },
           items: [
             "deploying-applications/deploying-from-docker-registry/linking-existing-registry",
+            "deploying-applications/deploying-from-docker-registry/deploying",
           ],
         },
         {
@@ -80,9 +86,17 @@ const sidebars = {
             id: "deploying-applications/deploying-from-cli",
           },
           items: [
-            "deploying-applications/deploying-from-cli/creating-an-application",
-            "deploying-applications/deploying-from-cli/updating-an-application",
-            "deploying-applications/deploying-from-cli/additional-cli-commands",
+            {
+              type: "doc",
+              label: "Creating an Application",
+              id: "deploying-applications/deploying-from-cli/creating-an-application",
+            },
+            {
+              type: "doc",
+              label: "Updating an Application",
+              id: "deploying-applications/deploying-from-cli/updating-an-application",
+            },
+            "deploying-applications/deploying-from-cli/common-configuration-options",
           ],
         },
         "deploying-applications/using-other-ci-tools",
@@ -192,6 +206,12 @@ const sidebars = {
     },
     {
       type: "category",
+      label: "Command Line Interface (CLI)",
+      items: ["command-line-interface/installation"],
+      collapsible: false,
+    },
+    {
+      type: "category",
       label: "Alerting",
       items: ["alerting/slack-notifications"],
       collapsible: false,
@@ -208,6 +228,7 @@ const sidebars = {
       items: [
         "other/team-management-and-authorization",
         "other/kubernetes-101",
+        "other/deleting-dangling-resources",
       ],
       collapsible: false,
     },

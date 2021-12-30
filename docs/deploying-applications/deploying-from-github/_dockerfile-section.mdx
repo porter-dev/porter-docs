@@ -1,0 +1,9 @@
+If you already have a Dockerfile, you should locate the Dockerfile in your repository and select it. Once you click on the Dockerfile, you will be asked if you'd like to set the Docker build context to a different directory.
+
+:::info Docker Build Context
+
+The Docker build context is the current working directory of your Dockerfile -- in other words, where your Dockerfile assumes your application should be built from. For example, if your application code and entrypoint exist in the root of your repository, but your Dockerfile exists under the path `./docker/Dockerfile`, you should select the root of the repository as the Docker build context.
+
+:::
+
+Once you have selected a Dockerfile and your Docker build context, clicking **Continue** will bring you your application's runtime configuration section. See [step 4](#step-4-deploy-your-application) for details.

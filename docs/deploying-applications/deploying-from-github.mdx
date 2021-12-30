@@ -6,11 +6,12 @@ title: Deploying from a Github Repository
 
 Porter lets you deploy a service directly from a Git repository. By default, services on Porter automatically update whenever there is a push to the primary branch (usually `main` or `master`) of the connected repo.
 
-> 📘 Prerequisites
->
-> - A repository (public or private) hosted on GitHub
-> - A Kubernetes cluster and container registry linked to Porter (linked by default if you provisioned through Porter). **Note:** If you didn't provision through Porter, consult the docs to link an existing cluster or registry.
-> - (Optional) A Dockerfile that generates the Docker image you would like to run on Porter
+:::info Prerequisites
+
+- A repository (public or private) hosted on GitHub
+- A Kubernetes cluster and container registry linked to Porter (linked by default if you following the [Getting Started guide](../getting-started/overview))
+
+:::
 
 These docs will guide you through getting your applications set up and integrated with Github:
 
