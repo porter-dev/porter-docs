@@ -4,4 +4,35 @@ slug: /cli/installation
 title: Installation
 ---
 
-Instructions for how to install the CLI.
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import MacInstallationSection from "./_mac-installation.mdx";
+import LinuxInstallationSection from "./_linux-installation.mdx";
+import WindowsInstallationSection from "./_windows-installation.mdx";
+
+To install the Porter CLI, see the OS-specific instructions below.
+
+<Tabs>
+  <TabItem value="mac" label="Mac" default>
+    <MacInstallationSection />
+  </TabItem>
+  <TabItem value="linux" label="Linux" default>
+    <LinuxInstallationSection />
+  </TabItem>
+  <TabItem value="windows" label="Windows" default>
+    <WindowsInstallationSection />
+  </TabItem>
+</Tabs>
+
+After installing, run the following to verify your installation:
+
+```
+porter version
+```
+
+To authenticate the CLI, run:
+
+```
+porter auth login
+```

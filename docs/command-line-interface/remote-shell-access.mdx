@@ -1,0 +1,41 @@
+---
+id: remote-shell-access
+slug: /cli/remote-shell-access
+title: Remote Shell Access to an Existing Application
+---
+
+:::info Prerequisites
+
+- You've logged in to the Porter CLI after running [`porter auth login`](./porter-auth)
+- You're connected to the correct project by running [`porter projects list`](./porter-project), and set the project via [`porter config set-project [PROJECT_ID]`](./porter-config)
+- You're connected to the correct cluster by running [`porter clusters list`](./porter-cluster), and set the cluster via [`porter config set-cluster [PROJECT_ID]`](./porter-config)
+
+:::
+
+The `porter run` command allows users to execute a command on a remote container:
+
+```
+porter run [APP_NAME] -- [COMMAND] [args...]
+```
+
+The `APP_NAME` is the name of the application on the Porter dashboard (this can be a release either in the "Applications" or the "Jobs" tab).
+
+## Examples
+
+If you have a release called `web`, and you would like to enter an interactive shell in the container attached to `web`:
+
+```sh
+porter run web -- sh
+```
+
+To test that remote execution is working, you can run:
+
+```sh
+porter run web -- echo "hello world"
+```
+
+To run in a namespace other than `default`, use the `--namespace` flag:
+
+```sh
+porter run web --namespace other-namespace -- sh
+```

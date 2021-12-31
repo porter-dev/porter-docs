@@ -1,0 +1,64 @@
+---
+id: porter-job
+slug: /cli/command-reference/porter-job
+title: porter job
+---
+
+:::info Prerequisites
+
+- You've logged in to the Porter CLI after running [`porter auth login`](./porter-auth)
+- You're connected to the correct project by running [`porter projects list`](./porter-project), and set the project via [`porter config set-project [PROJECT_ID]`](./porter-config)
+- You're connected to the correct cluster by running [`porter clusters list`](./porter-cluster), and set the cluster via [`porter config set-cluster [PROJECT_ID]`](./porter-config)
+
+:::
+
+<br></br>
+
+`porter job` contains commands for interacting with jobs.
+
+### `porter job update-images`
+
+Updates the image tag of all jobs in a namespace which use a specific image. Note that for all jobs with version `<= v0.4.0`, this will trigger a new run of a manual job. However, for versions
+`>= v0.5.0`, this will not create a new run of the job.
+
+#### Examples
+
+To update all jobs deployed from the image repo `my-image.registry.io` with the new tag `newtag`, you can run:
+
+```
+porter job update-images --image-repo-uri my-image.registry.io --tag newtag
+```
+
+This command is namespace-scoped and uses the default namespace. To specify a different namespace, use the `--namespace` flag:
+
+```
+porter job update-images --namespace custom-namespace --image-repo-uri my-image.registry.io --tag newtag
+```
+
+### `porter job wait`
+
+Waits for a job with a given name and namespace to complete a run. If the job completes successfully, this command exits with exit code 0. Otherwise, this command exits with exit code 1. This command is most useful when run after `porter update config`. For example:
+
+```sh
+# write a values.yaml file to ensure a job run does not occur
+echo '
+paused: false
+' > values-job.yaml
+
+porter update config --app <JOB_NAME> --namespace <NAMESPACE> --values ./values-job.yaml
+porter job wait --name <JOB_NAME> --namespace <NAMESPACE>
+```
+
+#### Examples
+
+Wait for a job run of `job-example` to run:
+
+```
+porter job wait --name job-example
+```
+
+This command is namespace-scoped and uses the default namespace. To specify a different namespace, use the `--namespace` flag:
+
+```
+porter job wait --name job-example --namespace custom-namespace
+```

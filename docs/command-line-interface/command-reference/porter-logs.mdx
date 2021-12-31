@@ -1,0 +1,27 @@
+---
+id: porter-logs
+slug: /cli/command-reference/porter-logs
+title: porter logs
+---
+
+:::info Prerequisites
+
+- You've logged in to the Porter CLI after running [`porter auth login`](./porter-auth)
+- You're connected to the correct project by running [`porter projects list`](./porter-project), and set the project via [`porter config set-project [PROJECT_ID]`](./porter-config)
+- You're connected to the correct cluster by running [`porter clusters list`](./porter-cluster), and set the cluster via [`porter config set-cluster [PROJECT_ID]`](./porter-config)
+
+:::
+
+<br></br>
+
+`porter logs` logs the output from a given application. If an application has multiple instances, you will be prompted to select the instance. If you would like to tail logs from an application, run the command with the `--follow` flag:
+
+```
+porter logs [APP_NAME] --follow
+```
+
+To locate an application in a different namespace, run with the `--namespace` flag:
+
+```
+porter logs [APP_NAME] --namespace custom-ns
+```

@@ -207,7 +207,33 @@ const sidebars = {
     {
       type: "category",
       label: "Command Line Interface (CLI)",
-      items: ["command-line-interface/installation"],
+      items: [
+        "command-line-interface/installation",
+        "command-line-interface/basic-usage",
+        "command-line-interface/remote-shell-access",
+        {
+          type: "category",
+          label: "Command Reference",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "command-line-interface/command-reference",
+          },
+          items: [
+            "command-line-interface/command-reference/porter-auth",
+            "command-line-interface/command-reference/porter-cluster",
+            "command-line-interface/command-reference/porter-config",
+            "command-line-interface/command-reference/porter-connect",
+            "command-line-interface/command-reference/porter-create",
+            "command-line-interface/command-reference/porter-job",
+            "command-line-interface/command-reference/porter-logs",
+            "command-line-interface/command-reference/porter-project",
+            "command-line-interface/command-reference/porter-registry",
+            "command-line-interface/command-reference/porter-run",
+            "command-line-interface/command-reference/porter-update",
+          ],
+        },
+      ],
       collapsible: false,
     },
     {

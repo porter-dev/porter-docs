@@ -1,0 +1,71 @@
+---
+id: basic-usage
+slug: /cli/basic-usage
+title: Basic Usage
+---
+
+To set up and authenticate with the CLI, run the following command:
+
+```
+porter auth login
+```
+
+This command will automatically set a project ID and a cluster ID in your default configuration file, if you have a project and cluster. You can always view your default configuration by running `porter config`. You can see all projects that you have access to by running:
+
+```
+porter projects list
+```
+
+And you can set a project via:
+
+```
+porter config set-project [PROJECT_ID]
+```
+
+Next, you can see all clusters that you have access to via:
+
+```
+porter clusters list
+```
+
+And similarly, you can set the cluster:
+
+```
+porter config set-cluster [CLUSTER_ID]
+```
+
+One useful way to make sure that you have access to a cluster is by running:
+
+```
+porter cluster namespace list
+```
+
+## Environment Variables and Global Flags
+
+The following environment variables can be set in order to authenticate to and target a specific Porter instance, project, or cluster:
+
+```
+PORTER_PROJECT
+PORTER_CLUSTER
+PORTER_HOST
+PORTER_TOKEN
+```
+
+These are also supported as global flags:
+
+```
+--cluster uint   cluster ID of Porter cluster
+--host string    host URL of Porter instance (default "https://dashboard.getporter.dev")
+--project uint   project ID of Porter project
+--token string   token for Porter authentication
+```
+
+## Viewing Help Instructions
+
+You can view help instructions for any command via the `-h`, or `--help` flag. For example:
+
+```
+porter -h
+porter cluster -h
+porter cluster namespace -h
+```

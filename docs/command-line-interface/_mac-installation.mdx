@@ -1,0 +1,33 @@
+Run the following command to grab the latest binary:
+
+```sh
+{
+name=$(curl -s https://api.github.com/repos/porter-dev/porter/releases/latest | grep "browser_download_url.*/porter_.*_Darwin_x86_64\.zip" | cut -d ":" -f 2,3 | tr -d \")
+name=$(basename $name)
+curl -L https://github.com/porter-dev/porter/releases/latest/download/$name --output $name
+unzip -a $name
+rm $name
+}
+```
+
+Then move the file into your bin:
+
+```sh
+chmod +x ./porter
+sudo mv ./porter /usr/local/bin/porter
+```
+
+To download a specific version of the CLI:
+
+```sh
+{
+# NOTE: replace this line with the version
+version=v0.6.1
+name=porter-$version.zip
+curl -L https://github.com/porter-dev/porter/releases/download/${version}/porter_${version}_Darwin_x86_64.zip --output $name
+unzip -a $name
+rm $name
+chmod +x ./porter
+sudo mv ./porter /usr/local/bin/porter
+}
+```
