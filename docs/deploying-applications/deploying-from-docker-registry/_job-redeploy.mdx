@@ -1,0 +1,11 @@
+If running a **Job** application, make sure that you have set the `Image Pull Policy` option in the **Advanced** tab to `Always`, and hit **Save Config**:
+
+![Job Redeploy](https://files.readme.io/dd38557-imagepullpolicy.png "Job Redeployment")
+
+Subsequent job runs will re-pull the image every time.
+
+:::caution
+
+If you are running a large amount of jobs, pulling the image on each job run may incur a large cost. Consult your image registry pricing to ensure that you do not get charged excessively.
+
+:::

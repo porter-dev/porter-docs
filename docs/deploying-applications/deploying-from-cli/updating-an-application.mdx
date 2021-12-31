@@ -14,7 +14,7 @@ porter update --app [app-name]
 
 Where `app-name` is the name of a web, worker, or job application on the Porter dashboard. The default behavior of this command is to build a new image using the local filesystem, push this image to the connect image repository, and re-deploy the application on the Porter dashboard. However, each of these steps can be configured.
 
-As with the `porter create` command, you can update the configuration that an application uses by passing in the `--values` flag, which should pass the filepath to a `values.yaml` file. **Note that this command merges the `values.yaml` file with your existing configuration, so you should only specify options that you would like to modify**. For example, the following `values.yaml` file:
+As with the [`porter create` command](./creating-an-application), you can update the configuration that an application uses by passing in the `--values` flag, which should pass the filepath to a `values.yaml` file. **Note that this command merges the `values.yaml` file with your existing configuration, so you should only specify options that you would like to modify**. For example, the following `values.yaml` file:
 
 ```yaml
 container:

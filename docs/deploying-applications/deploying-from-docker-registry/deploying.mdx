@@ -14,7 +14,7 @@ If you would like to deploy from a private Docker registry, make sure that you'v
 
 To deploy your application, first navigate to the **Launch** tab, where you will see three types of applications to deploy: web, worker, or job. To understand the difference between these three application types, see the description of the [types of applications](../overview#types-of-applications). After selecting your application type and selecting **Launch Template**, you should select the **Docker Registry** option:
 
-INSERT IMAGE
+![Registry Option](https://files.readme.io/3cc385a-registry.png)
 
 Next, you can either select a public or private Docker image to deploy from:
 
@@ -41,10 +41,21 @@ Under **Additional Settings**, you can configure remaining options like your ser
 
 To update the Docker image which your application is running, open the application on the Porter dashboard. If your Docker image has a unique image tag, you can navigate to the **Settings** tab and select a new tag for your image:
 
+![Tag](https://files.readme.io/cb15f99-source_Tag.png "Settings Tab Tag")
+
 If your Docker image tag is `latest` (or you re-use the same image tag for different images), there are different options depending on if you are running an web/worker or a job:
 
-- If running a **web or worker** application, navigate to the **Main** tab and hit "Deploy" with no configuration changes. This will re-pull the image by default. (TODO IMAGE AND TAB)
-- If running a **job** application, set the configuration option in the Advanced section! (TODO IMAGE AND TAB)
+import WebWorkerRedeploy from "./_web-worker-redeploy.mdx";
+import JobRedeploy from "./_job-redeploy.mdx";
+
+<Tabs>
+  <TabItem value="webworker" label="Web/Worker" default>
+    <WebWorkerRedeploy />
+  </TabItem>
+  <TabItem value="job" label="Job">
+    <JobRedeploy />
+  </TabItem>
+</Tabs>
 
 ### Programmatic Updates
 

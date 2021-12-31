@@ -9,17 +9,19 @@ import TabItem from "@theme/TabItem";
 
 Porter supports linking a private Docker container registry to your project. This container registry is used to deploy Docker containers onto a cluster and push new versions of the image to your registry from CI/CD workflows. We support the following container registries:
 
-- Amazon Elastic Container Registry (ECR)
-- Google Container Registry (GCR)
-- DigitalOcean Container Registry
-- Docker Hub
-- Other registries which implement the [Registry HTTP API v2](https://docs.docker.com/registry/spec/api/)
+- [Amazon Elastic Container Registry (ECR)](#amazon-elastic-container-registry-ecr)
+- [Google Container Registry (GCR)](#google-container-registry-gcr)
+- [DigitalOcean Container Registry](#digital-ocean-container-registry)
+- [Docker Hub](#docker-hub)
+- [Other registries](#customprivate-registries) which implement the [Registry HTTP API v2](https://docs.docker.com/registry/spec/api/)
 
 The following guide will show you how to link your container registries depending on your registry provider. Some container registries can only be linked from the CLI, so make sure that you've following the [installation guide](../../cli/installation) for the CLI.
 
 ## Amazon Elastic Container Registry (ECR)
 
-Linking ECR can either be done from the dashboard or the CLI:
+In order to link ECR, an AWS IAM user must be created in your AWS account with access to push, pull and list images from the ECR registry. If you are logged in via the AWS CLI, Porter can generate these credentials for you automatically when you run `porter connect ecr`. Alternatively, you must first [create an ECR user](#creating-an-aws-ecr-user) and have those credentials ready for the next step!
+
+You can link ECR using either the dashboard or the CLI:
 
 import ECRDashboardSection from "./_ecr-dashboard-section.mdx";
 import ECRCLISection from "./_ecr-cli-section.mdx";
@@ -33,9 +35,59 @@ import ECRCLISection from "./_ecr-cli-section.mdx";
   </TabItem>
 </Tabs>
 
+To verify that the ECR registry was linked correctly, you can navigate to the **Integrations** tab, click **Docker Registry**, and expand a registry to make sure you see all repositories listed.
+
+:::info Troubleshooting
+
+If you are unable to connect to your registry, double-check that the user exists, the region is correct, and the credentials were copied correctly.
+
+:::
+
+### Creating an AWS ECR User
+
+Before linking your ECR registry, you can create an AWS IAM user that has access to ECR, and then generate AWS credentials. To create a new user, go to your <a href="https://console.aws.amazon.com" target="_blank">AWS console</a> and navigate to **IAM** -> **Users** and select **Add user**:
+
+![AWS add user](https://files.readme.io/5b8d083-Screen_Shot_2020-12-30_at_1.01.49_PM.png "Screen Shot 2020-12-30 at 1.01.49 PM.png")
+
+Give your user a name and select **Programmatic access**. After selecting **Next**, you will be prompted to set permissions for your user, choose **Attach existing policies directly** and search for the policy `AmazonEC2ContainerRegistryFullAccess` that can push/pull images from ECR.
+
+:::info
+
+If you'd like to customize the IAM policy, you can create a new policy and attach that to the user directly.
+
+:::
+
+After creating this user, you will see an AWS Access Key and Secret -- make sure you have these credentials ready, and link your ECR registry using the instructions above.
+
 ## Google Container Registry (GCR)
 
-Linking GCR can either be done from the dashboard or the CLI:
+### Creating a GCP Service Account for GCR
+
+Before you can connect to an existing GCR instance, you must create a service account with permission to push/pull from GCR. To do this, follow the steps below.
+
+1. First, go to your [Google Cloud console](https://console.cloud.google.com/) and navigate to **IAM & Admin** -> **Service Accounts**:
+
+![GCP service accounts](https://files.readme.io/c93b89a-Screen_Shot_2021-02-26_at_8.34.21_AM.png "Screen Shot 2021-02-26 at 8.34.21 AM.png")
+
+2. Select **Create Service Account**:
+
+![Create SA](https://files.readme.io/8480097-Screen_Shot_2021-02-26_at_8.36.48_AM.png "Screen Shot 2021-02-26 at 8.36.48 AM.png")
+
+3. Name your service account (for example, "porter-gcr-access"), grant the service account **Storage Admin** permissions, then select **Done**:
+
+![Storage admin permissions](https://files.readme.io/3357638-Screen_Shot_2021-02-26_at_8.39.58_AM.png "Screen Shot 2021-02-26 at 8.39.58 AM.png")
+
+4. After creating the service account, you will be redirected to the list of service accounts. Find the row with the newly created service account, and select "Manage keys" in the "Actions" column:
+
+![Manage keys SA](https://files.readme.io/55283c8-Screen_Shot_2021-02-26_at_8.44.08_AM.png "Screen Shot 2021-02-26 at 8.44.08 AM.png")
+
+5. Finally, press the "Add key" dropdown and select "Create new key". After choosing the **JSON** key type, your key file will be **automatically** downloaded:
+
+![JSON key download](https://files.readme.io/21c8ec4-Screen_Shot_2021-02-26_at_8.45.48_AM.png "Screen Shot 2021-02-26 at 8.45.48 AM.png")
+
+### Linking GCR
+
+Now that you have a service account and JSON key downloaded, linking GCR can either be done from the dashboard or the CLI:
 
 import GCRDashboardSection from "./_gcr-dashboard-section.mdx";
 import GCRCLISection from "./_gcr-cli-section.mdx";

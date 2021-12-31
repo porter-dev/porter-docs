@@ -99,7 +99,6 @@ const sidebars = {
             "deploying-applications/deploying-from-cli/common-configuration-options",
           ],
         },
-        "deploying-applications/using-other-ci-tools",
         {
           type: "category",
           label: "HTTPS and Domains",
@@ -109,12 +108,13 @@ const sidebars = {
             id: "deploying-applications/https-and-domains",
           },
           items: [
-            "deploying-applications/https-and-domains/ssl-certificates",
             "deploying-applications/https-and-domains/porter-domains",
             "deploying-applications/https-and-domains/custom-domains",
             "deploying-applications/https-and-domains/wildcard-domains",
+            "deploying-applications/https-and-domains/ssl-certificates",
           ],
         },
+        "deploying-applications/using-other-ci-tools",
         "deploying-applications/zero-downtime-deployments",
         "deploying-applications/environment-groups",
         {

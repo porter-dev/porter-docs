@@ -4,4 +4,66 @@ slug: /deploying-applications/https-and-domains/custom-domains
 title: Custom Domains
 ---
 
-TODO
+The setup for a custom domain involves two steps: setting up a DNS record to point to that domain, and then deploying your application to deploy to that domain:
+
+- [DNS Setup](#dns-setup)
+- [Deploy your Application](#deploying-on-the-custom-domain)
+
+## DNS Setup
+
+You must first find the DNS name assigned to the load balancer of your cluster. This can be found by navigating to the Porter dashboard and copying the load balancer address:
+
+![Ingress IP Address](https://files.readme.io/8d36f12-ingressip.png "Ingress IP Address")
+
+If you're on Digital Ocean or Google Cloud Platform, this will be an IP address -- see [DO/GCP section](#digital-oceangoogle-cloud-platform) for setup. If you're on AWS, this will be a domain name to your load balancer -- see the [AWS section](#amazon-web-services) for setup.
+
+### Digital Ocean/Google Cloud Platform
+
+On Digital Ocean and GCP Kubernetes clusters, the load balancer address copied above will be an IP address. Thus, you can simply create an `A` record for your domain/subdomain and point it to this IP address. Once DNS has propagated, you can now [deploy your application using the custom domain](#deploying-on-the-custom-domain)!
+
+:::info
+
+After you complete the previous steps, it might take up to 30 minutes for DNS records to fully propagate. Please wait before deploying your applications until the DNS propagation is complete. You can check this using tools like [dnschecker.org](https://dnschecker.org) or running `nslookup <your-domain>`.
+
+:::
+
+### Amazon Web Services
+
+On EKS, the load balancer will be a domain name, rather than an IP address. The next steps depend on whether you are setting up a domain apex (i.e. root domain) or a subdomain:
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+import DomainApexSection from "./_aws-apex-domain.mdx";
+import SubdomainSection from "./_aws-subdomain.mdx";
+
+<Tabs>
+  <TabItem value="apex" label="Apex Domain" default>
+    <DomainApexSection />
+  </TabItem>
+  <TabItem value="subdomain" label="Subdomain">
+    <SubdomainSection />
+  </TabItem>
+</Tabs>
+
+Once DNS has propagated, you can now [deploy your application using the custom domain](#deploying-on-the-custom-domain)!
+
+:::info
+
+After you complete the previous steps, it might take up to 30 minutes for DNS records to fully propagate. Please wait before deploying your applications until the DNS propagation is complete. You can check this using tools like [dnschecker.org](https://dnschecker.org) or running `nslookup <your-domain>`.
+
+:::
+
+## Deploying on the Custom Domain
+
+To deploy an application on the domain, make sure the **Expose to external traffic** option is set add your domain in the **Configure Custom Domain** section, as follows:
+
+![Custom Domain Deployment](https://files.readme.io/dea636d-customdomain.png "Custom Domain Deployment")
+
+That's it! Your application should be running on your custom domain within a few minutes.
+
+:::info
+
+If you experience SSL certificate errors, see the [SSL Certificates](./ssl-certificates) doc for debugging SSL certificate errors.
+
+:::

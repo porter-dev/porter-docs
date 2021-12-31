@@ -1,0 +1,9 @@
+Because AWS creates a load balancer that is assigned a domain name, rather than an IP address, you must use a DNS provider which allows for `ALIAS` records, since `CNAME` records are not supported for apex domains. Create an `ALIAS` record for your root domain which points to the load balancer address that you copied above.
+
+If you've purchased your domain through a service like GoDaddy or Namecheap that does not support `ALIAS` records, we recommend that you switch your service to Route 53: please follow [this guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html) to manage your existing domains with Route 53, and then see the instructions below for Route 53 setup.
+
+#### Route 53 Instructions
+
+When creating a new record, leave the Record name empty and select the **Alias to Network Load Balancer** option. After you choose the region your EKS cluster is provisioned in, you will be able to select the URL you've copied from Step 2 from the dropdown menu. Set Record type as **A record** and create the record.
+
+![A Record](https://files.readme.io/bdbd78d-Screen_Shot_2021-01-18_at_6.56.04_PM.png "Screen Shot 2021-01-18 at 6.56.04 PM.png")

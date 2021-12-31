@@ -1,1 +1,7 @@
-TODO
+In order to link an existing ECR registry from the dashboard, navigate to the **Integrations** tab and select **Docker Registry**. Then, select **Add a Registry** in top right, and select **Google Container Registry**. Give the registry a name, for example `my-awesome-registry`:
+
+![GCR](https://files.readme.io/4f9ee9d-Screen_Shot_2021-12-31_at_7.50.52_AM.png)
+
+Next, input the GCP credentials that you downloaded above, and enter your registry URL, the the form `[GCR_DOMAIN]/[GCP_PROJECT_ID]`. For most, the GCR domain will be `gcr.io` (for more information, [click here](https://cloud.google.com/container-registry/docs/overview#registries)).
+
+Then, click **Save Settings**.

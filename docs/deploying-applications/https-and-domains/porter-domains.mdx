@@ -1,7 +1,17 @@
 ---
 id: porter-domains
 slug: /deploying-applications/https-and-domains/porter-domains
-title: Porter Domains (`onporter.run`)
+title: Porter Domains
 ---
 
-TODO
+Porter provides subdomains of `onporter.run` to use for testing and staging environments. A DNS record is automatically created on an `onporter.run` domain when a **Web** application is deployed with the **Expose to external traffic** option is set:
+
+![Porter Domains](https://files.readme.io/4feba90-expose.png "Porter Domains")
+
+Porter makes no guarantees about the availability of the Porter DNS server that manages this domain, so for production applications it is recommended that you use another DNS provider. Unlike Heroku, **do not make a CNAME record to these domains for production applications.**
+
+:::info DNS Propagation Delay
+
+Although DNS propagation is usually done within a few seconds to minutes, it can take up to several hours before DNS is propagated for a Porter domain.
+
+:::
