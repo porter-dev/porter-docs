@@ -4,16 +4,47 @@ slug: /deploying-applications/deploying-from-github/customizing-github-workflow
 title: Customizing your Github Workflow
 ---
 
-It is possible to customize your Github workflow file after it is written to the repository. Full documentation for writing Github actions files can be found [here](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions). This guide documents some common use-cases that you can use to set up your Github actions files.
+It is possible to customize your Github workflow file after it is written to the repository. Porter offers several Github actions that allow you to customize your Github actions workflows to accommodate different workflows:
 
-## Multi-Process Deployments
+- [Update a Porter deployment](https://github.com/marketplace/actions/update-porter-app) -- this action runs a full update sequence (build, push, deploy) for a specific application on Porter.
+- [Run a Porter job](https://github.com/marketplace/actions/run-porter-job) -- this action runs a job on Porter and waits for it to complete. This is most useful for running database migrations before deployment.
+- [Run any CLI command](https://github.com/marketplace/actions/run-porter-cli) -- this action allows you to run any CLI command, so that you can compose your own workflows.
 
-Applications are frequently deployed with multiple process types, such as web and workers. By default, Porter assumes that each repository runs one application type.
+:::info
 
-## Database Migrations and Jobs
+Full documentation for writing Github actions files can be found [here](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions).
 
+:::
+
+## Examples
+
+### Multi-Process Deployments
+
+Applications are frequently deployed with multiple process types, such as web and workers. By default, Porter assumes that each repository runs one application type. However, if you have multiple process types
+
+### Database Migrations and Jobs
+
+When you set up a one-time job to deploy from a Github repository, the job will **not** run automatically -- the Github action will simply update the image used to run the job.
+
+To get the Github action to run the job automatically, you can use [this Github action](https://github.com/porter-dev/porter-run-job-action). For example:
+
+```yaml
+# ... the rest of your Github action
+- name: Run Porter job
+  uses: porter-dev/porter-run-job-action@v0.1.0
+  with:
+    job: <job-name> # TODO: replace w/ name of your job
+    cluster: <cluster-id> # TODO: replace w/ cluster ID
+    project: <project-id> # TODO: replace w/ project ID
+    token: ${{ secrets.PORTER_TOKEN_12 }}
+```
+
+<!--
 ## Build-Time Environment Variables
 
 ## Running Tests
 
 ## Speeding up Docker Builds
+
+## Single-Builds
+-->

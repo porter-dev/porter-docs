@@ -4,4 +4,47 @@ slug: /managing-applications/application-troubleshooting
 title: Application Troubleshooting
 ---
 
-TODO
+## Networking Issues
+
+### Frequent Connection Resets/Dropped Connections
+
+This can be caused by a number of issues, which can either be at the application level, or at the networking level:
+
+- If your requests take longer than 30 seconds to resolve, or you are running a websocket-based application, the default read and write timeouts may not be long enough. See the [networking configuration doc](./network-configuration-options#setting-custom-readwrite-timeouts) for how to increase the read/write timeouts.
+- If you are seeing dropped connections while redeployed, follow the instructions for [zero-downtime deployments](../deploying-applications/zero-downtime-deployments).
+- If you are seeing `recv` errors in your NGINX logs, the application is sending sending a connection reset message before a response is sent. This can usually be resolved by increasing the `keepalive` value in your application code.
+
+### `413 Request Entity Too Large`
+
+This is caused by the NGINX instance rejecting requests that are too large. See the [networking configuration doc](./network-configuration-options#client-max-body-size) for how to resolve these errors.
+
+### `503 Temporarily Unavailable`
+
+The most common cause of this error is not setting the port number correctly. If not set correctly, your application will often show `503 Temporarily Unavailable` permanently when visiting the public URL. Make sure that you've set the port number correctly in the `Main` application tab. If the port number is set correctly, this is shown when there is an application restart: [see below](#application-restarts) for more information.
+
+## Application Restarts
+
+### Memory Usage
+
+One of the most common issues for application restarts is that your applications continuously runs out of memory. You can try to allocate more memory to your application, and check the **Metrics** tab to view the memory consumption. If the memory usage continues to hit the memory limit (which is set in the **Resources** tab), increase the memory limit.
+
+### Start Command
+
+When the start command isn't set correctly, application logs will never show in the dashboard, and you will see a message in the "System" logs stating that the OCI container runtime is unable to start the process. Make sure that you've set the start command correctly.
+
+:::info
+
+You can read more about the start command for web applications in the [runtime configuration options](../deploying-applications/runtime-configuration-options/web-applications#start-command).
+
+:::
+
+One method to check which commands are set in the `$PATH` of your container is to set the start command to `sleep infinity`, and then use the [`porter run` command](../cli/remote-shell-access) to get shell access. From this shell, you could for example run:
+
+```sh
+$ which <start-command>
+$ echo $PATH
+```
+
+### Application Issues
+
+Your application may be restarting due to an application-level error which is causing the process to exit. To investigate if this may be the cause of application restarts, you can view the logs for failing applications by navigating to the **Events** tab. Please see the [logging doc](#logs-for-failed-applications) for more information.

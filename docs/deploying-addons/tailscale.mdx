@@ -4,11 +4,11 @@ slug: /deploying-addons/tailscale
 title: Tailscale
 ---
 
-# About
+## About
 
 Tailscale is a [VPN](https://cybernews.com/what-is-vpn/#how-does-a-vpn-work) that creates a secure network between your servers, computers, and cloud instances. You can deploy a Tailscale <a href="https://tailscale.com/kb/1019/subnets/" target="_blank">relay node</a> to Porter to directly connect to services on your cluster by IP from your local machine.
 
-# Deployment
+## Deployment
 
 If you don't already have Tailscale installed on your local device, head to the official <a href="https://tailscale.com/download" target="_blank">downloads</a> page and then create a new account. Once you have created your account and installed Tailscale locally, head to the **Community Add-ons** tab on Porter and select the **Tailscale** add-on.
 
@@ -20,7 +20,7 @@ Copy the generated auth key and paste it into the **Tailscale Auth Key** field o
 
 > Note: Tailscale auth keys expire after 90 days by default. To disable key expiry, consult the [Tailscale docs](https://tailscale.com/kb/1028/key-expiry/).
 
-# Subnet Routes
+## Subnet Routes
 
 In order to route traffic from your local device to services on the cluster, it is necessary to specify the IP range of the subnet that will be advertised to your Tailscale VPN. If you don't know your cluster IP range, you can follow these steps:
 
@@ -34,7 +34,7 @@ For example, if all your services begin with 10.123.xxx.xxx, the subnet range yo
 
 After setting your IP range, select **Deploy**.
 
-# Enable Subnet Routes
+## Enable Subnet Routes
 
 The final step is to enable your subnet routes from the Tailscale admin panel. Navigate to the Tailscale <a href="https://login.tailscale.com/admin/machines">admin panel</a> and go to the **Machines** tab. You should see your deployed relay node with a gray subnet IP range. Under your machine settings, select **Review route settings...** and then enable your subnet routes:
 
@@ -44,7 +44,7 @@ The final step is to enable your subnet routes from the Tailscale admin panel. N
 
 After enabling your subnet routes, you will be able to connect to services running on Porter by IP from your local machine!
 
-# Example Connection Test
+## Example Connection Test
 
 To confirm that the Tailscale relay node is working, we will connect to a Redis instance deployed through Porter from our local machine. First, ensure that Tailscale is running on your local device and that you are connected to your Tailscale VPN.
 

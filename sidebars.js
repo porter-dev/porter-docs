@@ -137,12 +137,32 @@ const sidebars = {
       type: "category",
       label: "Managing Applications",
       items: [
-        "managing-applications/overview",
-        "managing-applications/viewing-application-metrics",
+        // {
+        //   type: "doc",
+        //   label: "Overview",
+        //   id: "managing-applications/overview",
+        // },
+        "managing-applications/application-metrics",
         "managing-applications/logging-options",
+        "managing-applications/alerting",
+        // TODO: alerting category
+        // {
+        //   type: "category",
+        //   label: "Alerting",
+        //   className: "expandable-subdoc",
+        //   link: {
+        //     type: "doc",
+        //     id: "managing-applications/alerting",
+        //   },
+        //   items: [
+        //     "managing-applications/alerting/slack-notifications",
+        //     "managing-applications/alerting/configuring-alerts",
+        //   ],
+        // },
+        // "managing-applications/autoscaling",
+        "managing-applications/network-configuration-options",
         "managing-applications/application-troubleshooting",
-        "managing-applications/getting-shell-access",
-        "managing-applications/version-updates",
+        "managing-applications/version-upgrades",
       ],
       collapsible: false,
     },
@@ -151,46 +171,50 @@ const sidebars = {
       label: "Deploying Addons",
       items: [
         "deploying-addons/overview",
-        {
-          type: "category",
-          label: "PostgreSQL",
-          className: "expandable-subdoc",
-          link: {
-            type: "doc",
-            id: "deploying-addons/postgresql",
-          },
-          items: [
-            "deploying-addons/postgresql/deploying",
-            "deploying-addons/postgresql/getting-shell-access",
-          ],
-        },
-        {
-          type: "category",
-          label: "Redis",
-          className: "expandable-subdoc",
-          link: {
-            type: "doc",
-            id: "deploying-addons/redis",
-          },
-          items: [
-            "deploying-addons/redis/deploying",
-            "deploying-addons/redis/getting-shell-access",
-            "deploying-addons/redis/exposing-redis-over-nginx",
-          ],
-        },
-        {
-          type: "category",
-          label: "MongoDB",
-          className: "expandable-subdoc",
-          link: {
-            type: "doc",
-            id: "deploying-addons/mongodb",
-          },
-          items: [
-            "deploying-addons/mongodb/deploying",
-            "deploying-addons/mongodb/getting-shell-access",
-          ],
-        },
+        "deploying-addons/postgresql",
+        "deploying-addons/redis",
+        "deploying-addons/mongodb",
+        // TODO: we should have separate docs on things like getting shell access to each DB
+        // {
+        //   type: "category",
+        //   label: "PostgreSQL",
+        //   className: "expandable-subdoc",
+        //   link: {
+        //     type: "doc",
+        //     id: "deploying-addons/postgresql",
+        //   },
+        //   items: [
+        //     "deploying-addons/postgresql/deploying",
+        //     "deploying-addons/postgresql/getting-shell-access",
+        //   ],
+        // },
+        // {
+        //   type: "category",
+        //   label: "Redis",
+        //   className: "expandable-subdoc",
+        //   link: {
+        //     type: "doc",
+        //     id: "deploying-addons/redis",
+        //   },
+        //   items: [
+        //     "deploying-addons/redis/deploying",
+        //     "deploying-addons/redis/getting-shell-access",
+        //     "deploying-addons/redis/exposing-redis-over-nginx",
+        //   ],
+        // },
+        // {
+        //   type: "category",
+        //   label: "MongoDB",
+        //   className: "expandable-subdoc",
+        //   link: {
+        //     type: "doc",
+        //     id: "deploying-addons/mongodb",
+        //   },
+        //   items: [
+        //     "deploying-addons/mongodb/deploying",
+        //     "deploying-addons/mongodb/getting-shell-access",
+        //   ],
+        // },
         "deploying-addons/tailscale",
         "deploying-addons/wallarm",
         "deploying-addons/datadog",
@@ -201,7 +225,11 @@ const sidebars = {
     {
       type: "category",
       label: "Running Jobs and Cron Jobs",
-      items: ["running-jobs/overview"],
+      items: [
+        "running-jobs/overview",
+        "running-jobs/deploying-jobs",
+        "running-jobs/advanced-options",
+      ],
       collapsible: false,
     },
     {
@@ -236,18 +264,12 @@ const sidebars = {
       ],
       collapsible: false,
     },
-    {
-      type: "category",
-      label: "Alerting",
-      items: ["alerting/slack-notifications"],
-      collapsible: false,
-    },
-    {
-      type: "category",
-      label: "Preview Environments",
-      items: ["preview-environments/overview"],
-      collapsible: false,
-    },
+    // {
+    //   type: "category",
+    //   label: "Preview Environments",
+    //   items: ["preview-environments/overview"],
+    //   collapsible: false,
+    // },
     {
       type: "category",
       label: "Other Guides",

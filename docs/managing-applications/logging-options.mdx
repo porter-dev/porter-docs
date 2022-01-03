@@ -4,4 +4,52 @@ slug: /managing-applications/logging-options
 title: Logging Options
 ---
 
-TODO
+By default, Porter comes with several logging options that will be sufficient for many use-cases. If you'd prefer to use a third-party provider to manage your logs, Porter offers easy deployments of [Datadog](#datadog) or [LogDNA](#logdna).
+
+## Built-In Logging
+
+### Live Logs
+
+Clicking into a Porter application will bring you to the **Status** tab, which generates live logs for your application. It will retrieve a history of `400` log lines from your application, and will live-stream these logs to the frontend.
+
+![Colored Logs](https://files.readme.io/b52521a-ansi_colors.png "Logs Screenshot")
+
+Note that if your application is re-deployed successfully, these logs will no longer be available.
+
+:::info
+
+You can also stream logs to your terminal by running the [`porter logs`](../cli/command-reference/porter-logs) command.
+
+:::
+
+### Logs for Failed Applications
+
+:::info Prerequisites
+
+- The `Porter Agent` must be installed in your cluster. This can be installed by navigating to the `Events` tab of an application, and if the agent isn't already installed, you will be given an option to install it.
+
+:::
+
+For application instances that have failed (exited due to non-zero exit code, out-of-memory errors, etc), a 100-line log history will be available for that application. This allows you to debug stack traces or view the logs from the application failure. These logs are available by clicking on the corresponding event in the `Events` tab:
+
+![Events](https://files.readme.io/90f803e-Screen_Shot_2022-01-03_at_8.46.35_AM.png "Events")
+
+## Logging Addons
+
+There are several logging addons that can be deployed to preserve logs in a third-party cloud.
+
+### Datadog
+
+[Datadog](https://datadoghq.com) is a powerful monitoring and security platform that gives you visibility into end-to-end traces, application metrics, logs, and infrastructure. You can read more about deploying Datadog on Porter [here](../deploying-addons/datadog).
+
+### LogDNA
+
+[LogDNA](https://www.logdna.com/) is a popular logging management system. This can be deployed by navigating to the **Launch** tab, selecting **Community Add-ons** and selecting the LogDNA chart. You will be prompted for a LogDNA ingestion key: please follow directions from https://app.logdna.com/pages/add-source to obtain this key:
+
+![LogDNA Deployment](https://files.readme.io/7d7f8b2-Screen_Shot_2021-05-18_at_12.27.16_PM.png "LogDNA Deployment")
+
+:::info
+
+LogDNA will forward all Kubernetes logs, not just logs from your applications. Please monitor your LogDNA usage closely to avoid unexpected costs.
+
+:::

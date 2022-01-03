@@ -1,0 +1,57 @@
+---
+id: network-configuration-options
+slug: /managing-applications/network-configuration-options
+title: Network Configuration Options
+---
+
+## Customizing Network Settings for an Application
+
+Most of the time, you can customize the NGINX configuration by adding an "Ingress Annotation" when deploying a web service. This can be found in the "Advanced" tab of the web template:
+
+![Advanced tab ingress](https://files.readme.io/fcfa8a2-Screen_Shot_2021-06-02_at_5.15.26_PM.png "Screen Shot 2021-06-02 at 5.15.26 PM.png")
+
+To add an annotation, simply click "Add row" and add key-value pairs for the annotation.
+
+:::info
+
+This document attempts to cover the most common use-cases. To view the full list of annotations, [go here](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations).
+
+:::
+
+### Setting Custom Read/Write Timeouts
+
+Read/write timeouts are very application-specific, and are subject to change on the Porter templates. For example, if you have a websocket application that does not handle dropped connections gracefully, you may be inclined to set your read/write timeout to be much higher than what is standard (~30 seconds). For those coming from Heroku, the Heroku router enforces a write timeout of 30 seconds, and will keep a connection alive if a single byte is sent within a 55 second window.
+
+On Porter, you can configure your own read/write timeouts by adding annotations:
+
+```
+nginx.ingress.kubernetes.io/proxy-connect-timeout: "60s"
+nginx.ingress.kubernetes.io/proxy-read-timeout: "60s"
+nginx.ingress.kubernetes.io/proxy-send-timeout: "60s"
+```
+
+For an explanation of these values:
+
+| Annotation                                          | Description                                                            |
+| :-------------------------------------------------- | :--------------------------------------------------------------------- |
+| `nginx.ingress.kubernetes.io/proxy-connect-timeout` | The timeout for NGINX to establish a connection with your application. |
+| `nginx.ingress.kubernetes.io/proxy-send-timeout`    | The timeout for NGINX to transmit a request to your application.       |
+| `nginx.ingress.kubernetes.io/proxy-read-timeout`    | The timeout for NGINX to read a response from your application.        |
+
+It is thus recommended to set these values with the ordering `proxy-connect-timeout <= proxy-send-timeout <= proxy-read-timeout`.
+
+### Client Max Body Size
+
+If you are getting undesired `413 Request Entity Too Large` errors, you can increase the maximum size of the client request by setting the field [client_max_body_size](http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size). You can do this by adding the following annotation:
+
+```yaml
+nginx.ingress.kubernetes.io/proxy-body-size: 8m
+```
+
+This will set the maximum client request body size to 8 megabytes.
+
+:::info
+
+To learn more about NGINX units, see [this document](http://nginx.org/en/docs/syntax.html).
+
+:::

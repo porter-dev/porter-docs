@@ -4,11 +4,11 @@ slug: /deploying-addons/wallarm
 title: Wallarm
 ---
 
-# About
+## About
 
 Wallarm is a platform that lets you protect and monitor your APIs, similarly to WAF. You can deploy a <a href="https://docs.wallarm.com/admin-en/installation-kubernetes-en/" target="_blank">Wallarm Ingress Controller</a> for Kubernetes to Porter to monitor and protect your APIs against threats like SQL injection and XSS attacks.
 
-# Deployment
+## Deployment
 
 Head to the **Community Add-ons** tab on Porter and select the **Wallarm-Ingress** add-on.
 
@@ -18,7 +18,7 @@ Copy the generated token and paste it into the **Cloud WAF Token** field on Port
 
 ![image](https://files.readme.io/746b12d-Screen_Shot_2021-06-28_at_10.27.15_PM.png)
 
-# Enabling Wallarm on Porter Deployments
+## Enabling Wallarm on Porter Deployments
 
 In order to protect your deployments with Wallarm, you need to configure the **Ingress** of the deployment to use the Wallarm Ingress Controller.
 
@@ -33,13 +33,13 @@ nginx.ingress.kubernetes.io/wallarm-mode: monitoring
 
 > Please ensure that your `nginx.ingress.kubernetes.io/wallarm-instance` value is surrounded with quotation marks. For example, if the number you'd like to assign to the instance is `101`, your value should be `\"101\"`
 
-# Custom Domains with Wallarm
+## Custom Domains with Wallarm
 
 To protect endpoints on custom domains with Wallarm, you need to create a `CNAME` record that points your domain at the load balancer attached to the Wallarm Ingress Controller, instead of the default load balancer that sits in front of the NGINX Ingress Controller.
 
 Navigate to your AWS Console's **EC2 > Load Balancer** to find the DNS name of the load balancer spun up by the Wallarm Ingress Controller. Create a `CNAME` record that points your domain to this DNS name. If your custom domain is throwing an error, try re-deploying your web service with the same configuration.
 
-# Verifying Deployment
+## Verifying Deployment
 
 To test whether Wallarm is properly protecting and monitoring your endpoint, run:
 

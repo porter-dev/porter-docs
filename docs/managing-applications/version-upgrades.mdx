@@ -1,0 +1,31 @@
+---
+id: version-upgrades
+slug: /managing-applications/version-upgrades
+title: Version Upgrades
+---
+
+Every application (web, worker, or job) that is deployed on Porter is deployed from a specific **template version**. This template generates the configuration required to run your application. You are given the option to select the version when you are launching the template:
+
+![Launch template version](https://files.readme.io/64987b5-Screen_Shot_2021-05-18_at_5.47.38_PM.png "Screen Shot 2021-05-18 at 5.47.38 PM.png")
+
+If you're not sure which version to launch, the latest version (selected by default) should be deployed.
+
+## Upgrading your Application
+
+After deploying the template, you will be notified if a chart upgrade is available:
+
+![Chart upgrade available](https://files.readme.io/34bb4a0-Screen_Shot_2021-05-18_at_5.45.42_PM.png "Screen Shot 2021-05-18 at 5.45.42 PM.png")
+
+After clicking on this button, a popup will appear detailed if there are any backwards-incompatible changes in this upgrade. If there are breaking changes, you will be given the option to configure your application.
+
+This upgrade will be of three different types, following [semantic versioning guidelines](https://semver.org/):
+
+- **Patch upgrade** (ex. `v0.20.0 -> v0.20.1`): upgrades with backwards-compatible bug fixes. These upgrades will not require any configuration changes: you will simply be asked to upgrade the chart, and the upgrade will occur after confirmation.
+- **Minor upgrade** (ex. `v0.20.0 -> v0.21.0`): new features with backwards-compatible configuration. These upgrades will not require any configuration changes: you will simply be asked to upgrade the chart, and the upgrade will occur after confirmation.
+- **Major upgrade** (ex. `v0.20.0 -> v1.0.0`): substantial new feature sets that **may** require configuration changes. These upgrades will link to docs describing the upgrade process: we will try our best to make all major upgrades as backwards-compatible as possible, with any backwards incompatibilities documented clearly.
+
+## Reverting an Upgrade
+
+If an upgrade causes unexpected behavior or introduces a bug, you will be able to revert this upgrade immediately from the Porter dashboard. You can do this by clicking into the chart, expanding the list of revisions, and clicking on the "Revert" button to roll back the version:
+
+![Revert to revision](https://files.readme.io/10971ce-Screen_Shot_2021-05-18_at_5.49.42_PM.png "Screen Shot 2021-05-18 at 5.49.42 PM.png")
