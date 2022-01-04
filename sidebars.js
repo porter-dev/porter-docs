@@ -12,7 +12,7 @@ const sidebars = {
   docs: [
     {
       type: "doc",
-      id: "home-doc",
+      id: "default",
       className: "top-level-doc",
     },
     {
