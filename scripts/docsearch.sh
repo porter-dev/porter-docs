@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [[ -z "${PORTER_DOCS_DOMAIN}" ]]; then
   echo "Error: PORTER_DOCS_DOMAIN environment variable not set"
   exit 1
