@@ -9,6 +9,11 @@ module.exports = {
   organizationName: "porter-dev",
   projectName: "porter",
   themeConfig: {
+    algolia: {
+      appId: "UHHK7LBTTD",
+      apiKey: "fee1e27616e7d25f6fca5361af665f02",
+      indexName: "porter-docs",
+    },
     colorMode: {
       defaultMode: "dark",
       disableSwitch: true,

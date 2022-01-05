@@ -12,6 +12,8 @@ jobs:
     - name: Set Github tag
       id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: Re-index DocSearch
+      run: sh ./scripts/docsearch.sh
     - name: Update Porter App
       timeout-minutes: 20
       uses: porter-dev/porter-update-action@v0.1.0

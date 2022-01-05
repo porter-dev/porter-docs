@@ -910,12 +910,21 @@ a.hash-link {
 .DocSearch-Button {
   border-radius: 8px !important;
 }
-.DocSearch-Button > svg {
+.DocSearch-Button-Container > svg {
   display: none;
 }
 .DocSearch-Button-Placeholder {
   font-family: var(--ifm-font-family-base);
   line-height: 10px;
+  font-size: 11px;
+}
+
+.DocSearch-Search-Icon {
+  display: none;
+}
+
+.DocSearch-Input {
+  font-size: 15px !important;
 }
 
 .prism-code {
