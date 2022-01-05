@@ -40,6 +40,6 @@ cat >./algolia.json <<EOL
 }
 EOL
 
-docker run -it --env APPLICATION_ID=$APPLICATION_ID --env API_KEY=$API_KEY --env "CONFIG=$(cat ./algolia.json | jq -r tostring)" algolia/docsearch-scraper
+docker run --env APPLICATION_ID=$APPLICATION_ID --env API_KEY=$API_KEY --env "CONFIG=$(cat ./algolia.json | jq -r tostring)" algolia/docsearch-scraper
 
 rm algolia.json
