@@ -1,0 +1,55 @@
+---
+id: google-sign-in
+slug: /self-hosted/integrations/google-sign-in
+title: Google Sign-In
+---
+
+:::info Prerequisites
+
+- You have followed the on-premise deployment instructions for your specific hosting provider.
+- You have created a Google Cloud Platform project.
+
+:::
+
+This guide will explain how to create a Google OAuth 2.0 client to enable Google SSO, and optionally restrict sign-in to a specific email domain. This assumes that you have already followed the on-prem deployment guide. In this guide, we assume you are setting up Google SSO for a Porter instance running on `porter.example.com`. Let's get started!
+
+## Step 1: Google Developer Console Configuration
+
+Go to your [Google developer console credentials](https://console.cloud.google.com/apis/credentials) page. Click on **+Create Credentials** and select **OAuth client ID**:
+
+![Google Dev Console](https://files.readme.io/4936c91-Screen_Shot_2021-05-20_at_2.33.35_PM.png "Google Dev Console")
+
+You may be asked to configure an OAuth consent screen. Simply select "Internal" for User Type.
+
+:::info
+
+**Note:** if you have not set up Google Workspace for your Google project, you should do so first. Alternately, you can set up an \"External\" OAuth consent screen, but this will require you to enter your top-level domain as the \"Authorized Domain,\" which may or may not be desired.
+
+:::
+
+Select "Web application" when asked for the Application type. Name your application and set the redirect URI to `https://<your-domain>/api/oauth/google/callback`. The OAuth app configuration should look something like this:
+
+![Google OAuth App](https://files.readme.io/dc876a6-Screen_Shot_2021-05-20_at_2.43.51_PM.png "Google OAuth App")
+
+## Step 2: Update Porter Environment Variables
+
+Copy your client ID and client secret. This can always be found by clicking the "Edit" button next to your OAuth client, which will display the ID/secret in the sidebar:
+
+![Google OAuth ID/Secret](https://files.readme.io/5985ea1-Screen_Shot_2021-05-20_at_2.45.50_PM.png "Google OAuth ID/Secret")
+
+Update your Porter environment variables with the following fields:
+
+```
+GOOGLE_CLIENT_ID=<your-google-client-id>
+GOOGLE_CLIENT_SECRET=<your-google-client-secret
+```
+
+:::info
+
+**Note:** if you would like to restrict Google login to users from a **single domain**, you can add the following environment variable;\n\n`\nGOOGLE_RESTRICTED_DOMAIN=<your-domain>\n`\n\nFor example, if I wanted to restrict emails to those that end in `@example.com`, I would set `GOOGLE_RESTRICTED_DOMAIN=example.com`.
+
+:::
+
+Restart the Porter instance, and you will be given the option to log in with Google!
+
+![Google Sign In](https://files.readme.io/53c41ac-Screen_Shot_2021-05-20_at_2.51.44_PM.png "Google Sign In")

@@ -1399,12 +1399,24 @@ details summary:hover {
 }
 
 .navbar__title {
-  margin-left: 20px;
+  margin: 0 20px;
   display: none;
 }
 
 .navbar__item {
-  font-size: 15px;
+  font-size: 14px;
+  color: white;
+  padding-bottom: 2px;
+  margin: 0 10px;
+}
+
+.navbar__link--active {
+  color: white;
+  border-bottom: 1px solid white;
+  margin-bottom: -1px;
+}
+
+.navbar__link:hover {
   color: white;
 }
 

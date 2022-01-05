@@ -1,0 +1,25 @@
+---
+id: self-hosted-default
+slug: /self-hosted
+title: Self-Hosting Porter
+---
+
+There are several options offered for self-hosting Porter. While the Porter platform is built around Kubernetes, we believe it should be incredibly easy to deploy the Porter dashboard anywhere: on your local computer, on a Kubernetes cluster, or even on other hosting platforms. These docs will guide you through deploying Porter on-premises for the following platforms:
+
+- [Aptible](./aptible)
+
+## Why Deploy on Other Hosting Platforms?
+
+There are several cases where it makes sense to deploy the Porter dashboard on an existing hosting platform, despite the applications that you deploy on Porter running on a Kubernetes cluster. These cases may be:
+
+- If you only wish to use a subset of Porter's functionality, such as jobs or workers, while your primary applications run on a different platform.
+- If you want to integrate Porter with existing infrastructure, such as a custom domain for internal tools, or an existing PostgreSQL database.
+- If you need to run Porter on a certain platform for compliance reasons.
+
+If none of these cases apply, it likely makes sense to deploy the on-premise version of Porter on a new or existing Kubernetes cluster (more docs coming soon).
+
+:::info Caution
+
+**Please note:** on-premise deployments are in beta, and we strongly recommend reaching out on Discord, Intercom, or over email before attempting an on-premise deployment.
+
+:::

@@ -1,0 +1,67 @@
+---
+id: aptible
+slug: /self-hosted/setup/aptible
+title: Aptible
+---
+
+:::info Prerequisites
+
+- You have an existing Aptible account and project
+- You have [installed the Aptible CLI](https://deploy-docs.aptible.com/docs/cli) and are logged in to the CLI via `aptible login`.
+
+:::
+
+## Deploying Porter on Aptible
+
+Deploying Porter on Aptible will require either an existing PostgreSQL instance, or will require you to create one first ([see below](#optional-creating-a-postgresql-instance-on-aptible)). You should have the database authentication credentials handy for the deployment step.
+
+Create and deploy an instance of Porter with no config set:
+
+```sh
+aptible apps:create porter
+aptible deploy --docker-image=porter1/porter:v0.3.3 --app porter
+```
+
+Then, set config to deploy Porter:
+
+```sh
+aptible config:set --app porter \
+  SERVER_URL=https://<your-porter-endpoint> \
+  REDIS_ENABLED=false \
+  ENCRYPTION_KEY=$(cat /dev/urandom | base64 | head -c 32) \
+  COOKIE_SECRETS="$(cat /dev/urandom | base64 | head -c 16);$(cat /dev/urandom | base64 | head -c 16)" \
+  SQL_LITE=false \
+  DB_HOST=<postgres-host> \
+  DB_PORT=<postgres-port> \
+  DB_USER=<postgres-user> \
+  DB_PASS=<postgres-password> \
+  DB_NAME=porter \
+  DB_FORCE_SSL=true \
+  FORCE_SSL=true \
+  HELM_APP_REPO_URL=https://charts.getporter.dev \
+  HELM_ADD_ON_REPO_URL=https://chart-addons.getporter.dev
+```
+
+:::info
+
+**Note:** if you are using an Aptible default domain `*.on-aptible.com`, you may have to deploy Porter without the `SERVER_URL` variable set, and then run `aptible config:set` again after you set up the endpoint in Aptible. You can do this by only adding `SERVER_URL` in `aptible config:set` on subsequent deployments:\n\n`sh\naptible config:set --app porter SERVER_URL=https://<subdomain>.on-aptible.com\n`
+
+:::
+
+### (Optional) Creating a PostgreSQL instance on Aptible
+
+Create the database via the following command:
+
+```sh
+aptible db:create postgres --type postgresql
+```
+
+Then, go to your Aptible dashboard to view the deployed database credentials. These can be found by clicking on the "Reveal" button for the database credentials:
+
+![Aptible Postgres](https://files.readme.io/89ce74c-Screen_Shot_2021-05-21_at_11.26.36_AM.png "Aptible Postgres")
+
+This will display a connection string to the PostgreSQL instance. The following shows the environment variables that these map to when running `aptible config:set` above:
+
+```sh
+postgresql://DB_USER:DB_PASS@DB_HOST:DB_PORT/DB_NAME
+```
