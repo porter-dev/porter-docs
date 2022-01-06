@@ -150,6 +150,10 @@ module.exports = {
       {
         redirects: [
           {
+            to: "/",
+            from: ["/docs"],
+          },
+          {
             to: "/getting-started/overview",
             from: ["/docs/overview"],
           },
