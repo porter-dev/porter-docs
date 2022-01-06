@@ -310,10 +310,6 @@ module.exports = {
             from: ["/docs/aptible"],
           },
           {
-            to: "/self-hosted/integrations/google-sign-in",
-            from: ["/docs/deployment-instructions"],
-          },
-          {
             to: "/self-hosted",
             from: ["/docs/sso"],
           },
