@@ -1442,12 +1442,8 @@ details summary:hover {
 *:target {
   animation: target-fade 2s 1;
   padding: 4px 0 4px 4px;
-  margin-bottom: calc(
-    var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading) - 4px
-  );
-  margin-top: calc(
-    var(--ifm-h3-vertical-rhythm-top) * var(--ifm-leading) - 4px
-  );
+  margin-bottom: calc(var(--ifm-heading-margin-bottom) - 4px);
+  margin-top: calc(var(--ifm-heading-margin-top) - 4px);
   margin-left: -4px;
 }
 
