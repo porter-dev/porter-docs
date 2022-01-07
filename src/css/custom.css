@@ -422,12 +422,13 @@ nav.menu {
   display: none;
 }
 
-/* @media screen and (max-width: 996px) {
+@media screen and (max-width: 996px) {
   .row .col {
     padding-top: var(--ifm-col-spacing-vertical);
     padding-bottom: var(--ifm-col-spacing-vertical);
   }
-} */
+}
+
 a.card {
   text-decoration: none !important;
   color: var(--ifm-color-content);
