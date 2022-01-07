@@ -18,9 +18,13 @@ This can be caused by a number of issues, which can either be at the application
 
 This is caused by the NGINX instance rejecting requests that are too large. See the [networking configuration doc](./network-configuration-options#client-max-body-size) for how to resolve these errors.
 
+### `502 Bad Gateway`
+
+You will see `502 Bad Gateway` when your application is not starting correctly. See [application restarts](#application-restarts) to troubleshoot the error. This could also be a port number error -- make sure that you've set the port number correctly in the `Main` application tab.
+
 ### `503 Temporarily Unavailable`
 
-The most common cause of this error is not setting the port number correctly. If not set correctly, your application will often show `503 Temporarily Unavailable` permanently when visiting the public URL. Make sure that you've set the port number correctly in the `Main` application tab. If the port number is set correctly, this is shown when there is an application restart: [see below](#application-restarts) for more information.
+The most common cause of this error is not setting the port number correctly. If not set correctly, your application will often show `503 Temporarily Unavailable` permanently when visiting the public URL. Make sure that you've set the port number correctly in the `Main` application tab. If the port number is set correctly, this may be shown when there is an application restart: [see below](#application-restarts) for more information.
 
 ## Application Restarts
 
