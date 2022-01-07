@@ -422,12 +422,12 @@ nav.menu {
   display: none;
 }
 
-@media screen and (max-width: 996px) {
+/* @media screen and (max-width: 996px) {
   .row .col {
     padding-top: var(--ifm-col-spacing-vertical);
     padding-bottom: var(--ifm-col-spacing-vertical);
   }
-}
+} */
 a.card {
   text-decoration: none !important;
   color: var(--ifm-color-content);
@@ -797,13 +797,13 @@ a.hash-link {
   }
 }
 
-@media screen and (min-width: 996px) {
+/* @media screen and (min-width: 996px) {
   .row.is-multiline .col {
     margin-top: var(--ifm-spacing-horizontal) !important;
     margin-bottom: var(--ifm-spacing-horizontal) !important;
   }
 }
-
+ */
 .has-hover-pointer:hover {
   cursor: pointer;
 }
@@ -910,9 +910,7 @@ a.hash-link {
 .DocSearch-Button {
   border-radius: 8px !important;
 }
-.DocSearch-Button-Container > svg {
-  display: none;
-}
+
 .DocSearch-Button-Placeholder {
   font-family: var(--ifm-font-family-base);
   line-height: 10px;
@@ -921,6 +919,18 @@ a.hash-link {
 
 .DocSearch-Search-Icon {
   display: none;
+}
+
+@media screen and (max-width: 750px) {
+  .DocSearch-Search-Icon {
+    display: block;
+  }
+}
+
+@media (max-width: 996px) {
+  .searchBox_node_modules-\@docusaurus-theme-search-algolia-lib-theme-SearchBar-styles-module {
+    position: static !important;
+  }
 }
 
 .DocSearch-Input {
@@ -1503,6 +1513,12 @@ footer.footer {
   cursor: pointer;
   user-select: none;
   margin-right: 30px;
+}
+
+@media screen and (max-width: 750px) {
+  .dashboard__link {
+    display: none !important;
+  }
 }
 
 .dashboard__link:focus {
