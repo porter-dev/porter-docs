@@ -106,3 +106,18 @@ If the resource is an addon, the `config` block corresponds directly to the [run
 #### Runtime Configuration
 
 The options for the runtime configuration (`config.values` for applications, `config` for addons) corresponds to the default Helm values for the application. If you have experience with Kubernetes/Helm, you can also view all possible configuration options in the `values.yaml` files of the respective applications: [`web`](https://github.com/porter-dev/porter-charts/blob/master/applications/web/values.yaml), [`worker`](https://github.com/porter-dev/porter-charts/blob/master/applications/worker/values.yaml), and [`job`](https://github.com/porter-dev/porter-charts/blob/master/applications/job/values.yaml). If you don't have this experience, please see the [examples](./examples) to view common configuration options.
+
+#### Variable References
+
+It is possible to reference output values from another resource to set configuration for the current resource. The syntax to reference dependent variables is as follows:
+
+```
+"{ .<resource_name>.<jsonpath> }"
+```
+
+The `<jsonpath>` section follows [JSONPath](https://goessner.net/articles/JsonPath/index.html#e2) syntax. Most of the time, this will simply be a set of nested fields. For example, the `postgresql` addon outputs a fields `postgresqlPassword` and `postgresqlUsername`, so a resource named `postgres` can be referenced via:
+
+```yaml
+POSTGRES_USERNAME: "{ .postgres.postgresqlUsername }"
+POSTGRES_PASSWORD: "{ .postgres.postgresqlPassword }"
+```
