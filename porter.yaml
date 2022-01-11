@@ -6,7 +6,7 @@ resources:
     config:
       build:
         method: "pack"
-        builder: heroku/buildpacks:18
+        builder: heroku/buildpacks:20
       values:
         container:
           port: 3000
