@@ -1,0 +1,14 @@
+version: "v1"
+resources:
+  - name: "docs-web"
+    source:
+      name: "web"
+    config:
+      build:
+        method: "pack"
+      values:
+        container:
+          port: 3000
+          env:
+            normal:
+              BPE_PORT: "3000"
