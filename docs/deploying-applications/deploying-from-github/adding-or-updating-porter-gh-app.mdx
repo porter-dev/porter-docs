@@ -58,14 +58,26 @@ Note that when you grant access to the Porter Github App, you are granting acces
 
 The Porter Github App requires several Github permissions in order to operate properly:
 
-**Repository permissions**
+### Repository permissions
 
 **Actions (Read & write):** required for Porter to write Github actions YAML files to the repository.
 
+**Administration (Read & write):** required for Porter to create a new Github environment called `Preview` for deployments. The administration API isn't used otherwise.
+
 **Contents (Read & write):** required for Porter to write Github actions YAML files to the repository.
 
+**Deployments (Read & write):** required for Porter to request Github deployments to the `Preview` environment.
+
+**Environments (Read & write):** required for Porter to create a new Github environment called `Preview` for deployments.
+
 **Metadata (Read-only):** mandatory, required for Github apps that integrate with repositories.
+
+**Pull Requests (Read & write):** required for Porter to add comments to Github PRs.
 
 **Secrets (Read & write):** required for Porter to write a `PORTER_TOKEN` secret to the repository automatically. We **do not** read any secrets from the repository beyond those prefixed with `PORTER_`.
 
 **Workflows (Read & write):** required for Porter to write Github actions YAML files to the repository.
+
+### User Permissions
+
+**Email addresses (read-only)**: required for Porter to read your Github email address for authentication.

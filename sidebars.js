@@ -261,12 +261,25 @@ const sidebars = {
       ],
       collapsible: false,
     },
-    // {
-    //   type: "category",
-    //   label: "Preview Environments",
-    //   items: ["preview-environments/overview"],
-    //   collapsible: false,
-    // },
+    {
+      type: "category",
+      label: "Preview Environments",
+      items: [
+        "preview-environments/setup",
+        "preview-environments/porter-yaml-reference",
+        {
+          type: "category",
+          label: "Examples",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "preview-environments/examples",
+          },
+          items: ["preview-environments/examples/basic-web-application"],
+        },
+      ],
+      collapsible: false,
+    },
     {
       type: "category",
       label: "Other Guides",
