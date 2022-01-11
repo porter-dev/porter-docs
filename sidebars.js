@@ -275,7 +275,10 @@ const sidebars = {
             type: "doc",
             id: "preview-environments/examples",
           },
-          items: ["preview-environments/examples/basic-web-application"],
+          items: [
+            "preview-environments/examples/basic-web-application",
+            "preview-environments/examples/web-and-database",
+          ],
         },
       ],
       collapsible: false,
