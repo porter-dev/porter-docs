@@ -6,9 +6,11 @@ resources:
     config:
       build:
         method: "pack"
+        builder: heroku/buildpacks:18
       values:
         container:
           port: 3000
-          env:
-            normal:
-              BPE_PORT: "3000"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1024Mi
