@@ -8,6 +8,7 @@ module.exports = {
   favicon: "https://i.ibb.co/HnSk02f/ptr.png",
   organizationName: "porter-dev",
   projectName: "porter",
+  staticDirectories: ['static'],
   themeConfig: {
     algolia: {
       appId: "UHHK7LBTTD",
