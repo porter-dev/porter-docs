@@ -36,23 +36,38 @@ redis://peaches-redis-master.default.svc.cluster.local:6379
 
 ## Exposing Redis over NGINX
 
-### Step 1: Install the Redis addon
+:::info
 
-![image](https://files.readme.io/0bca97e-redis.jpg)
+Note that exposing Redis over NGINX isn't natively supported with the Porter Redis addon. This guide walks you through installing and exposing Redis manually, by interacting with the cluster using `kubectl`.
 
-### Step 2: Upgrade Redis to enable TLS and ingress
+:::
 
-1. Upgrade the chart with the following values.
+While exposing Redis over the NGINX instance isn't natively supported with the Porter Redis Addon, it is possible to expose Redis by manually installing the Bitnami Redis Helm chart and tweaking some values on the Porter NGINX instance.
 
-> 🚧
->
-> **Warning:** make sure to merge these values with the existing values.
+### Create a DNS Record
+
+First, create a DNS record for your exposed Redis instance. To do this, you must first find the DNS name assigned to the load balancer of your cluster. This can be found by navigating to the Porter dashboard and copying the load balancer address:
+
+![Ingress IP Address](https://files.readme.io/8d36f12-ingressip.png "Ingress IP Address")
+
+If you're on Digital Ocean or Google Cloud Platform, this will be an IP address, while if you're on AWS, this will be a domain name to your load balancer. For IP addresses, simply create an `A` record for your redis subdomain and point it to this IP address. For AWS, create a `CNAME` record on your DNS provider for your desired subdomain, which points to the load balancer URL you have copied above.
+
+:::info
+
+After you complete the previous steps, it might take up to 30 minutes for DNS records to fully propagate. Please wait before deploying your applications until the DNS propagation is complete. You can check this using tools like [dnschecker.org](https://dnschecker.org) or running `nslookup <your-domain>`.
+
+:::
+
+### Install the Redis Addon
+
+To install the Redis addon, make sure that you've installed [helm](https://helm.sh/docs/intro/install/) and [kubectl](https://kubernetes.io/docs/tasks/tools/), and that `kubectl` is configured to connect to your cluster. To confirm this, make sure `kubectl get namespace` is returning your list of namespaces.
+
+Then, create the following `redis-values.yaml` file in a secure directory (make sure you don't push this file to Git):
 
 ```yaml
-# values.redis.yaml
 auth:
   enabled: true
-  # change the password here
+  # TODO: change the password here
   password: foo
 
 tls:
@@ -63,46 +78,43 @@ tls:
 ingress:
   enabled: true
   hosts:
-    # change the domain here
-    - example.com
+    # TODO: change the subdomain here to the DNS record you created above
+    - redis.example.com
 ```
 
-> 🚧
->
-> **Warning:** make sure to add an A record or CNAME record for your domain pointing to the cluster's load balancer IP address.
+Next, use these values to install a Redis instance on your cluster by running these commands:
 
-### Step 3: Upgrade NGINX Ingress Controller
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install redis bitnami/redis --values redis-values.yaml
+```
 
-Kubernetes Ingress does not support TCP services, so NGINX Ingress Controller needs to be [configured](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/) separately.
+After about 30 seconds, you should see a console message indicating that Redis was successfully installed.
 
-1. Upgrade the chart with the following values.
+### Upgrade NGINX Ingress Controller
 
-> 🚧
->
-> **Warning:** make sure to merge these values with the existing values.
+Next, update the NGINX ingress controller to expose the Redis instance that you just created. You can find the NGINX ingress controller by navigating to the `ingress-nginx` namespace and selecting the `nginx-ingress` application. Upgrade the chart with the following values:
+
+:::info Caution
+
+**Warning:** make sure to merge these values with the existing values.
+
+:::
 
 ```yaml
-# values.nginx.yaml
 tcp:
   # service name is {release_name}-master
   6379: "default/hello-redis-world-master:6379"
   # {ingress_port}: {release_namespace}/{release_name}-master:{service_port}
 ```
 
-### Step 4: Connect to Redis
+For more information about exposing TCP directly over the NGINX ingress, see the [documentation](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/).
 
-1. Get the auto-generated CA certificate
+### Connect to your Application
 
-   ```bash
-   # secret name is {release_name}-crt
-   $ kubectl get secret hello-redis-world-crt -o json |
-       jq -r '.data."ca.crt"' |
-       base64 --decode > ca.crt
-   ```
+You can now connect to your Redis instance over the public DNS record you created! Before running the following commands, make sure your `redis-cli` installation is up to date (by running `redis-cli --version`). If you do not have `redis-cli` installed, you can install it via `brew install redis` (or view the download instructions [here](https://redis.io/download)). As of this writing, the latest version is `6.2.6`. To connect to your instance with TLS enabled, run:
 
-2. Connect!
-
-   ```bash
-   # change the password and domain here
-   $ redis-cli -u rediss://foo@example.com --cacert ./ca.crt
-   ```
+```bash
+# NOTE: change the password and domain here
+redis-cli -u rediss://foo@example.com --cacert ./ca.crt
+```
