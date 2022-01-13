@@ -165,6 +165,28 @@ const sidebars = {
     },
     {
       type: "category",
+      label: "Language-specific Guides",
+      items: [
+        {
+          type: "doc",
+          label: "NodeJS",
+          id: "language-guides/node-js"
+        },
+        {
+          type: "doc",
+          label: "Python",
+          id: "language-guides/python"
+        },
+        {
+          type: "doc",
+          label: "Go",
+          id: "language-guides/go"
+        },
+      ],
+      collapsible: false,
+    },
+    {
+      type: "category",
       label: "Deploying Addons",
       items: [
         "deploying-addons/overview",
