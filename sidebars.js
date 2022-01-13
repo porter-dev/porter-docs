@@ -165,7 +165,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Language Guides",
+      label: "Language-specific Guides",
       items: [
         {
           type: "doc",
