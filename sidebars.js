@@ -165,28 +165,6 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Language-specific Guides",
-      items: [
-        {
-          type: "doc",
-          label: "NodeJS",
-          id: "language-guides/node-js"
-        },
-        {
-          type: "doc",
-          label: "Python",
-          id: "language-guides/python"
-        },
-        {
-          type: "doc",
-          label: "Go",
-          id: "language-guides/go"
-        },
-      ],
-      collapsible: false,
-    },
-    {
-      type: "category",
       label: "Deploying Addons",
       items: [
         "deploying-addons/overview",
@@ -279,6 +257,28 @@ const sidebars = {
             "command-line-interface/command-reference/porter-run",
             "command-line-interface/command-reference/porter-update",
           ],
+        },
+      ],
+      collapsible: false,
+    },
+    {
+      type: "category",
+      label: "Language-Specific Guides",
+      items: [
+        {
+          type: "doc",
+          label: "NodeJS",
+          id: "language-guides/node-js",
+        },
+        {
+          type: "doc",
+          label: "Python",
+          id: "language-guides/python",
+        },
+        {
+          type: "doc",
+          label: "Go",
+          id: "language-guides/go",
         },
       ],
       collapsible: false,
