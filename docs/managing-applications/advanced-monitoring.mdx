@@ -70,3 +70,32 @@ serverFiles:
               summary: Kubernetes Job failed (instance {{ $labels.instance }})
               description: "Job {{$labels.namespace}}/{{$labels.exported_job}} failed to complete\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ```
+
+Once you've added the alerts you need, click `Deploy`.
+
+## Configuring notifications
+
+Once you have configured the alerts you'd like to use on your cluster, the next step is to configure `alertmanager` to deliver messages based on these alerting rules to a channel of your choice, typically Slack. In the steps below, we'll configure `alertmanager` use a Slack webhook for sending notifications.
+
+Inside the Helm values for the `prometheus` application, add the following block at the end:
+
+```yaml
+alertmanagerFiles:
+  alertmanager.yml:
+    global:
+      slack_api_url: >-
+        <SLACK_WEBHOOK>
+    receivers:
+      - name: slack-notifications
+        slack_configs:
+          - channel: '#alerting-notifs'
+            text: >-
+              Note - {{ .GroupLabels.app }} is throwing a
+              {{.GroupLabels.alertname }} alert.
+    route:
+      receiver: slack-notifications
+```
+
+Here, `<SLACK_WEBHOOK>` is the webhook `alertmanager` will use to push messages to your Slack organization, to a channel called `#alert-notifs` - this channel can be named anything you'd like. After adding these details, click `Deploy`.
+
+
