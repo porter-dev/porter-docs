@@ -3,3 +3,72 @@ id: advanced-monitoring
 slug: /managing-applications/advanced-monitoring
 title: Advanced Monitoring
 ---
+
+Each Porter cluster ships with its own Prometheus and alertmanager deployment, allowing you to set up your own monitoring rules and alerting pipelines. This can be quite useful when there's a problem with either the underlying infrastructure, or when you need to be notified when your cluster's nodes are running out of capacity and need to be reconfigured with more CPU/RAM.
+
+
+This section will walk you through the process of configuring some common monitoring alerts. Please note that these alerts can be modified with values and parameters that you deem to fit your application best.
+
+## Configuring a monitoring alert
+
+Let's say that you need to configure an alert that is triggered when a cluster's nodes are not ready, or are unavailable. 
+
+First, navigate to the `Applications` tab on your Porter cluster, and select the `prometheus` application under the `monitoring` namespace.
+
+> <screenshot>
+
+Next, click on `Helm Values` - in case it's not visible, turn on `DevOps Mode`, which allows you to customise your prometheus deployment. Add the following block to the end of the file:
+
+```yaml
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: Default Alerts
+        rules:
+```
+
+Each alert you'd like to add, can be added under the `rules` section. Since we'd like an alert that is triggered when a cluster node is unavailable, the block will look like this:
+
+```yaml
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: Default Alerts
+        rules:
+          - alert: KubernetesNodeReady
+            expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+            for: 10m
+            labels:
+              severity: critical
+            annotations:
+              summary: Kubernetes Node ready (instance {{ $labels.instance }})
+              description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+The alert we're configuring here consists of a name, a PromQL query as well as a window where Prometheus will check that the alert continues to be active during each evaluation for 10 minutes before firing the alert. This can be customised, as can the actual summary and descriptions. 
+
+If you wish to add more alerts, it's eas easy as appending them inside the `rules:` object. Let's say you'd now like to add another alert that's triggered when a job fails on your cluster:
+
+```yaml
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: Default Alerts
+        rules:
+          - alert: KubernetesNodeReady
+            expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+            for: 10m
+            labels:
+              severity: critical
+            annotations:
+              summary: Kubernetes Node not ready (instance {{ $labels.instance }})
+              description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: KubernetesJobFailed
+            expr: kube_job_status_failed > 0
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: Kubernetes Job failed (instance {{ $labels.instance }})
+              description: "Job {{$labels.namespace}}/{{$labels.exported_job}} failed to complete\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
