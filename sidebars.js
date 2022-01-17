@@ -142,6 +142,7 @@ const sidebars = {
         "managing-applications/application-metrics",
         "managing-applications/logging-options",
         "managing-applications/alerting",
+        "managing-applications/advanced-monitoring"
         // TODO: alerting category
         // {
         //   type: "category",
