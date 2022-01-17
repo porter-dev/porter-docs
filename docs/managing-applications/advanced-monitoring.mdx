@@ -98,4 +98,39 @@ alertmanagerFiles:
 
 Here, `<SLACK_WEBHOOK>` is the webhook `alertmanager` will use to push messages to your Slack organization, to a channel called `#alert-notifs` - this channel can be named anything you'd like. After adding these details, click `Deploy`.
 
+## Common alert configurations
+
+This section lists some common alerting rules that help notify you of issues at the cluster level. Do note that you can tweak the default values in these, and we do recommend experimenting with the thresholds and alerting windows in these samples, in order to find the best possible fit for your workloads.
+
+
+### Node Readiness
+
+```yaml
+- alert: KubernetesNodeReady
+    expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: Kubernetes Node ready (instance {{ $labels.instance }})
+      description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+Node readiness issues typically arise when one or more nodes in your Kubernetes cluster are either not running, or are unresponsive. In such situations, it's useful to access the cloud dashboard for the infrastructure provider running your cluster, in order to determine the actual cause.
+
+### Node Memory Pressure
+
+```yaml
+- alert: KubernetesMemoryPressure
+    expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: Kubernetes memory pressure (instance {{ $labels.instance }})
+      description: "{{ $labels.node }} has MemoryPressure condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+Memmory pressure errors typically mean that one or more of your nodes are running out of memory. In some cases, this can be handled automatically by the cluster autoscaler, which will add more nodes to your cluster, in order to accomodate workloads whose resource requetes can't fit with existing nodes. But it's a good idea to keep an eye on this alert - if raised frequently, it might be due to a resource leak within your workload(s).
+
 
