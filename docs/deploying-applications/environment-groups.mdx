@@ -16,15 +16,15 @@ Environment groups are stored in **your own cluster** as a Kubernetes [Config Ma
 
 You can create a new environment group in the "Env Groups" tab on the dashboard. Click on "Create Env Group" from this tab:
 
-![Create env group](https://files.readme.io/07c9628-env-groups-0.png "env-groups-0.png")
+![Create env group](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/0408b9b7-6437-4a44-e0f4-ae56cccb8000/large "env-groups-0.png")
 
 From this screen, you can name your env group and add your environment variables. In this example, we will simply create an environment group named `web` that will be shared across all web services that we create. When you're finished, press "Create env group".
 
-![Create env group finished](https://files.readme.io/f795459-env-groups-1.png "env-groups-1.png")
+![Create env group finished](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/16cc4637-2f35-4fcc-ad60-206534c5cb00/large "env-groups-1.png")
 
 You will be redirected to the list of environment groups, and your new environment group should be listed. At this point, you can use this environment group in a deployment. From the "Launch" tab, you can select "Load from Env Group" in the "Environment" tab:
 
-![Load env group](https://files.readme.io/c909d6a-env-groups-4.png "env-groups-4.png")
+![Load env group](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/e97e2124-865f-4d71-a5dc-9b1fd214f800/large "env-groups-4.png")
 
 You can then select your environment group and click "Load Selected Env Group", which will automatically populate the environment group variables that you previously set. You can modify these environment variables in this tab, for example if you'd like to add environment variables that aren't currently in the environment group. To view all deployment options, head over to our [application deployment docs](https://docs.getporter.dev/docs/add-ons).
 
@@ -32,11 +32,11 @@ You can then select your environment group and click "Load Selected Env Group", 
 
 Porter supports creating secret environment variables that will not be exposed after creation. At the moment, you must create an environment group in order to create secret environment variables. To create a secret environment variable, click on the lock icon next to the environment variable during creation of the environment variable:
 
-![Lock icon](https://files.readme.io/1d91810-env-groups-5.png "env-groups-5.png")
+![Lock icon](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/01fb9242-5374-4f35-417a-6372a1b0af00/large "env-groups-5.png")
 
 When you launch a new service, and you select "Load from Env Group" in the "Environment" tab, this sensitive value will be injected into the container before it is mounted:
 
-![Sensitive value](https://files.readme.io/14f07f3-Screen_Shot_2021-04-27_at_9.33.04_AM.png "Screen Shot 2021-04-27 at 9.33.04 AM.png")
+![Sensitive value](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/f6243034-198b-4a5e-f650-58529e208a00/large "Screen Shot 2021-04-27 at 9.33.04 AM.png")
 
 :::info
 
@@ -48,11 +48,11 @@ When you launch a new service, and you select "Load from Env Group" in the "Envi
 
 To update or delete your environment group, navigate back to the "Env Groups" tab, and click on the existing environment group to update or delete. You can make changes to the env group here, and select the "Update" button when finished:
 
-![Updating env group](https://files.readme.io/d26712e-env-groups-2.png "env-groups-2.png")
+![Updating env group](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/7c8fde40-43b1-492c-a883-efc13d286300/large "env-groups-2.png")
 
 To delete the environment group, navigate to the "Settings" tab, and press the "Delete" button:
 
-![Deleting env group](https://files.readme.io/4323089-env-groups-3.png "env-groups-3.png")
+![Deleting env group](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/89fdb10b-c2f2-4be9-c575-3ac5a4e0cb00/large "env-groups-3.png")
 
 ## How Secrets are Stored
 
@@ -66,6 +66,8 @@ All env group variables are stored **in your own cluster**, and not on Porter's 
 
 There is no further encryption beyond what is offered by the managed Kubernetes providers. Some providers will encrypt all secret data in the control plane at rest (in `etcd`), others will store it as base64-encoded data. While you don't have access to this control plane or the `etcd` instance, users with access to your cluster could view the secrets using `kubectl get secrets -o yaml`, for example.
 
-> 📘
->
-> **Note:** for secret encryption beyond what is offered in the managed Kubernetes providers, you may want to use a solution such as [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets).
+:::info
+
+For secret encryption beyond what is offered in the managed Kubernetes providers, you may want to use a solution such as [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets).
+
+:::

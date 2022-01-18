@@ -17,7 +17,7 @@ This guide will explain how to create a Google OAuth 2.0 client to enable Google
 
 Go to your [Google developer console credentials](https://console.cloud.google.com/apis/credentials) page. Click on **+Create Credentials** and select **OAuth client ID**:
 
-![Google Dev Console](https://files.readme.io/4936c91-Screen_Shot_2021-05-20_at_2.33.35_PM.png "Google Dev Console")
+![Google Dev Console](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/ca5424c7-ad11-48cd-5e63-fd6ad3a87c00/large "Google Dev Console")
 
 You may be asked to configure an OAuth consent screen. Simply select "Internal" for User Type.
 
@@ -29,13 +29,13 @@ You may be asked to configure an OAuth consent screen. Simply select "Internal" 
 
 Select "Web application" when asked for the Application type. Name your application and set the redirect URI to `https://<your-domain>/api/oauth/google/callback`. The OAuth app configuration should look something like this:
 
-![Google OAuth App](https://files.readme.io/dc876a6-Screen_Shot_2021-05-20_at_2.43.51_PM.png "Google OAuth App")
+![Google OAuth App](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/4153a8e7-60e7-47fb-c817-53ddaf2fae00/large "Google OAuth App")
 
 ## Step 2: Update Porter Environment Variables
 
 Copy your client ID and client secret. This can always be found by clicking the "Edit" button next to your OAuth client, which will display the ID/secret in the sidebar:
 
-![Google OAuth ID/Secret](https://files.readme.io/5985ea1-Screen_Shot_2021-05-20_at_2.45.50_PM.png "Google OAuth ID/Secret")
+![Google OAuth ID/Secret](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/3e8b85ff-c016-4ec0-7ead-5b8d03a2e200/large "Google OAuth ID/Secret")
 
 Update your Porter environment variables with the following fields:
 
@@ -52,4 +52,4 @@ GOOGLE_CLIENT_SECRET=<your-google-client-secret
 
 Restart the Porter instance, and you will be given the option to log in with Google!
 
-![Google Sign In](https://files.readme.io/53c41ac-Screen_Shot_2021-05-20_at_2.51.44_PM.png "Google Sign In")
+![Google Sign In](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/4fc3c94a-3be8-43d5-172e-24479db4aa00/large "Google Sign In")

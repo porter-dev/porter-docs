@@ -6,13 +6,13 @@ title: Redis
 
 To deploy a Redis instance on Porter, head to the **Community Add-ons** tab. You can optionally specify a password for the instance or configure the amount of resources (i.e. CPU and RAM) assigned to the instance.
 
-![Redis settings](https://files.readme.io/3274ddb-Screen_Shot_2021-03-19_at_12.26.26_PM.png "Screen Shot 2021-03-19 at 12.26.26 PM.png")
+![Redis settings](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/65345e8a-7620-4393-447c-7ed021b79000/large "Screen Shot 2021-03-19 at 12.26.26 PM.png")
 
 ## Connecting to the Database
 
 Redis on Porter is by default only exposed to internal traffic - only applications and add-on's that are deployed in the same Kubernetes cluster can connect to the Redis instance. The DNS name for the instance can be found on the deployment view as shown below. Note that Redis listens on port 6379 by default.
 
-![Redis URI](https://files.readme.io/d0d7317-Screen_Shot_2021-03-19_at_12.27.42_PM.png "Screen Shot 2021-03-19 at 12.27.42 PM.png")
+![Redis URI](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/5085f630-fff6-4d0f-eef2-4999a84ef000/large "Screen Shot 2021-03-19 at 12.27.42 PM.png")
 
 The connection URI for the Redis instance follows this format:
 
@@ -48,7 +48,7 @@ While exposing Redis over the NGINX instance isn't natively supported with the P
 
 First, create a DNS record for your exposed Redis instance. To do this, you must first find the DNS name assigned to the load balancer of your cluster. This can be found by navigating to the Porter dashboard and copying the load balancer address:
 
-![Ingress IP Address](https://files.readme.io/8d36f12-ingressip.png "Ingress IP Address")
+![Ingress IP Address](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/01faa26c-51ae-4553-28a4-6fe8925e6600/large "Ingress IP Address")
 
 If you're on Digital Ocean or Google Cloud Platform, this will be an IP address, while if you're on AWS, this will be a domain name to your load balancer. For IP addresses, simply create an `A` record for your redis subdomain and point it to this IP address. For AWS, create a `CNAME` record on your DNS provider for your desired subdomain, which points to the load balancer URL you have copied above.
 
