@@ -20,13 +20,13 @@ porter run [APP_NAME] -- [COMMAND] [args...]
 
 The `APP_NAME` is the name of the application on the Porter dashboard (this can be a release either in the "Applications" or the "Jobs" tab).
 
-It can also cleanup residual copies (called **ephemeral pods**) of applications that may have been left behind as a result of a previous call to `porter run`:
+It can also cleanup residual instances of applications that may have been left behind as a result of a previous call to `porter run`:
 
 ```
 porter run cleanup
 ```
 
-You may learn more about ephemeral pods in the [Ephemeral Pods](#ephemeral-pods) section.
+You may learn more about ephemeral instances in the [Ephemeral Instances](#ephemeral-instances) section.
 
 ## Examples
 
@@ -60,11 +60,8 @@ To cleanup such copies of releases in other namespaces, use the `--namespace` fl
 porter run cleanup --namespace other-namespace
 ```
 
-## Ephemeral Pods
+## Ephemeral Instances
 
-When you call `porter run` for remote shell access into an application, it creates an exact copy of it. These are called **ephemeral pods**. In some cases, these ephemeral pods might not get deleted once they are exited from.
+When you call `porter run` **without** the `-e` for remote shell access into an application, an exact copy of your application instance is created. These are called **ephemeral instances**. If you lose internet connection or unexpectedly terminate your shell session, the ephemeral instance might not be shut down immediately. In order to shut down these instances, a job runs on your cluster that deletes ephemeral instances **greater than 6 hours old**.
 
-In order to save resources, Porter deploys a [cron job](https://en.wikipedia.org/wiki/Cron) that runs every hour in the background to scan for and delete any leftover ephemeral pods.
-To accommodate for scenarios where you might need access to such an ephemeral pod for longer than usual, the cron job only deletes those ephemeral pods which are more than 6 hours old.
-
-The `porter run cleanup` command comes in handy for when you want to delete any leftover ephemeral pods manually.
+To delete these ephemeral instances manually, you can run `porter run cleanup`.

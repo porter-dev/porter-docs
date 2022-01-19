@@ -12,11 +12,11 @@ When you delete your project or clusters, Porter automatically destroys your res
 
 Navigate to the **VPC** section in your AWS console to see the VPC's that are currently in use. Select the VPC that belongs to the cluster you've provisioned, then click **Actions > Delete VPC**.
 
-![Delete VPC](https://files.readme.io/a33b774-Screen_Shot_2021-03-26_at_4.05.16_PM.png "Screen Shot 2021-03-26 at 4.05.16 PM.png")
+![Delete VPC](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/e74141e4-6a77-4a08-6ffb-541586499300/large "Screen Shot 2021-03-26 at 4.05.16 PM.png")
 
 AWS might warn you that the VPC cannot be deleted due to existing NAT gateways or network interfaces that are in use. Click on the text **NAT Gateways** to view the NAT gateway in use. Once you delete the NAT gateway, you'll be able to delete the VPC.
 
-![NAT gateway](https://files.readme.io/61a972f-Screen_Shot_2021-03-26_at_4.09.51_PM.png "Screen Shot 2021-03-26 at 4.09.51 PM.png")
+![NAT gateway](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/29bcf96e-84ff-4d9d-d3b5-1e15a5554900/large "Screen Shot 2021-03-26 at 4.09.51 PM.png")
 
 ### Deleting Elastic IP
 
@@ -26,7 +26,7 @@ Head to the **Elastic IP addresses** section in the VPC tab. Select the EIP of t
 
 Head to the **EKS** tab, select the cluster and click **Delete** .
 
-![EKS](https://files.readme.io/0d4635a-Screen_Shot_2021-03-26_at_4.16.01_PM.png "Screen Shot 2021-03-26 at 4.16.01 PM.png")
+![EKS](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/86a228b3-68d5-4e42-912b-a34a51f6d600/large "Screen Shot 2021-03-26 at 4.16.01 PM.png")
 
 ### Deleting Nodes
 
@@ -34,4 +34,4 @@ It sometimes occurs that even after the EKS cluster has been deleted, the actual
 
 Once you've deleted the **Autoscaling Group**, head to **EC2 > Instances** and delete all the nodes.
 
-![Autoscaling group](https://files.readme.io/fad5baf-Screen_Shot_2021-03-26_at_4.24.08_PM.png "Screen Shot 2021-03-26 at 4.24.08 PM.png")
+![Autoscaling group](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/33c10eca-b30b-44c3-8f43-3deae40da300/large "Screen Shot 2021-03-26 at 4.24.08 PM.png")

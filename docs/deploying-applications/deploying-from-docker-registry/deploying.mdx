@@ -14,7 +14,7 @@ If you would like to deploy from a private Docker registry, make sure that you'v
 
 To deploy your application, first navigate to the **Launch** tab, where you will see three types of applications to deploy: web, worker, or job. To understand the difference between these three application types, see the description of the [types of applications](../overview#types-of-applications). After selecting your application type and selecting **Launch Template**, you should select the **Docker Registry** option:
 
-![Registry Option](https://files.readme.io/3cc385a-registry.png)
+![Registry Option](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/fd395d4a-0ccc-4f24-8d3b-eea5a7d54300/large)
 
 Next, you can either select a public or private Docker image to deploy from:
 
@@ -41,7 +41,7 @@ Under **Additional Settings**, you can configure remaining options like your ser
 
 To update the Docker image which your application is running, open the application on the Porter dashboard. If your Docker image has a unique image tag, you can navigate to the **Settings** tab and select a new tag for your image:
 
-![Tag](https://files.readme.io/cb15f99-source_Tag.png "Settings Tab Tag")
+![Tag](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/373dd8d6-b477-415d-493f-43a69adc9300/large "Settings Tab Tag")
 
 If your Docker image tag is `latest` (or you re-use the same image tag for different images), there are different options depending on if you are running an web/worker or a job:
 
@@ -61,6 +61,6 @@ import JobRedeploy from "./_job-redeploy.mdx";
 
 To programmatically redeploy your service (for instance, from a CI pipeline), you will need to call your service's custom webhook. You can find your webhook by expanding your deployed service and going to the **Settings** tab.
 
-![Webhook](https://user-images.githubusercontent.com/11699655/120046959-ac25c480-c013-11eb-8b2f-e6bfd704d7fc.png "webhook in the settings tab")
+![Webhook](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/378409ad-73e4-41fe-a149-2b76b32bf800/large "webhook in the settings tab")
 
 Make sure to replace the `YOUR_COMMIT_HASH` field with the tag of your Docker image.

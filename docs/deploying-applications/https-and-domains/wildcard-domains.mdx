@@ -29,7 +29,7 @@ It might take up to 30 minutes for DNS records to fully propagate. Please wait b
 
 Once you've created this record, simply deploy an application that falls under that wildcard domain:
 
-![Custom Domain Deployment](https://files.readme.io/dea636d-customdomain.png "Custom Domain Deployment")
+![Custom Domain Deployment](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/0c665ba1-bd7f-4e19-1b80-606af85cc500/large "Custom Domain Deployment")
 
 ## Wildcard Certificates
 
@@ -46,11 +46,11 @@ Once you've created this record, simply deploy an application that falls under t
 
 2. Once DNS propagation is complete, deploy the **HTTPS Issuer** template to the `cert-manager` namespace from the Porter Dashboard.
 
-![HTTPS issuer deployment](https://files.readme.io/231ad37-Screen_Shot_2021-05-07_at_8.18.06_PM.png "Screen Shot 2021-05-07 at 8.18.06 PM.png")
+![HTTPS issuer deployment](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/2ab10974-4c81-44ad-a35d-51b78ff3c600/large "Screen Shot 2021-05-07 at 8.18.06 PM.png")
 
 3. Enter the email you'd like to receive any updates about the certificate that will be issued (e.g. expiry date). Enable the wildcard domain, copy your personal access token and input the wildcard domain you have made the A record for in step 1. Then hit the **Deploy** button.
 
-![Deploy HTTPS issuer](https://files.readme.io/3a6e36c-Screen_Shot_2021-05-07_at_8.20.30_PM.png "Screen Shot 2021-05-07 at 8.20.30 PM.png")
+![Deploy HTTPS issuer](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/a9648217-a953-4bf4-c8c9-95b015010000/large "Screen Shot 2021-05-07 at 8.20.30 PM.png")
 
 It might take a few minutes for the HTTPS Issuer instance to be ready. To be safe, wait 5~10 minutes before you start creating deployments that use the wildcard domain.
 
@@ -58,7 +58,7 @@ It might take a few minutes for the HTTPS Issuer instance to be ready. To be saf
 
 1. From the **Web Service** view, click **Enable Custom Domains**. Put in the name of the domain you'd like to expose your web service on and make sure it matches the wildcard domain you have configured in the previous section. Then toggle the **Use wildcard domain** option.
 
-![Wildcard domain option](https://files.readme.io/8fbcb3f-Screen_Shot_2021-05-07_at_8.26.23_PM.png "Screen Shot 2021-05-07 at 8.26.23 PM.png")
+![Wildcard domain option](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/3bd5c399-02d3-4eb0-836e-64ec1df14200/large "Screen Shot 2021-05-07 at 8.26.23 PM.png")
 
 After you hit deploy, it might take a few minutes for the endpoint to be secured with HTTPS. Once that's done, you will be able to access endpoints on the domain you have specified.
 
