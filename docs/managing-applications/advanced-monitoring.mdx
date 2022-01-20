@@ -103,7 +103,7 @@ Here, `<SLACK_WEBHOOK>` is the webhook `alertmanager` will use to push messages 
 This section lists some common alerting rules that help notify you of issues at the cluster level. Do note that you can tweak the default values in these, and we do recommend experimenting with the thresholds and alerting windows in these samples, in order to find the best possible fit for your workloads.
 
 
-### Node Readiness
+### `Node` Readiness
 
 ```yaml
 - alert: KubernetesNodeReady
@@ -118,7 +118,7 @@ This section lists some common alerting rules that help notify you of issues at 
 
 Node readiness issues typically arise when one or more nodes in your Kubernetes cluster are either not running, or are unresponsive. In such situations, it's useful to access the cloud dashboard for the infrastructure provider running your cluster, in order to determine the actual cause.
 
-### Node Memory Pressure
+### `Node` Memory Pressure
 
 ```yaml
 - alert: KubernetesMemoryPressure
@@ -133,4 +133,62 @@ Node readiness issues typically arise when one or more nodes in your Kubernetes 
 
 Memmory pressure errors typically mean that one or more of your nodes are running out of memory. In some cases, this can be handled automatically by the cluster autoscaler, which will add more nodes to your cluster, in order to accomodate workloads whose resource requetes can't fit with existing nodes. But it's a good idea to keep an eye on this alert - if raised frequently, it might be due to a resource leak within your workload(s).
 
+### `Pod` CPU Throttling
 
+```yaml
+- alert: PodCPUThrottling
+    expr: 100 * sum by(container_name, pod_name, namespace) (increase(container_cpu_cfs_throttled_periods_total{container_name!=""}[5m])) / sum by(container_name, pod_name, namespace) (increase(container_cpu_cfs_periods_total[5m])) > 25
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: Kubernetes Pod CPU throttled (instance {{ $labels.instance }})
+      description: "{{ $labels.pod }}'s CPU is throttled\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+If set, this alert will be triggered when application `Pods` will see their CPU requests being throttled. This is typically a situation where you'd need to monitor your application logs, to understand the reasons behind constantly high CPU usage.
+
+### `Pod` Out-of-Memory(OOM) Errors
+
+```yaml
+- alert: KubernetesContainerOomKiller
+    expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: Kubernetes container oom killer (instance {{ $labels.instance }})
+      description: "Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+This alert is triggered when your application `Pod` runs out of memory. The quickest fix is to increase the amount of RAM allocated to the `Pod`, but frequent instances of this alert could point towards a generalised memory leak in your code.
+
+### Kubernetes `Job` Failures
+
+```yaml
+- alert: KubernetesJobFailed
+    expr: kube_job_status_failed > 0
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: Kubernetes Job failed (instance {{ $labels.instance }})
+      description: "Job {{$labels.namespace}}/{{$labels.exported_job}} failed to complete\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+If any jobs set up on Porter fail due to a misconfiguration, or an application-specific error, this alert will be triggered. Viewing the job logs for that particular run on the Porter dashboard will give you significant insight into the reasons behind the failure.
+
+### `Pod` `CrashLoopBackoff` Errors
+
+```yaml
+- alert: KubernetesPodCrashLooping
+    expr: increase(kube_pod_container_status_restarts_total[1m]) > 3
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: Kubernetes pod crash looping (instance {{ $labels.instance }})
+      description: "Pod {{ $labels.pod }} is crash looping\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+``` 
+
+Application `Pods` experience `CrashLoopBackoff` errors when the application tries to boot up and exits with an error code - this error is raised if this happens more than three times. Debugging such errors would require checking the `Events` tab on your application dashboard on Porter; each `CrashLoopBackoff` event's logs will be available there, giving you information on what caused your app to crash.
