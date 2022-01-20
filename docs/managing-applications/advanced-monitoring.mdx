@@ -15,7 +15,12 @@ Let's say that you need to configure an alert that is triggered when a cluster's
 
 First, navigate to the `Applications` tab on your Porter cluster, and select the `prometheus` application under the `monitoring` namespace.
 
-Next, click on `Helm Values` - in case it's not visible, turn on `DevOps Mode`, which allows you to customise your prometheus deployment. Add the following block to the end of the file:
+![Prometheus](https://user-images.githubusercontent.com/288007/150322848-48a97f2f-b7b7-43ff-8031-6714f94e8e5c.png)
+
+Next, click on `Helm Values` - in case it's not visible, turn on `DevOps Mode`, which allows you to customise your prometheus deployment. 
+![Helm values for Prometheus](https://user-images.githubusercontent.com/288007/150323094-afd5884f-2bd3-4e35-b840-478b553cff12.png)
+
+In the editor that appears, add the following block to the end of the file:
 
 ```yaml
 serverFiles:
@@ -45,7 +50,7 @@ serverFiles:
 
 The alert we're configuring here consists of a name, a PromQL query as well as a window where Prometheus will check that the alert continues to be active during each evaluation for 10 minutes before firing the alert. This can be customised, as can the actual summary and descriptions. 
 
-If you wish to add more alerts, it's eas easy as appending them inside the `rules:` object. Let's say you'd now like to add another alert that's triggered when a job fails on your cluster:
+If you wish to add more alerts, it's as easy as appending them inside the `rules:` object. Let's say you'd now like to add another alert that's triggered when a job fails on your cluster:
 
 ```yaml
 serverFiles:
@@ -72,6 +77,10 @@ serverFiles:
 ```
 
 Once you've added the alerts you need, click `Deploy`.
+
+:::warning YAML Syntax
+Please be careful about the indentation used in your YAML, whilst configuring these alerts. Improper use of spaces will lead to an error.
+:::
 
 ## Configuring notifications
 
