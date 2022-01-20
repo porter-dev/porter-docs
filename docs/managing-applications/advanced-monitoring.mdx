@@ -192,3 +192,18 @@ If any jobs set up on Porter fail due to a misconfiguration, or an application-s
 ``` 
 
 Application `Pods` experience `CrashLoopBackoff` errors when the application tries to boot up and exits with an error code - this error is raised if this happens more than three times. Debugging such errors would require checking the `Events` tab on your application dashboard on Porter; each `CrashLoopBackoff` event's logs will be available there, giving you information on what caused your app to crash.
+
+### Stuck `CronJobs`
+
+```yaml
+- alert: KubernetesCronjobTooLong
+    expr: time() - kube_cronjob_next_schedule_time > 3600
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: Kubernetes CronJob too long (instance {{ $labels.instance }})
+      description: "CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} is taking more than 1h to complete.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+This alert is triggered when a `CronJob` runs for more than an hour, which could be because the job is stuck. Checking the logs for these jobs on the Porter dashboard will allow you to understand the reasons behind such jobs.
