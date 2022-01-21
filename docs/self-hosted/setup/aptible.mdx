@@ -44,7 +44,9 @@ aptible config:set --app porter \
 
 :::info
 
-**Note:** if you are using an Aptible default domain `*.on-aptible.com`, you may have to deploy Porter without the `SERVER_URL` variable set, and then run `aptible config:set` again after you set up the endpoint in Aptible. You can do this by only adding `SERVER_URL` in `aptible config:set` on subsequent deployments:\n\n`sh\naptible config:set --app porter SERVER_URL=https://<subdomain>.on-aptible.com\n`
+**Note:** if you are using an Aptible default domain `*.on-aptible.com`, you may have to deploy Porter without the `SERVER_URL` variable set, and then run `aptible config:set` again after you set up the endpoint in Aptible. You can do this by only adding `SERVER_URL` in `aptible config:set` on subsequent deployments:
+
+`sh aptible config:set --app porter SERVER_URL=https://<subdomain>.on-aptible.com`
 
 :::
 
