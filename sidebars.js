@@ -141,8 +141,21 @@ const sidebars = {
         // },
         "managing-applications/application-metrics",
         "managing-applications/logging-options",
-        "managing-applications/alerting",
-        "managing-applications/advanced-monitoring",
+        //"managing-applications/alerting",
+        {
+          type: "category",
+          label: "Alerting",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "managing-applications/alerting",
+          },
+          items: [
+            "managing-applications/alerting/slack-notifications",
+            "managing-applications/alerting/advanced-monitoring"
+          ],
+        },
+        //"managing-applications/advanced-monitoring",
         // TODO: alerting category
         // {
         //   type: "category",
