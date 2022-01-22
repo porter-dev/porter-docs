@@ -140,7 +140,7 @@ Node readiness issues typically arise when one or more nodes in your Kubernetes 
       description: "{{ $labels.node }} has MemoryPressure condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ```
 
-Memmory pressure errors typically mean that one or more of your nodes are running out of memory. In some cases, this can be handled automatically by the cluster autoscaler, which will add more nodes to your cluster, in order to accomodate workloads whose resource requetes can't fit with existing nodes. But it's a good idea to keep an eye on this alert - if raised frequently, it might be due to a resource leak within your workload(s).
+Memory pressure errors typically mean that one or more of your nodes are running out of memory. In some cases, this can be handled automatically by the cluster autoscaler, which will add more nodes to your cluster, in order to accommodate workloads whose resource requests can't fit with existing nodes. But it's a good idea to keep an eye on this alert - if raised frequently, it might be due to a resource leak within your workload(s).
 
 ### `Pod` CPU Throttling
 
