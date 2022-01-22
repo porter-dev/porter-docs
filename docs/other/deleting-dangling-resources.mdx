@@ -18,6 +18,10 @@ Go to the **EKS** section on your AWS console, and delete the cluster in questio
 
 On the **EC2** dashboard, navigate to the **Auto Scaling Groups** section, and remove any auto scaling groups that contain your cluster's name. Once they're deleted, you need to delete any launch configurations that may be left over, containing your cluster's name.
 
+### Removing Load Balancers
+
+First, navigate to the **VPC** section in your AWS console to see the VPC's that are currently in use. Select the VPC that belongs to the cluster you've provisioned, and copy the VPC ID. Then go to the **Load Balancers** section on the **EC2** dashboard, and locate the load balancer for your cluster using the VPC ID you just copied as a filter - delete any load balancers found.
+
 ### Terminating EC2 nodes
 
 Deleting the EKS cluster and associated auto scaling groups and launch configurations will ensure your EC2 nodes are also terminated; you can navigate to the **Instances** section on the EC2 dashboard to confirm.
@@ -28,6 +32,7 @@ Navigate to the **VPC** section in your AWS console to see the VPC's that are cu
 
 1. Click on **NAT Gateways**, and use the VPC ID to filter out the NAT Gateway for your cluster; select it and then click on **Actions** -> **Delete NAT Gateway**. 
 2. After ensuring the NAT Gateway was deleted, navigate to **Internet Gateways**, and use the VPC ID to locate the Internet Gateway for your cluster; select it and click on **Actions** -> **Detach from VPC**. Once the gateway is detached, select **Actions** -> **Delete Internet gateway**.
+3. 
 
 ![Delete VPC](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/e74141e4-6a77-4a08-6ffb-541586499300/large "Screen Shot 2021-03-26 at 4.05.16 PM.png")
 
