@@ -125,7 +125,7 @@ This section lists some common alerting rules that help notify you of issues at 
       description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ```
 
-Node readiness issues typically arise when one or more nodes in your Kubernetes cluster are either not running, or are unresponsive. In such situations, it's useful to access the cloud dashboard for the infrastructure provider running your cluster, in order to determine the actual cause.
+Node readiness issues typically arise when one or more nodes in your Kubernetes cluster are either not running, or are unresponsive. In such situations, it's useful to first navigate to the `Nodes` tab on your cluster dashboard, on Porter; this will give you an idea as to when the node became unavailable, and provide you with some information as to the cause. You can also access the cloud dashboard for the infrastructure provider running your cluster, in order to determine the actual cause in greater detail.
 
 ### `Node` Memory Pressure
 
