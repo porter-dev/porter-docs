@@ -8,7 +8,7 @@ title: Network Configuration Options
 
 Most of the time, you can customize the NGINX configuration by adding an "Ingress Annotation" when deploying a web service. This can be found in the "Advanced" tab of the web template:
 
-![Advanced tab ingress](https://files.readme.io/fcfa8a2-Screen_Shot_2021-06-02_at_5.15.26_PM.png "Screen Shot 2021-06-02 at 5.15.26 PM.png")
+![Advanced tab ingress](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/0e1036fe-ef04-4bd5-abe9-8bcee6fc1d00/large "Screen Shot 2021-06-02 at 5.15.26 PM.png")
 
 To add an annotation, simply click "Add row" and add key-value pairs for the annotation.
 
@@ -94,7 +94,7 @@ controller:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb-ip
 ```
 
-![AWS nginx config](https://files.readme.io/26d96cf-Screen_Shot_2021-05-11_at_10.08.32_AM.png "Screen Shot 2021-05-11 at 10.08.32 AM.png")
+![AWS nginx config](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/f22c7c1c-e9a4-45d6-6492-2c37e6c31200/large "Screen Shot 2021-05-11 at 10.08.32 AM.png")
 
 :::info Update: December 10, 2021
 
@@ -114,7 +114,7 @@ On Porter clusters provisioned through GCP, traffic flows through a regional TCP
 
 1. You must first create a static global IP address in the GCP console. You can do this by navigating to [External IP addresses](https://console.cloud.google.com/networking/addresses/list) (**VPC Network > External IP Addresses**), and clicking "Reserve External Address". Name this address something like `porter-ip-address` and select "Global" for the type:
 
-![Global LB config](https://files.readme.io/5e56940-Screen_Shot_2021-05-10_at_2.25.04_PM.png "Screen Shot 2021-05-10 at 2.25.04 PM.png")
+![Global LB config](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/f51bd6b7-f441-4a11-33b4-8859e0393800/large "Screen Shot 2021-05-10 at 2.25.04 PM.png")
 
 Copy the created IP address to the clipboard.
 
@@ -122,7 +122,7 @@ Copy the created IP address to the clipboard.
 
 3. Install an HTTPS issuer on the Porter dashboard by going to **Launch > Community Addons > HTTPS Issuer**. Toggle the checkbox **Create GCE Ingress**. If you have already installed the HTTPS issuer, you will have to delete your current issuer and create a new one.
 
-![HTTPS ingress with GCE](https://files.readme.io/a58e975-Screen_Shot_2021-05-10_at_4.12.27_PM.png "Screen Shot 2021-05-10 at 4.12.27 PM.png")
+![HTTPS ingress with GCE](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/c37f044c-9528-4531-2fdb-f1bbb7861a00/large "Screen Shot 2021-05-10 at 4.12.27 PM.png")
 
 4. Create the web service by going to the Porter dashboard and navigating to **Launch > Web service**. Link up your source, and then configure the following three settings:
 
@@ -138,10 +138,10 @@ kubernetes.io/ingress.global-static-ip-name: porter-ip-address # IMPORTANT: repl
 
 It should look something like this:
 
-![Deployment config](https://files.readme.io/acdf9c2-Screen_Shot_2021-05-10_at_4.24.01_PM.png "Screen Shot 2021-05-10 at 4.24.01 PM.png")
+![Deployment config](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/66b77f56-b352-4b93-ed11-a7907284e500/large "Screen Shot 2021-05-10 at 4.24.01 PM.png")
 
 - Still in the "Advanced" tab, you must set up a custom health check at an application endpoint. This is by default set to `/healthz`, but you can choose whichever path you'd like. This endpoint must return a `200 OK` status when it is pinged.
 
-![Healthz config](https://files.readme.io/9b5432a-Screen_Shot_2021-05-10_at_4.24.13_PM.png "Screen Shot 2021-05-10 at 4.24.13 PM.png")
+![Healthz config](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/464a064d-ac58-436d-1d45-03a97b768100/large "Screen Shot 2021-05-10 at 4.24.13 PM.png")
 
 5. Click "Deploy". It will take 10-15 minutes for the load balancer to be created and the certificates to be issued.

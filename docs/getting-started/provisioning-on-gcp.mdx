@@ -18,7 +18,7 @@ To use Porter on GCP, you must first enable some APIs on your project.
 
 1. Navigate to the **APIs & Services** tab of your project.
 
-![APIs and services](https://files.readme.io/210337a-Screen_Shot_2021-05-06_at_6.23.07_PM.png "Screen Shot 2021-05-06 at 6.23.07 PM.png")
+![APIs and services](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/75c924c8-88d4-40a7-5a35-5e29261f4d00/large "Screen Shot 2021-05-06 at 6.23.07 PM.png")
 
 2. Click on the **Enable APIs and Services** button at the top. This will bring up a catalog of APIs that you can enable on GCP. Enable the following four APIs:
 
@@ -33,31 +33,31 @@ It might take a few minutes for each of these APIs to be enabled. Once you can c
 
 1. First, go to your [Google Cloud console](https://console.cloud.google.com/) and navigate to **IAM & Admin** -> **Service Accounts**:
 
-![Service accounts](https://files.readme.io/f0f2b69-Screen_Shot_2021-04-15_at_6.41.26_PM.png "Screen Shot 2021-04-15 at 6.41.26 PM.png")
+![Service accounts](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/c7dbb5ea-64ff-4ac5-4b97-6b4ff403cb00/large "Screen Shot 2021-04-15 at 6.41.26 PM.png")
 
 <br />
 
 2. Select **Create Service Account**:
 
-![Create service account](https://files.readme.io/38dd34a-Screen_Shot_2021-04-15_at_6.45.42_PM.png "Screen Shot 2021-04-15 at 6.45.42 PM.png")
+![Create service account](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/a625aa4d-08d9-4a47-885a-d470fd1a3100/large "Screen Shot 2021-04-15 at 6.45.42 PM.png")
 
 <br />
 
 3. After naming your service account, grant the service account these four permissions: **Cloud Storage > Storage Admin**, **Compute Engine > Compute Admin**, **Kubernetes Engine > Kubernetes Engine Admin**, and **Service Accounts > Service Account User**. Select **Done** to create the service account.
 
-![Create service account confirmation](https://files.readme.io/15b1d28-Screen_Shot_2021-01-28_at_4.34.21_PM.png "Screen Shot 2021-01-28 at 4.34.21 PM.png")
+![Create service account confirmation](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/497483cc-c2cc-4e53-3535-bea44f81e700/large "Screen Shot 2021-01-28 at 4.34.21 PM.png")
 
 <br />
 
 4. Once the service account has been created, under **Actions** select **Manage keys**.
 
-![Manage keys](https://files.readme.io/b94a4ef-Screen_Shot_2021-04-15_at_6.51.25_PM.png "Screen Shot 2021-04-15 at 6.51.25 PM.png")
+![Manage keys](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/7ed41d02-b6dd-40cf-b2aa-bdbb23155900/large "Screen Shot 2021-04-15 at 6.51.25 PM.png")
 
 <br />
 
 5. Select **ADD KEY** -> **Create new key** and then choose **JSON** as your key type. After creation, your JSON key will automatically be downloaded as a file.
 
-![Download JSON](https://files.readme.io/ebeb5c2-Screen_Shot_2021-04-15_at_6.56.30_PM.png "Screen Shot 2021-04-15 at 6.56.30 PM.png")
+![Download JSON](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/9e17f17a-9d9e-4bdc-5978-55275f3d9a00/large "Screen Shot 2021-04-15 at 6.56.30 PM.png")
 
 <br />
 
@@ -69,7 +69,7 @@ You can find your GCP project ID by navigating to [console.cloud.google.com](htt
 
 :::
 
-![image](https://files.readme.io/9dc1576-Screen_Shot_2021-10-26_at_12.08.00_AM.png)
+![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/8ffc379d-e726-4129-a542-111975731300/large)
 
 After clicking **Continue** from Porter, installation will begin automatically.
 
@@ -85,10 +85,10 @@ We recommend that you delete all provisioned resources through Porter as well as
 
 To delete resources, click on **Cluster Settings** from the **Cluster Dashboard**.
 
-![Cluster settings](https://files.readme.io/c1ed31a-Screen_Shot_2021-01-09_at_2.59.49_PM.png "Screen Shot 2021-01-09 at 2.59.49 PM.png")
+![Cluster settings](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/2c71940a-a86b-46de-b32d-2788ecbc9800/large "Screen Shot 2021-01-09 at 2.59.49 PM.png")
 
 Click **Delete Cluster** to remove the cluster from Porter and delete resources in your GCP console. It may take up to 30 minutes for these resources to be deleted from your GCP console.
 
 **Note that you can only delete cluster resources that have been provisioned via Porter from the dashboard.**
 
-![Cluster settings delete modal](https://files.readme.io/a7b36fc-Screen_Shot_2021-01-09_at_3.02.07_PM.png "Screen Shot 2021-01-09 at 3.02.07 PM.png")
+![Cluster settings delete modal](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/d65c7b50-fae0-4c77-1d5a-583d827cbd00/large "Screen Shot 2021-01-09 at 3.02.07 PM.png")

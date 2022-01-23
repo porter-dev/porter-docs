@@ -6,7 +6,7 @@ title: porter run
 
 :::info
 
-A guide on using `porter run` can be found [here](../remote-shell-access).
+A guide on using `porter run` can be found [here](/cli/remote-shell-access).
 
 :::
 :::info Prerequisites
@@ -19,6 +19,8 @@ A guide on using `porter run` can be found [here](../remote-shell-access).
 
 <br></br>
 
+### `porter run`
+
 The `porter run` command allows users to execute a command on a remote container:
 
 ```
@@ -26,3 +28,13 @@ porter run [APP_NAME] -- [COMMAND] [args...]
 ```
 
 The `APP_NAME` is the name of the application on the Porter dashboard (this can be a release either in the "Applications" or the "Jobs" tab).
+
+### `porter run cleanup`
+
+It can also cleanup residual instances of applications that may have been left behind as a result of a previous call to `porter run`:
+
+```
+porter run cleanup
+```
+
+You may learn more about ephemeral instances in the [Ephemeral Instances](/cli/remote-shell-access#ephemeral-pods) section.

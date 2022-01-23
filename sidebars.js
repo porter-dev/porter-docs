@@ -275,12 +275,50 @@ const sidebars = {
       ],
       collapsible: false,
     },
-    // {
-    //   type: "category",
-    //   label: "Preview Environments",
-    //   items: ["preview-environments/overview"],
-    //   collapsible: false,
-    // },
+    {
+      type: "category",
+      label: "Language-Specific Guides",
+      items: [
+        {
+          type: "doc",
+          label: "NodeJS",
+          id: "language-guides/node-js",
+        },
+        {
+          type: "doc",
+          label: "Python",
+          id: "language-guides/python",
+        },
+        {
+          type: "doc",
+          label: "Go",
+          id: "language-guides/go",
+        },
+      ],
+      collapsible: false,
+    },
+    {
+      type: "category",
+      label: "Preview Environments",
+      items: [
+        "preview-environments/setup",
+        "preview-environments/porter-yaml-reference",
+        {
+          type: "category",
+          label: "Examples",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "preview-environments/examples",
+          },
+          items: [
+            "preview-environments/examples/basic-web-application",
+            "preview-environments/examples/web-and-database",
+          ],
+        },
+      ],
+      collapsible: false,
+    },
     {
       type: "category",
       label: "Other Guides",

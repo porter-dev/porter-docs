@@ -1,0 +1,21 @@
+"on":
+  pull_request:
+    types:
+    - closed
+name: Porter Preview Environment
+jobs:
+  porter-delete-preview:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Delete Porter preview env
+      timeout-minutes: 30
+      uses: porter-dev/porter-delete-preview-action@v0.1.0
+      with:
+        cluster: "31"
+        host: https://dashboard.dev.getporter.dev
+        installation_id: "22158312"
+        namespace: pr-${{ github.event.pull_request.number }}-porter-docs
+        project: "3"
+        repo_name: porter-docs
+        repo_owner: ${{ github.repository_owner }}
+        token: ${{ secrets.PORTER_TOKEN_3 }}

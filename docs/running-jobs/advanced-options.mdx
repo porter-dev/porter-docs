@@ -8,7 +8,7 @@ title: Advanced Options
 
 Jobs can be stopped by clicking the stop icon on a job in a "Running" state:
 
-![Stop job](https://user-images.githubusercontent.com/25448214/118313395-acc14580-b4c0-11eb-833b-a5d91ce8334c.png "Screen Shot 2021-05-14 at 2 28 27 PM")
+![Stop job](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/e3806c4b-1e8f-44db-1824-983092365700/large "Screen Shot 2021-05-14 at 2 28 27 PM")
 
 You can configure the stopping behavior of the job in the "Advanced" tab. By default, Porter will send `SIGTERM` to the job and all child processes of the job, wait for the job to terminate, and send `SIGKILL` if the job has not terminated after 30 seconds. The time between `SIGTERM` and `SIGKILL` can be configured, and you can avoid sending the signal to all child processes by toggling the "Propagate SIGTERM to child processes" checkbox.
 
