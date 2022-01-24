@@ -141,7 +141,6 @@ const sidebars = {
         // },
         "managing-applications/application-metrics",
         "managing-applications/logging-options",
-        //"managing-applications/alerting",
         {
           type: "category",
           label: "Alerting",
@@ -152,25 +151,9 @@ const sidebars = {
           },
           items: [
             "managing-applications/alerting/slack-notifications",
-            "managing-applications/alerting/advanced-monitoring"
+            "managing-applications/alerting/advanced-monitoring",
           ],
         },
-        //"managing-applications/advanced-monitoring",
-        // TODO: alerting category
-        // {
-        //   type: "category",
-        //   label: "Alerting",
-        //   className: "expandable-subdoc",
-        //   link: {
-        //     type: "doc",
-        //     id: "managing-applications/alerting",
-        //   },
-        //   items: [
-        //     "managing-applications/alerting/slack-notifications",
-        //     "managing-applications/alerting/configuring-alerts",
-        //   ],
-        // },
-        // "managing-applications/autoscaling",
         "managing-applications/network-configuration-options",
         "managing-applications/application-troubleshooting",
         "managing-applications/version-upgrades",
