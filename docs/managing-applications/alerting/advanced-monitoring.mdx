@@ -6,19 +6,19 @@ title: Advanced Monitoring
 
 Each Porter cluster ships with its own Prometheus and alertmanager deployment, allowing you to set up your own monitoring rules and alerting pipelines. This can be quite useful when there's a problem with either the underlying infrastructure, or when you need to be notified when your cluster's nodes are running out of capacity and need to be reconfigured with more CPU/RAM.
 
-
 This section will walk you through the process of configuring some common monitoring alerts. Please note that these alerts can be modified with values and parameters that you deem to fit your application best.
 
 ## Configuring a Monitoring Alert
 
-Let's say that you need to configure an alert that is triggered when a cluster's nodes are not ready, or are unavailable. 
+Let's say that you need to configure an alert that is triggered when a cluster's nodes are not ready, or are unavailable.
 
 First, navigate to the `Applications` tab on your Porter cluster, and select the `prometheus` application under the `monitoring` namespace.
 
-![Prometheus](https://user-images.githubusercontent.com/288007/150625828-6df3d4cb-2343-44c2-a43e-35b47ba98428.png)
+![Prometheus](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/16ee790c-4d84-4f0e-7703-af290362fa00/large)
 
-Next, click on `Helm Values` - in case it's not visible, turn on `DevOps Mode`, which allows you to customise your prometheus deployment. 
-![Helm values for Prometheus](https://user-images.githubusercontent.com/288007/150625866-4cdbb329-ab7a-4cd6-a0b1-88e967099133.png)
+Next, click on `Helm Values` - in case it's not visible, turn on `DevOps Mode`, which allows you to customise your prometheus deployment.
+
+![Helm values for Prometheus](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/d454d703-e8a3-4b5c-358b-90e98df8ed00/large)
 
 In the editor that appears, add the following block to the end of the file:
 
@@ -48,7 +48,7 @@ serverFiles:
               description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ```
 
-The alert we're configuring here consists of a name, a PromQL query as well as a window where Prometheus will check that the alert continues to be active during each evaluation for 10 minutes before firing the alert. This can be customised, as can the actual summary and descriptions. 
+The alert we're configuring here consists of a name, a PromQL query as well as a window where Prometheus will check that the alert continues to be active during each evaluation for 10 minutes before firing the alert. This can be customised, as can the actual summary and descriptions.
 
 If you wish to add more alerts, it's as easy as appending them inside the `rules:` object. Let's say you'd now like to add another alert that's triggered when a job fails on your cluster:
 
@@ -97,7 +97,7 @@ alertmanagerFiles:
     receivers:
       - name: slack-notifications
         slack_configs:
-          - channel: '#alerting-notifs'
+          - channel: "#alerting-notifs"
             text: >-
               Note - {{ .GroupLabels.app }} is throwing a
               {{.GroupLabels.alertname }} alert.
@@ -110,7 +110,6 @@ Here, `<SLACK_WEBHOOK>` is the incoming webhook `alertmanager` will use to push 
 ## Common alert configurations
 
 This section lists some common alerting rules that help notify you of issues at the cluster level. Do note that you can tweak the default values in these, and we do recommend experimenting with the thresholds and alerting windows in these samples, in order to find the best possible fit for your workloads.
-
 
 ### `Node` Readiness
 
@@ -198,7 +197,7 @@ If any jobs set up on Porter fail due to a misconfiguration, or an application-s
     annotations:
       summary: Kubernetes pod crash looping (instance {{ $labels.instance }})
       description: "Pod {{ $labels.pod }} is crash looping\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-``` 
+```
 
 Application `Pods` experience `CrashLoopBackoff` errors when the application tries to boot up and exits with an error code - this error is raised if this happens more than three times. Debugging such errors would require checking the `Events` tab on your application dashboard on Porter; each `CrashLoopBackoff` event's logs will be available there, giving you information on what caused your app to crash.
 
