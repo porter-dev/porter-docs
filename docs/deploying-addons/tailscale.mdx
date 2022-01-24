@@ -53,7 +53,8 @@ To confirm that the Tailscale relay node is working, we will connect to a Redis 
 From the Tailscale add-on, we can see that the cluster IP of our Redis instance is 10.147.248.69. We can connect to this Redis instance by IP using the Redis CLI:
 
 ```
-$ redis-cli -h 10.147.248.69 -p 6379\n10.147.248.69:6379> ping
+$ redis-cli -h 10.147.248.69 -p 6379
+10.147.248.69:6379> ping
 PONG
 ```
 
