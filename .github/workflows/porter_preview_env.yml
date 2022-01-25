@@ -13,7 +13,7 @@ jobs:
       with:
         action_id: ${{ github.run_id }}
         branch: ${{ github.head_ref }}
-        cluster: "31"
+        cluster: "34"
         host: https://dashboard.dev.getporter.dev
         installation_id: "22158312"
         namespace: pr-${{ github.event.pull_request.number }}-porter-docs
