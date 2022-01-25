@@ -12,7 +12,7 @@ Environment groups are stored in **your own cluster** as a Kubernetes [Config Ma
 
 :::
 
-## Creating and Using environment groups
+## Creating and Using Environment Groups
 
 You can create a new environment group in the "Env Groups" tab on the dashboard. Click on "Create Env Group" from this tab:
 
@@ -28,7 +28,7 @@ You will be redirected to the list of environment groups, and your new environme
 
 You can then select your environment group and click "Load Selected Env Group", which will automatically populate the environment group variables that you previously set. You can modify these environment variables in this tab, for example if you'd like to add environment variables that aren't currently in the environment group. To view all deployment options, head over to our [application deployment docs](./overview).
 
-## 🔒 Creating secret environment variables
+## 🔒 Creating Secret Environment Variables
 
 Porter supports creating secret environment variables that will not be exposed after creation. At the moment, you must create an environment group in order to create secret environment variables. To create a secret environment variable, click on the lock icon next to the environment variable during creation of the environment variable:
 
@@ -44,7 +44,15 @@ When you launch a new service, and you select "Load from Env Group" in the "Envi
 
 :::
 
-## Updating and deleting environment groups
+## Syncing Environment Groups to Applications
+
+Environment groups have the capability to sync with applications, so when the environment variables are updated the synced applications are automatically restarted. To enable environment group syncing, click on **Sync env group** when loading the environment variables from the group:
+
+![]()
+
+When you subsequently update those env group variables from the **Env groups** tab, the applications will be restarted with the new variables.
+
+## Updating and Deleting Environment Groups
 
 To update or delete your environment group, navigate back to the "Env Groups" tab, and click on the existing environment group to update or delete. You can make changes to the env group here, and select the "Update" button when finished:
 
