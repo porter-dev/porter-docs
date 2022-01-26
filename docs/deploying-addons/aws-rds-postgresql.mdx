@@ -1,0 +1,28 @@
+---
+id: aws-rds-postgresql
+slug: /deploying-addons/aws-rds-postgresql
+title: AWS RDS PostgreSQL
+---
+
+## Overview
+
+Porter Databases allow you to spin up managed cloud databaser services, hosted by the same cloud provider running your Porter cluster. These databases are placed within the same VPC as the Porter cluster, allowing for a robust database setup accessible only to your application workloads. Currently, Porter Databases has support for AWS RDS PostgreSQL, with support for MySQL coming soon.
+
+:::warning General Availability
+Please note that this feature has not been rolled out for all users; please reach out to us on Slack/Discord or on [support@porter.run](mailto:support@porter.run) if you'd like to enable it for your projects.
+:::
+
+## Features
+
+With Porter Databases, you can spin up a AWS RDS PostgreSQL instance within your AWS account, that is placed within your Porter cluster's VPC, along with associated networking and security configurations to allow easy database access from your applications. As of now, we support orchestrating a single replica placed within a private subnet on any one availability zone, along with the ability to specify the master credentials, an instance type as well as the exact Postgres version and family you'd like to use. These instances also come with some default backup policies, where database snapshots are taken daily, and are persisted for seven days. For each instance created through Porter, environment groups containing database access credentials are automatically created on Porter, for easy injection into your applications' configuration.
+
+## Caveats
+
+Since this is a new feature and is still under development, the following features are currently not supported:
+
+1. Multiple replicas on separate availability zones.
+2. Support for modifying the RDS instance type or metadata.
+3. Resetting the master credentials.
+
+We do recommend _not_ modifying the instance's name or metadata on the AWS console; this tends to also change the database endpoint, rendering the previous one invalid. If you do see the need to change that - or the master credentials - please note that you'd then have to inject these into your applications through environment variables; the predefined environment group will not be updated with upstream changes to the instance.
+
