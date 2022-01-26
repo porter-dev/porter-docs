@@ -56,6 +56,14 @@ This environment group contains the following environment variables:
 ![db-env-group-vars](https://user-images.githubusercontent.com/288007/151193051-b8a984a7-22ca-4ea5-be6a-9ba63b324dbe.png)
 
 
+## Connecting to an AWS RDS instance
+
+Once your database instance is up and running, you can inject the RDS environment group mentioned above into any applications that require database access. As an example, let's connect to the database using `postgres-toolbox`, a basic app that ships with Porter's community addons for easy access to Postgres databases using `psql` from within your cluster.
+
+First, we'll spin up an instance of the `postgres-toolbox` app with the RDS environment group.
+
+![pgtoolbox](https://user-images.githubusercontent.com/288007/151195720-125fc3b4-0db0-4ea6-aa1f-e4ecf6079299.png)
+
 
 
 
