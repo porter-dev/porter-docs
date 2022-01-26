@@ -26,3 +26,19 @@ Since this is a new feature and is still under development, the following featur
 
 We do recommend _not_ modifying the instance's name or metadata on the AWS console; this tends to also change the database endpoint, rendering the previous one invalid. If you do see the need to change that - or the master credentials - please note that you'd then have to inject these into your applications through environment variables; the predefined environment group will not be updated with upstream changes to the instance.
 
+
+## Deploying an AWS RDS PostgreSQL instance
+
+If Porter Databases is enabled for your project, navigate to `Databases` inside the cluster you'd like to deploy the database instance for. This will open a list of existing(if any) RDS instances created through Porter.
+
+![rds-list](https://user-images.githubusercontent.com/288007/151189519-c3ac593a-e78b-440a-ade5-6ef69e81694b.png)
+
+Now click on `Create database` - this will open up a form, asking you to choose a database name, instance type as well as Postgres version. You can also specify master credentials for accessing your database here:
+
+![create-db](https://user-images.githubusercontent.com/288007/151189786-96d2966c-c914-41ae-8f60-43174c2ca13a.png)
+
+After entering these details and clicking on `Create database`, you'll see the Porter provisioner start the database orchestration process - this typically takes between 10-15 minutes.
+
+![db-provisioner](https://user-images.githubusercontent.com/288007/151189868-ef152a8b-aac1-4018-acff-b94651196b21.png)
+
+
