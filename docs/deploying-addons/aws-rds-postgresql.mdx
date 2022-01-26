@@ -41,4 +41,21 @@ After entering these details and clicking on `Create database`, you'll see the P
 
 ![db-provisioner](https://user-images.githubusercontent.com/288007/151189868-ef152a8b-aac1-4018-acff-b94651196b21.png)
 
+## Environment Groups
+
+Every successful orchestration of a RDS instance also leads to the automatic creation of an environment group in the same namespace as the one selected whilst creating the cluster. 
+
+![db-env-group](https://user-images.githubusercontent.com/288007/151192980-9d7bb5f8-61c1-4463-a789-7a5a443bb7b7.png)
+
+This environment group contains the following environment variables:
+
+1. `PGHOST` - this is the DNS endpoint for the RDS instance, accessible only from within your Porter cluster.
+2. `PGUSERNAME` - the master user defined during the RDS instance creation process.
+3. `PGPASSWORD` - the master password defined during the RDS instance creation process.
+
+![db-env-group-vars](https://user-images.githubusercontent.com/288007/151193051-b8a984a7-22ca-4ea5-be6a-9ba63b324dbe.png)
+
+
+
+
 
