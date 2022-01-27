@@ -345,6 +345,10 @@ module.exports = {
             to: "/terms-and-privacy/privacy-policy",
             from: ["/docs/privacy-policy"],
           },
+          {
+            to: "/deploying-applications/deploying-from-github",
+            from: ["/docs/setting-up-cicd-1"],
+          },
         ],
       },
     ],
