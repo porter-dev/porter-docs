@@ -77,6 +77,10 @@ You can now use these environment variables to access your RDS Postgres instance
 
 AWS RDS instances provisioned through Porter can also be deleted through Porter. We do recommend deleting such an instance from the Porter dashboard instead of the AWS RDS console.
 
+:::warning General Availability
+Please note that destroying an AWS RDS database will also lead to _all_ data inside the database being deleted, along with all backups; this process is not reversible. Please proceed with the following steps with caution.
+:::
+
 To delete an AWS RDS instance provisioned through Porter, navigate to `Databases` within your Porter project, and click the `Delete` icon for the cluster in question:
 
 ![rds-delete-icon](https://user-images.githubusercontent.com/288007/151528402-74bdfc69-5d51-4082-bb8b-cae285abeda7.png)
