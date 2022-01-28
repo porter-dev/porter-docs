@@ -50,10 +50,11 @@ Every successful orchestration of a RDS instance also leads to the automatic cre
 This environment group contains the following environment variables:
 
 1. `PGHOST` - this is the DNS endpoint for the RDS instance, accessible only from within your Porter cluster.
-2. `PGUSERNAME` - the master user defined during the RDS instance creation process.
+2. `PGUSER` - the master user defined during the RDS instance creation process.
 3. `PGPASSWORD` - the master password defined during the RDS instance creation process.
+4. `PGPORT` - the port for the RDS instance, typically 5432.
 
-![db-env-group-vars](https://user-images.githubusercontent.com/288007/151193051-b8a984a7-22ca-4ea5-be6a-9ba63b324dbe.png)
+![db-env-group-vars](https://user-images.githubusercontent.com/288007/151534357-b15e0234-4033-410e-8012-98d6ad405fb5.png)
 
 
 ## Connecting to an AWS RDS instance
@@ -62,15 +63,15 @@ Once your database instance is up and running, you can inject the RDS environmen
 
 First, we'll spin up an instance of the `postgres-toolbox` app with the RDS environment group.
 
-![pgtoolbox](https://user-images.githubusercontent.com/288007/151523078-1df43cc9-7cf8-4f5b-b9e9-37487e846929.png)
+![pgtoolbox](https://user-images.githubusercontent.com/288007/151534760-adbef808-5479-4b0a-9d5f-f9777a395506.png)
 
 Once the application is running, you can confirm the connection details are being injected:
 
-![app-db-envs](https://user-images.githubusercontent.com/288007/151523203-92bf57d5-8662-47e8-89e4-ad106679c8e8.png)
+![app-db-envs](https://user-images.githubusercontent.com/288007/151534357-b15e0234-4033-410e-8012-98d6ad405fb5.png)
 
 You can now use these environment variables to access your RDS Postgres instance; in this example, we use `psql` to connect to our RDS instance:
 
-![psql](https://user-images.githubusercontent.com/288007/151523740-a8d6a37b-7c0d-4fee-9663-934f688b14c0.png)
+![psql](https://user-images.githubusercontent.com/288007/151535462-58ea78d2-ea8a-4422-94af-24115b8fa2af.png)
 
 
 ## Deleting AWS RDS instances
