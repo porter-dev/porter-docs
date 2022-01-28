@@ -168,7 +168,19 @@ const sidebars = {
         "deploying-addons/postgresql",
         "deploying-addons/redis",
         "deploying-addons/mongodb",
-        "deploying-addons/aws-rds-postgresql",
+        //"deploying-addons/aws-rds-postgresql",
+        {
+          type: "category",
+          label: "AWS RDS",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "deploying-addons/aws-rds",
+          },
+          items: [
+            "deploying-addons/aws-rds/aws-rds-postgresql",
+          ],
+        },
         // TODO: we should have separate docs on things like getting shell access to each DB
         // {
         //   type: "category",
