@@ -5,10 +5,15 @@ resources:
       name: "job"
     config:
       waitForJob: true
+      build:
+        method: registry
+        image: ubuntu:latest
       values:
         container:
           command: sleep 30
   - name: "docs-web"
+    depends_on:
+      - test-docs-job
     source:
       name: "web"
     config:
