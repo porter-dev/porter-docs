@@ -9,11 +9,11 @@ jobs:
       uses: actions/checkout@v2.3.4
     - name: Create Porter preview env
       timeout-minutes: 30
-      uses: porter-dev/porter-preview-action@v0.1.0
+      uses: porter-dev/porter-preview-action@v0.15.3
       with:
         action_id: ${{ github.run_id }}
         branch: ${{ github.head_ref }}
-        cluster: "31"
+        cluster: "34"
         host: https://dashboard.dev.getporter.dev
         installation_id: "22158312"
         namespace: pr-${{ github.event.pull_request.number }}-porter-docs

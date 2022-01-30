@@ -11,7 +11,7 @@ jobs:
       timeout-minutes: 30
       uses: porter-dev/porter-delete-preview-action@v0.1.0
       with:
-        cluster: "31"
+        cluster: "34"
         host: https://dashboard.dev.getporter.dev
         installation_id: "22158312"
         namespace: pr-${{ github.event.pull_request.number }}-porter-docs
