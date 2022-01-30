@@ -54,6 +54,8 @@ To delete the environment group, navigate to the "Settings" tab, and press the "
 
 ![Deleting env group](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/89fdb10b-c2f2-4be9-c575-3ac5a4e0cb00/large "env-groups-3.png")
 
+Testing
+
 ## How Secrets are Stored
 
 All env group variables are stored **in your own cluster**, and not on Porter's infrastructure. The entire env group is stored as a Kubernetes [Config Map](https://kubernetes.io/docs/concepts/configuration/configmap/), which is meant for non-sensitive, unstructured data. When you create a secret environment variable, the ConfigMap will contain a reference to a Kubernetes [Secret](https://kubernetes.io/docs/concepts/configuration/secret), which contains the secret data. This secret will be [injected into your container](https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/) as it is mounted, and will not be exposed on the Porter dashboard after creation. To summarize:
