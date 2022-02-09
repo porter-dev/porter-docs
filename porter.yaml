@@ -1,8 +1,6 @@
 version: "v1"
 resources:
   - name: "test-docs-job"
-    depends_on:
-      - docs-web
     source:
       name: "job"
     config:
