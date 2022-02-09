@@ -1,0 +1,43 @@
+---
+id: porter-get
+slug: /cli/command-reference/porter-get
+title: porter get
+---
+
+:::info Prerequisites
+
+- You've logged in to the Porter CLI after running [`porter auth login`](./porter-auth)
+- You're connected to the correct project by running [`porter projects list`](./porter-project), and set the project via [`porter config set-project [PROJECT_ID]`](./porter-config)
+- You're connected to the correct cluster by running [`porter clusters list`](./porter-cluster), and set the cluster via [`porter config set-cluster [PROJECT_ID]`](./porter-config)
+
+:::
+
+<br></br>
+
+`porter get` fetches basic information about a Porter application. It also supports outputting in the JSON and YAML formats.
+
+#### Examples
+
+To get information about a release named `sample-app`, you can run the following:
+
+```
+porter get sample-app
+```
+
+This command is namespace-scoped and uses the default namespace. To specify a different namespace, use the `--namespace` flag:
+
+```
+porter get sample-app --namespace custom-namespace
+```
+
+To output in a data interchange format such as JSON, use the `--output` flag:
+
+```
+porter get sample-app --output json
+```
+
+And similarly for YAML:
+
+```
+porter get sample-app --output yaml
+```
