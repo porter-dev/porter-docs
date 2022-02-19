@@ -3,3 +3,21 @@ id: upgrading-eks
 slug: /other/cluster-upgrades/upgrading-eks
 title: Upgrading EKS
 ---
+
+At a broad level, upgrading a Porter-provisioned EKS cluster involves the following main steps:
+
+1. Upgrading the EKS control plane
+2. Updating the launch configuration for the cluster's autoscale groups to use a new EKS AMI
+3. Refreshing the instances in the cluster to use the new AMI
+
+:::warning Application Downtime
+Please note - this process may incur downtime for a couple of minutes at the end, as yoru cluster's nodes are switched out for newer nodes - at this stage, Kubernetes will be responsible for switching your applications to working nodes, which may render them inaccessible for a few minutes.
+:::
+
+## Upgrading the EKS control plane
+
+To upgrade the cluster's control plane, navigate to the EKS dashboard on your AWS account, and for the cluster in question, click on `Update now`, in the `Kubernetes version` column.
+
+![step-1](https://user-images.githubusercontent.com/288007/154793461-042ffd02-e463-43c3-bc83-05e33bbc7dde.png)
+
+This process may take 20-30 minutes; you can check whether the upgrade's finished by hitting the Refresh button above your cluster list. Once the cluster's version is successfully upgraded, you can proceed to the next step.
