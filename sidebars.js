@@ -319,7 +319,7 @@ const sidebars = {
             id: "other/cluster-upgrades",
           },
           items: [
-            "/other/cluster-upgrades/upgrading-eks",
+            "other/cluster-upgrades/upgrading-eks",
           ],
         },
       ],
