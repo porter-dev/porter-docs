@@ -310,6 +310,18 @@ const sidebars = {
         "other/kubernetes-101",
         "other/deleting-dangling-resources",
         "other/connecting-to-cloudsql",
+        {
+          type: "category",
+          label: "Cluster Upgrades",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "other/cluster-upgrades",
+          },
+          items: [
+            "/other/cluster-upgrades/upgrading-eks",
+          ],
+        },
       ],
       collapsible: false,
     },
