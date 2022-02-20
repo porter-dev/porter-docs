@@ -81,3 +81,19 @@ Now you need to go back to the launch configuration you just modified, and set t
 
 And that's it! Repeat these steps for the second autoscaling group, using the same AMI ID, and your launch configurations will be updated.
 
+## Refreshing instances
+
+The last step in the upgrade process involves refreshing your autoscaling groups to run new instances, based on the latest versions of the launch configurations we modified; the autoscaling groups provision new instances and swap out older nodes running the older Kubernetes version in your cluster, for the newer nodes with the new Kubernetes version.
+
+To get started, navigate back to the `Auto Scaling groups` section on the EC2 dashboard, and click on the name of the autoscaling group where `Instances` is set to `2` - that's for system nodes, and we'll upgrade those nodes first. In the screen that opens up next, select the `Instance refresh` section, and click `Start instance refresh`.
+
+![step-thirteen](https://user-images.githubusercontent.com/288007/154793520-3477a95c-6d28-4964-9e46-165cd0b5ee15.png)
+
+Now, scroll down and expand the `Desired configuration` section. In the options that appear, ensure that `Update launch template` is selected, and that the version of the launch configuration you created with the new AMI, is selected in the `Version` dropdown. Then click `Start instance refresh`.
+
+![step-fourteen](https://user-images.githubusercontent.com/288007/154793522-07e34a19-c0af-4285-bed1-56430ef395ae.png)
+
+This triggers a refresh for the system nodes in your cluster, and you can monitor the status of the refresh by clicking the `Refresh` button. This process can take up to 15 minutes; once it's complete, you can move on and repeat the same procedure for the other autoscaling group.
+
+![step-fifteen](https://user-images.githubusercontent.com/288007/154793524-f62fd76e-dd20-47e3-b3b7-5644514ec3d0.png)
+
