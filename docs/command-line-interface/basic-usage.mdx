@@ -69,3 +69,11 @@ porter -h
 porter cluster -h
 porter cluster namespace -h
 ```
+
+## Cloudflare Authentication
+
+If your Porter instance is self-hosted and sits behind Cloudflare, see [this guide]() to get a Cloudflare access token. Then run the following:
+
+```
+export PORTER_CF_ACCESS_TOKEN=<your-cf-token>
+```
