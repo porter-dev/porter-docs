@@ -9,6 +9,7 @@ resources:
         method: registry
         image: ubuntu:latest
       values:
+        paused: false
         container:
           command: sleep 30
   - name: "docs-web"
