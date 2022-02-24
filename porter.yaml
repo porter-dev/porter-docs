@@ -18,6 +18,9 @@ resources:
     source:
       name: "web"
     config:
+      envgroups:
+      - name: testing
+        namespace: default
       build:
         method: "pack"
         builder: heroku/buildpacks:20
