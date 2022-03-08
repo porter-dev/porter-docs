@@ -4,7 +4,13 @@ slug: /self-hosted/advanced/form-yaml-reference
 title: Form YAML Reference
 ---
 
-Porter allows developers to build customizable forms on top of Helm by adding an optional `form.yaml` file to any Helm chart. Currently, forms can write to any field specified in a chart's `values.yaml`. We are working to add support for user-defined applets that can directly perform CRUD operations on cluster resources.
+:::info Beta Notice
+
+Porter forms are currently in beta. Please reach out on Discord or over email (contact@porter.run) for questions about Porter forms or to make feature suggestions.
+
+:::
+
+Porter allows developers to build customizable forms on top of Helm by adding an optional `form.yaml` file to any Helm chart. Currently, forms can write to any field specified in a chart's `values.yaml`. We are also working to add support for user-defined applets that can directly perform CRUD operations on cluster resources.
 
 # Basic Overview
 
@@ -154,52 +160,98 @@ A section's `contents` contains a list of form units which can display informati
 
 ### `heading`
 
+A header text component.
+
 Required fields:
 
 - `label` - Label to render (string)
 
 ### `subtitle`
 
+A helper text component.
+
 Required fields:
 
 - `label` - Label to render (string)
+
+### `checkbox`
+
+A basic checkbox component.
+
+Required fields:
+
+- `variable` - Target variable name in `values.yaml` (string)
+- `label` - Label to render (string)
+
+Optional fields:
+
+- `settings`
+  - `default` - Default value (`true`/`false`)
+
+### `select`
+
+A dropdown select component.
+
+Required fields:
+
+- `variable` - Target variable name in `values.yaml` (string)
+- `label` - Label to render (string)
+- `settings`
+  - `options` - A list of options containing a `value` and `label` field
+
+Optional fields:
+
+- `settings`
+  - `default` - Default option value (string)
 
 ### `number-input`
 
+A numerical input component (unit optional).
+
 Required fields:
 
-- `variable` - Target variable in `values.yaml` (string)
+- `variable` - Target variable name in `values.yaml` (string)
 - `label` - Label to render (string)
+
+Optional fields:
+
 - `settings`
   - `default` - Default value (number)
   - `unit` - Input unit (string)
 
 ### `string-input`
 
-Required fields:
-
-- variable - Target variable in values.yaml (string)
-- label - Label to render (string)
-- settings
-  - default - Default value (string)
-  - unit - Input unit (string)
-
-### `checkbox`
-
-- variable - Target variable in values.yaml (string)
-- label - Label to render (string)
-- settings
-  - default - Default value (boolean)
-
-### `select`
+A string input component.
 
 Required fields:
 
-- variable - Target variable in values.yaml (string)
-- label - Label to render (string)
-- settings
-  - default - Default value (string)
-  - options - A list of options containing a value and label field
+- `variable` - Target variable name in `values.yaml` (string)
+- `label` - Label to render (string)
+
+Optional fields:
+
+- `settings`
+  - `default` - Default value (string)
+  - `unit` - Input unit (string)
+
+### `array-input`
+
+An array input component that returns a list of string values.
+
+Required fields:
+
+- `variable` - Target variable name in values.yaml (string)
+- `label` - Label to render (string)
+
+### `variable`
+
+A variable for form-only state (ex: for conditionally rendering form sections).
+
+Required fields:
+
+- `variable` - Form variable name (string)
+- `settings`
+  - `default` - Default value (string)
 
 ## Conditional Rendering
 
