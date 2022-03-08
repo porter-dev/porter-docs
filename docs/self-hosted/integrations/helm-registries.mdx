@@ -1,0 +1,32 @@
+---
+id: helm-registries
+slug: /self-hosted/integrations/helm-registries
+title: Helm Registries
+---
+
+In order to add a public or private Helm registry to the existing Porter instance, you must first use the CLI to provide the registry URL and optional registry credentials. First off, make sure you downloaded the CLI and set the host for the CLI to your Porter instance via `porter config set-host`. For example, if port-forwarding to localhost, you can run:
+
+```
+porter config set-host http://localhost:8080
+porter auth login
+```
+
+Next, run the following command:
+
+```
+porter connect helm
+```
+
+For example, to add the Bitnami Helm registry, the following configuration can be set:
+
+```
+Name: bitnami
+Provide the Helm registry URL, make sure to include the protocol. For example, https://charts.bitnami.com/bitnami.
+Registry URL: https://charts.bitnami.com/bitnami
+Helm repo username (press enter for a public registry):
+Helm registry password (press enter for a public registry).
+```
+
+After this is added, you will see the following on the Porter dashboard from the **Launch** tab:
+
+![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/13079fe9-e4ce-4310-b453-79fb35a5a200/large)
