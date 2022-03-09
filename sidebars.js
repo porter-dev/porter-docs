@@ -319,9 +319,7 @@ const sidebars = {
             type: "doc",
             id: "other/cluster-upgrades",
           },
-          items: [
-            "other/cluster-upgrades/upgrading-eks",
-          ],
+          items: ["other/cluster-upgrades/upgrading-eks"],
         },
       ],
       collapsible: false,
@@ -346,7 +344,11 @@ const sidebars = {
     {
       type: "category",
       label: "Setup",
-      items: ["self-hosted/setup/local", "self-hosted/setup/aptible"],
+      items: [
+        "self-hosted/setup/local",
+        "self-hosted/setup/aptible",
+        "self-hosted/setup/helm",
+      ],
       collapsible: false,
     },
     {
@@ -356,6 +358,7 @@ const sidebars = {
         "self-hosted/integrations/google-sign-in",
         "self-hosted/integrations/github",
         "self-hosted/integrations/slack",
+        "self-hosted/integrations/helm-registries",
       ],
       collapsible: false,
     },
