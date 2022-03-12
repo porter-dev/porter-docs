@@ -46,3 +46,24 @@ server:
   tokenEncryptionKey: \"$(cat /dev/urandom | base64 | head -c 32)\"
 "
 ```
+
+## Rotating Credentials
+
+#### Rotating Database Encryption Keys
+
+In order to rotate database encryption keys for the instance, you must set the following variables:
+
+```yaml
+server:
+  dbEncryptionKey: "__random_strong_encryption_key__"
+  oldDBEncryptionKey: "__random_strong_encryption_key__"
+  newDBEncryptionKey: "__random_strong_encryption_key__"
+```
+
+#### Rotating Token Encryption Keys
+
+If you'd like to rotate token encryption keys, it will cause all existing issued tokens to become invalid. To change the token encryption key, simply modify the `server.tokenEncryptionKey` variable.
+
+#### Rotating Cookie Secrets
+
+If you'd like to rotate the cookie secret, it will cause all existing sessions to become invalid, logging out all users. The user will need to log back in again in order to use Porter. This will not impact CLI authentication or token-based authentication to the API (for example, from a CI process). To change the cookie secrets, simply modify the `server.cookieSecret` variable.
