@@ -24,3 +24,25 @@ Then, navigate to the Porter dashboard at `http://localhost:8080` and log in. If
 ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/bce6db57-2264-4b4b-93fa-a3f78e1d8100/large)
 
 To link your own Helm registry, please see the instructions [here](../integrations/helm-registries).
+
+## Securing your Installation
+
+There are several parameters that should be set in order to secure your installation. Note that updating database encryption keys may cause existing credentials to become unreadable - see the [rotating credentials](#rotating-credentials) section below for more information. The following values should be set for secure installations:
+
+```yaml
+server:
+  cookieSecret: "random_hash_key_;random_block_key" # the random hash key and block key should be 16 characters
+  dbEncryptionKey: "__random_strong_encryption_key__" # the db encryption key should be 32 characters
+  tokenEncryptionKey: "__random_strong_encryption_key__" # the token encryption key should be 32 characters
+```
+
+For example, this can be generated via the following command:
+
+```sh
+echo "
+server:
+  cookieSecret: \"$(cat /dev/urandom | base64 | head -c 16);$(cat /dev/urandom | base64 | head -c 16)\"
+  dbEncryptionKey: \"$(cat /dev/urandom | base64 | head -c 32)\"
+  tokenEncryptionKey: \"$(cat /dev/urandom | base64 | head -c 32)\"
+"
+```
