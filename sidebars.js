@@ -347,7 +347,7 @@ const sidebars = {
       items: [
         "self-hosted/setup/local",
         "self-hosted/setup/aptible",
-        "self-hosted/setup/helm",
+        // "self-hosted/setup/helm",
       ],
       collapsible: false,
     },
@@ -358,7 +358,7 @@ const sidebars = {
         "self-hosted/integrations/google-sign-in",
         "self-hosted/integrations/github",
         "self-hosted/integrations/slack",
-        "self-hosted/integrations/helm-registries",
+        // "self-hosted/integrations/helm-registries",
       ],
       collapsible: false,
     },
