@@ -1,13 +1,5 @@
 version: "v1"
 resources:
-  - name: "test-docs-job"
-    source:
-      name: "job"
-    config:
-      waitForJob: true
-      values:
-        container:
-          command: sleep 30
   - name: "docs-web"
     source:
       name: "web"
