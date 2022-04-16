@@ -1,7 +1,22 @@
 "on":
-  pull_request:
-    types:
-    - closed
+  workflow_dispatch:
+    inputs:
+      environment_id:
+        description: Environment ID
+        required: true
+        type: number
+      pr_number:
+        description: Pull request number
+        required: true
+        type: number
+      repo_name:
+        description: Repository name
+        required: true
+        type: string
+      repo_owner:
+        description: Repository owner
+        required: true
+        type: string
 name: Porter Preview Environment
 jobs:
   porter-delete-preview:
@@ -9,12 +24,12 @@ jobs:
     steps:
     - name: Delete Porter preview env
       timeout-minutes: 30
-      uses: porter-dev/porter-delete-preview-action@v0.1.0
+      uses: porter-dev/porter-delete-preview-action@v0.2.0
       with:
         cluster: "34"
+        environment_id: ${{ github.event.inputs.environment_id }}
         host: https://dashboard.dev.getporter.dev
-        installation_id: "22158312"
-        namespace: pr-${{ github.event.pull_request.number }}-porter-docs
+        pr_number: ${{ github.event.inputs.pr_number }}
         project: "3"
         repo_name: porter-docs
         repo_owner: ${{ github.repository_owner }}
