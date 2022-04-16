@@ -260,7 +260,9 @@ const sidebars = {
             "command-line-interface/command-reference/porter-config",
             "command-line-interface/command-reference/porter-connect",
             "command-line-interface/command-reference/porter-create",
+            "command-line-interface/command-reference/porter-get",
             "command-line-interface/command-reference/porter-job",
+            "command-line-interface/command-reference/porter-list",
             "command-line-interface/command-reference/porter-logs",
             "command-line-interface/command-reference/porter-project",
             "command-line-interface/command-reference/porter-registry",
@@ -323,6 +325,16 @@ const sidebars = {
         "other/kubernetes-101",
         "other/deleting-dangling-resources",
         "other/connecting-to-cloudsql",
+        {
+          type: "category",
+          label: "Cluster Upgrades",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "other/cluster-upgrades",
+          },
+          items: ["other/cluster-upgrades/upgrading-eks"],
+        },
       ],
       collapsible: false,
     },
@@ -346,7 +358,11 @@ const sidebars = {
     {
       type: "category",
       label: "Setup",
-      items: ["self-hosted/setup/local", "self-hosted/setup/aptible"],
+      items: [
+        "self-hosted/setup/local",
+        "self-hosted/setup/aptible",
+        // "self-hosted/setup/helm",
+      ],
       collapsible: false,
     },
     {
@@ -356,6 +372,7 @@ const sidebars = {
         "self-hosted/integrations/google-sign-in",
         "self-hosted/integrations/github",
         "self-hosted/integrations/slack",
+        // "self-hosted/integrations/helm-registries",
       ],
       collapsible: false,
     },
