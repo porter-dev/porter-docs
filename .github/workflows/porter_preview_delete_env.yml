@@ -24,7 +24,7 @@ jobs:
     steps:
     - name: Delete Porter preview env
       timeout-minutes: 30
-      uses: porter-dev/porter-delete-preview-action@v0.2.0
+      uses: porter-dev/porter-delete-preview-action@dev
       with:
         cluster: "34"
         environment_id: ${{ github.event.inputs.environment_id }}
