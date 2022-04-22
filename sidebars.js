@@ -247,6 +247,7 @@ const sidebars = {
             "command-line-interface/command-reference/porter-config",
             "command-line-interface/command-reference/porter-connect",
             "command-line-interface/command-reference/porter-create",
+            "command-line-interface/command-reference/porter-delete",
             "command-line-interface/command-reference/porter-get",
             "command-line-interface/command-reference/porter-job",
             "command-line-interface/command-reference/porter-list",
