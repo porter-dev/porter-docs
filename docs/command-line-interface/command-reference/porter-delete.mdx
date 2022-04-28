@@ -1,0 +1,58 @@
+---
+id: porter-delete
+slug: /cli/command-reference/porter-delete
+title: porter delete
+---
+
+:::info Prerequisites
+
+- You've logged in to the Porter CLI after running [`porter auth login`](./porter-auth)
+- You're connected to the correct project by running [`porter projects list`](./porter-project), and set the project via [`porter config set-project [PROJECT_ID]`](./porter-config)
+
+:::
+
+<br></br>
+
+`porter delete` deletes applications, jobs or addons in a specific cluster and namespace.
+
+### `porter delete application`
+
+To delete an application in the `default` namespace, simply run:
+
+```
+porter delete application app-name
+```
+
+To delete an application in a different namespace, run:
+
+```
+porter delete application app-name --namespace my-custom-ns
+```
+
+### `porter delete job`
+
+To delete a job in the `default` namespace, run:
+
+```
+porter delete job job-name
+```
+
+To delete a job in a different namespace, run:
+
+```
+porter delete job job-name --namespace my-custom-ns
+```
+
+### `porter delete addon`
+
+To delete an addon in the `default` namespace, run:
+
+```
+porter delete addon addon-name
+```
+
+To delete an addon in a different namespace, run:
+
+```
+porter delete addon addon-name --namespace my-custom-ns
+```

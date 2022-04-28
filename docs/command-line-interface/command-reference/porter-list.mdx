@@ -14,11 +14,23 @@ title: porter list
 
 <br></br>
 
-`porter list` lists applications or jobs in a specific cluster and namespace.
+`porter list` lists applications, jobs or addons in a specific cluster and namespace.
 
-### Examples
+### `porter list all`
 
-#### `porter list applications`
+To list all releases in the `default` namespace, simply run:
+
+```
+porter list all
+```
+
+To list all releases in a different namespace, run:
+
+```
+porter list all --namespace my-custom-ns
+```
+
+### `porter list applications`
 
 To list applications in the `default` namespace, simply run:
 
@@ -32,7 +44,7 @@ To list applications in a different namespace, run:
 porter list applications --namespace my-custom-ns
 ```
 
-#### `porter list jobs`
+### `porter list jobs`
 
 To list jobs in the `default` namespace, run:
 
@@ -44,4 +56,18 @@ To list jobs in a different namespace, run:
 
 ```
 porter list jobs --namespace my-custom-ns
+```
+
+### `porter list addons`
+
+To list addons in the `default` namespace, run:
+
+```
+porter list addons
+```
+
+To list addons in a different namespace, run:
+
+```
+porter list addons --namespace my-custom-ns
 ```
