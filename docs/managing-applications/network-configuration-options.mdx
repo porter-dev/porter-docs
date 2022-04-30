@@ -56,6 +56,14 @@ To learn more about NGINX units, see [this document](http://nginx.org/en/docs/sy
 
 :::
 
+### Header Size
+
+If you are occasionally getting 500-level errors on certain endpoints, your application may be sending response headers which are too large for NGINX to process. You can try increasing the maximum value of the response header size by setting something like the following (default is `1k`):
+
+```yaml
+nginx.ingress.kubernetes.io/proxy-buffer-size: 10k
+```
+
 ## Preserving Client IP Addresses
 
 :::info
