@@ -1,0 +1,220 @@
+openapi: 3.0.0
+servers:
+  - url: "https://dashboard.getporter.dev"
+info:
+  description: >-
+    Documentation for the Porter public API.
+  version: 1.0.0
+  title: API v1
+  termsOfService: "https://docs.porter.run/terms-and-privacy/terms-of-service/"
+  contact:
+    email: support@porter.run
+paths:
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
+    post:
+      tags:
+        - Namespaces
+      summary: Create a new namespace
+      operationId: createNamespace
+      responses:
+        "201":
+          description: Successfully created a new namespace
+        "500":
+          description: Internal server error
+      requestBody:
+        $ref: "#/components/requestBodies/CreateNamespace"
+      x-codeSamples:
+        - lang: "cURL"
+          label: "cURL"
+          source: |
+            curl --request POST \
+            --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces' \
+            --header 'authorization: bearer <api_token>' \
+            --header 'content-type: application/json' \
+            --data '{name:"test-namespace"}'
+        - lang: "JavaScript"
+          label: "Node"
+          source: |
+            const https = require('https');
+
+            const data = JSON.stringify({
+              name: 'test-namespace',
+            });
+
+            const options = {
+              hostname: 'dashboard.getporter.dev',
+              port: 443,
+              path: '/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces',
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': data.length,
+              },
+            };
+
+            const req = https.request(options, res => {
+              console.log(`statusCode: ${res.statusCode}`);
+
+              res.on('data', d => {
+                process.stdout.write(d);
+              });
+            });
+
+            req.on('error', error => {
+              console.error(error);
+            });
+
+            req.write(data);
+            req.end();
+        - lang: "Python"
+          label: "Python"
+          source: |
+            import requests
+
+            url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces'
+            myobj = {'name': 'test-namespace'}
+
+            x = requests.post(url, data = myobj)
+
+            print(x.text)
+        - lang: "Go"
+          label: "Go"
+          source: |
+            package main
+
+            import (
+                "bytes"
+                "encoding/json"
+                "fmt"
+                "log"
+                "net/http"
+            )
+
+            func main() {
+
+                values := map[string]string{"name": "test-namespace"}
+                json_data, err := json.Marshal(values)
+
+                if err != nil {
+                    log.Fatal(err)
+                }
+
+                resp, err := http.Post("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces", "application/json",
+                    bytes.NewBuffer(json_data))
+
+                if err != nil {
+                    log.Fatal(err)
+                }
+
+                var res map[string]interface{}
+
+                json.NewDecoder(resp.Body).Decode(&res)
+
+                fmt.Println(res["json"])
+            }
+    get:
+      tags:
+        - Namespaces
+      summary: List all namespaces
+      operationId: listNamespaces
+      responses:
+        "200":
+          description: Successfully listed all namespaces
+        "500":
+          description: Internal server error
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
+    get:
+      tags:
+        - Namespaces
+      summary: Get a namespace
+      operationId: getNamespace
+      responses:
+        "200":
+          description: Successfully fetched the namespace
+        "404":
+          description: No such namespace exists
+        "500":
+          description: Internal server error
+    delete:
+      tags:
+        - Namespaces
+      summary: Delete a namespace
+      operationId: deleteNamespace
+      responses:
+        "200":
+          description: Successfully deleted the namespace if it existed
+        "500":
+          description: Internal server error
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
+    post:
+      tags:
+        - Releases
+      summary: Create a new release
+      responses:
+        "201":
+          description: Successfully created the release
+        "500":
+          description: Internal server error
+    get:
+      tags:
+        - Releases
+      summary: List all releases
+      responses:
+        "200":
+          description: Successfully listed all releases
+        "500":
+          description: Internal server error
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}:
+    get:
+      tags:
+        - Releases
+      summary: Get a release
+      responses:
+        "200":
+          description: Successfully fetched the release
+        "404":
+          description: No such release exists
+        "500":
+          description: Internal server error
+    patch:
+      tags:
+        - Releases
+      summary: Update a release
+      responses:
+        "200":
+          description: Successfully updated the release
+        "404":
+          description: No such release exists
+        "500":
+          description: Internal server error
+    delete:
+      tags:
+        - Releases
+      summary: Delete a release
+      responses:
+        "200":
+          description: Successfully deleted the release if it existed
+        "500":
+          description: Internal server error
+components:
+  schemas:
+    CreateNamespace:
+      type: object
+      properties:
+        name:
+          type: string
+  requestBodies:
+    CreateNamespace:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CreateNamespace"
+      required: true
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: "Authorization: Bearer"
+      in: header
+  links: {}
+  callbacks: {}
+security: []

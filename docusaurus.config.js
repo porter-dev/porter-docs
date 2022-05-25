@@ -142,6 +142,20 @@ module.exports = {
         },
       },
     ],
+    [
+      'redocusaurus',
+      {
+        specs: [
+          {
+            spec: './docs/api/api.yaml',
+            route: '/api/',
+          },
+        ],
+        theme: {
+          primaryColor: '#1890ff',
+        },
+      },
+    ],
   ],
   scripts: [],
   plugins: [
