@@ -196,6 +196,75 @@ paths:
           description: Successfully deleted the release if it existed
         "500":
           description: Internal server error
+  /api/v1/projects/{project_id}/registries:
+    post:
+      tags:
+        - Registries
+      summary: Create a new registry
+      responses:
+        "201":
+          description: Successfully created the new registry
+        "500":
+          description: Internal server error
+    get:
+      tags:
+        - Registries
+      summary: List all registries
+      responses:
+        "200":
+          description: Successfully listed all registries
+        "500":
+          description: Internal server error
+  /api/v1/projects/{project_id}/registries/{registry_id}:
+    get:
+      tags:
+        - Registries
+      summary: Get a registry
+      responses:
+        "200":
+          description: Successfully fetched the registry
+        "404":
+          description: No such registry exists
+        "500":
+          description: Internal server error
+    delete:
+      tags:
+        - Registries
+      summary: Delete a registry
+      responses:
+        "200":
+          description: Successfully deleted the registry if it existed
+        "500":
+          description: Internal server error
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
+    post:
+      tags:
+        - Registries
+      summary: Create a repository inside a registry
+      responses:
+        "201":
+          description: Successfully created the new repository
+        "500":
+          description: Internal server error
+    get:
+      tags:
+        - Registries
+      summary: List all repositories in a registry
+      responses:
+        "200":
+          description: Successfully listed all repositories
+        "500":
+          description: Internal server error
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
+    get:
+      tags:
+        - Registries
+      summary: List all image tags of a repository
+      responses:
+        "200":
+          description: Successfully listed all image tags
+        "500":
+          description: Internal server error
 components:
   schemas:
     CreateNamespace:
