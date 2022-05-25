@@ -8,7 +8,15 @@ info:
   title: API v1
   termsOfService: "https://docs.porter.run/terms-and-privacy/terms-of-service/"
   contact:
+    name: Porter Support
     email: support@porter.run
+tags:
+  - name: Namespaces
+    description: Porter Namespaces
+  - name: Releases
+    description: Porter Releases
+  - name: Registries
+    description: Porter Registries
 paths:
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
     post:
@@ -112,6 +120,8 @@ paths:
 
                 fmt.Println(res["json"])
             }
+      security:
+        - api_key: []
     get:
       tags:
         - Namespaces
