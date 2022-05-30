@@ -85,3 +85,7 @@ GITHUB_APP_NAME=<github-app-name>
 GITHUB_APP_ID=<github-app-id>
 GITHUB_APP_SECRET_PATH=<path-to-secret>
 ```
+
+### Troubleshooting
+
+If your Github app is connected properly and is showing the correct accounts on the Porter dashboard, but the repos aren't displaying on the Porter dashboard, you can check that the webhooks have been delivered properly from the **Advanced** tab of the Github app's settings. From there, you can view recent webhook deliveries and ensure that they were delivered successfully. If they were not delivered successfully, you can redeliver them or debug the request from this tab. 
