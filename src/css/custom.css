@@ -65,8 +65,8 @@
   --ifm-background-color: var(--custom-background-color);
   --ifm-sidebar-background: var(--custom-background-color);
   --ifm-color-content-secondary: var(--custom-content-color-light);
-  --ifm-code-background: var(--custom-background-color-diff);
-  --ifm-code-background-dark: #2a2a2a;
+  --ifm-code-background: "none";
+  --ifm-code-background-dark: "none";
   --ifm-code-color: var(--custom-content-color);
   --ifm-color-warning: var(--custom-color-orange-600);
 
@@ -231,7 +231,7 @@ h3 {
 html,
 body {
   font-smoothing: antialiased;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
   text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -348,6 +348,14 @@ li + li {
 .main-wrapper {
   box-shadow: none;
   border-bottom: 1px solid var(--custom-border-color);
+}
+
+.redoc-wrapper {
+  scroll-behavior: auto !important;
+  /* margin-top: 3.75rem; */
+  /* position: absolute;
+  height: calc(100% - 3.75rem);
+  top: 3.75rem; */
 }
 
 .with-underline::after {
@@ -936,6 +944,14 @@ a.hash-link {
 
 .DocSearch-Input {
   font-size: 15px !important;
+}
+
+.redoc-wrapper .prism-code {
+  background-color: none important!;
+}
+
+.redocusaurus .menu-content {
+  top: 3.75rem !important;
 }
 
 .prism-code {

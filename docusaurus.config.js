@@ -1,4 +1,4 @@
-module.exports = {
+docusaurusConfig = {
   title: "Porter",
   tagline: "Kubernetes powered PaaS that runs in your own cloud.",
   url: "https://docs.porter.run",
@@ -143,16 +143,86 @@ module.exports = {
       },
     ],
     [
-      'redocusaurus',
+      "redocusaurus",
       {
         specs: [
           {
-            spec: './docs/api/api.yaml',
-            route: '/api/',
+            spec: "./docs/api/api-populated.yaml",
+            route: "/api/",
+            layout: {
+              wrapperClassName: "redoc-wrapper",
+            },
           },
         ],
         theme: {
-          primaryColor: '#1890ff',
+          primaryColor: "#1890ff",
+          options: { disableSearch: true, hideDownloadButton: true },
+          theme: {
+            //   breakpoints: {
+            //     small: "10rem",
+            //     medium: "40rem",
+            //     large: "85rem",
+            //   },
+            colors: {
+              //     primary: {
+              //       main: "rgba(246, 20, 63, 1)",
+              //       light: "rgba(246, 20, 63, 0.42)",
+              //     },
+              success: {
+                main: "rgba(28, 184, 65, 1)",
+                light: "#81ec9a",
+                dark: "#083312",
+                contrastText: "#000",
+              },
+              error: {
+                main: "rgba(28, 184, 65, 1)",
+                light: "#81ec9a",
+                dark: "#083312",
+                contrastText: "#000",
+              },
+              //     text: {
+              //       primary: "rgba(0, 0, 0, 1)",
+              //       secondary: "#4d4d4d",
+              //     },
+              http: {
+                get: "rgba(0, 200, 219, 1)",
+                post: "red",
+                put: "rgba(255, 187, 0, 1)",
+                delete: "rgba(254, 39, 35, 1)",
+              },
+            },
+            codeBlock: {
+              backgroundColor: "#ffffff10",
+            },
+            rightPanel: {
+              backgroundColor: "#18191A",
+            },
+            typography: {
+              //     fontSize: "16px",
+              //     fontFamily: "Fira Sans, Roboto, sans-serif",
+              //     optimizeSpeed: true,
+              //     smoothing: "antialiased",
+              //     headings: {
+              //       fontWeight: "bold",
+              //       lineHeight: "1em",
+              //     },
+              // code: {
+              //   backgroundColor: "red",
+              // },
+              //     links: {
+              //       color: "rgba(246, 20, 63, 1)",
+              //       visited: "rgba(246, 20, 63, 1)",
+              //       hover: "#fa768f",
+              //     },
+              //   },
+              // sidebar: {
+              //   activeBgColor: "white",
+              //   backgroundColor: "#202227",
+              // },
+              // rightPanel: {
+              //   backgroundColor: "#25282C",
+            },
+          },
         },
       },
     ],
@@ -378,3 +448,5 @@ module.exports = {
     ],
   ],
 };
+
+module.exports = docusaurusConfig;

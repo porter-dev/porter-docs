@@ -1,0 +1,832 @@
+openapi: 3.0.0
+servers:
+  - url: https://dashboard.getporter.dev
+info:
+  description: |
+    # Introduction
+
+    This is the Porter API. 
+
+    # Authentication
+
+    Petstore offers two forms of authentication:
+      - API Key
+      - OAuth2
+    OAuth2 - an open protocol to allow secure authorization in a simple
+    and standard method from web, mobile and desktop applications.
+
+    <SecurityDefinitions />
+  version: 1.0.0
+  title: API v1
+  termsOfService: https://docs.porter.run/terms-and-privacy/terms-of-service/
+  contact:
+    name: Porter Support
+    email: support@porter.run
+tags:
+  - name: Namespaces
+    description: Porter Namespaces
+  - name: Releases
+    description: Porter Releases
+  - name: Registries
+    description: Porter Registries
+paths:
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
+    post:
+      parameters:
+        - in: path
+          name: project_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The project ID
+        - in: path
+          name: cluster_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The cluster ID
+      tags:
+        - Namespaces
+      summary: Create a new namespace
+      operationId: createNamespace
+      responses:
+        '201':
+          description: Successfully created a new namespace
+        '500':
+          description: Internal server error
+      requestBody: &ref_0
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNamespace'
+        required: true
+      security:
+        - api_key: []
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces \
+              --header 'Authorization: Bearer: REPLACE_KEY_VALUE' \
+              --header 'content-type: application/json' \
+              --data '{"name":"string"}'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces';
+
+
+            let options = {
+              method: 'POST',
+              headers: {
+                'Authorization: Bearer': 'REPLACE_KEY_VALUE',
+                'content-type': 'application/json'
+              },
+              body: '{"name":"string"}'
+            };
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces"
+
+
+            payload = {"name": "string"}
+
+            headers = {
+                "Authorization: Bearer": "REPLACE_KEY_VALUE",
+                "content-type": "application/json"
+            }
+
+
+            response = requests.request("POST", url, json=payload,
+            headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization: Bearer\", \"REPLACE_KEY_VALUE\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Namespaces
+      summary: List all namespaces
+      operationId: listNamespaces
+      responses:
+        '200':
+          description: Successfully listed all namespaces
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
+    get:
+      tags:
+        - Namespaces
+      summary: Get a namespace
+      operationId: getNamespace
+      responses:
+        '200':
+          description: Successfully fetched the namespace
+        '404':
+          description: No such namespace exists
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    delete:
+      tags:
+        - Namespaces
+      summary: Delete a namespace
+      operationId: deleteNamespace
+      responses:
+        '200':
+          description: Successfully deleted the namespace if it existed
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request DELETE \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D';
+
+
+            let options = {method: 'DELETE'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D"
+
+
+            response = requests.request("DELETE", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
+    post:
+      tags:
+        - Releases
+      summary: Create a new release
+      responses:
+        '201':
+          description: Successfully created the release
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases';
+
+
+            let options = {method: 'POST'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases"
+
+
+            response = requests.request("POST", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Releases
+      summary: List all releases
+      responses:
+        '200':
+          description: Successfully listed all releases
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}:
+    get:
+      tags:
+        - Releases
+      summary: Get a release
+      responses:
+        '200':
+          description: Successfully fetched the release
+        '404':
+          description: No such release exists
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    patch:
+      tags:
+        - Releases
+      summary: Update a release
+      responses:
+        '200':
+          description: Successfully updated the release
+        '404':
+          description: No such release exists
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request PATCH \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D';
+
+
+            let options = {method: 'PATCH'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D"
+
+
+            response = requests.request("PATCH", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D\"\n\n\treq, _ := http.NewRequest(\"PATCH\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    delete:
+      tags:
+        - Releases
+      summary: Delete a release
+      responses:
+        '200':
+          description: Successfully deleted the release if it existed
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request DELETE \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D';
+
+
+            let options = {method: 'DELETE'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D"
+
+
+            response = requests.request("DELETE", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/clusters/%7Bcluster_id%7D/namespaces/%7Bnamespace%7D/releases/%7Brelease%7D/%7Bversion%7D\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries:
+    post:
+      tags:
+        - Registries
+      summary: Create a new registry
+      responses:
+        '201':
+          description: Successfully created the new registry
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries';
+
+
+            let options = {method: 'POST'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries"
+
+
+            response = requests.request("POST", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Registries
+      summary: List all registries
+      responses:
+        '200':
+          description: Successfully listed all registries
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries/{registry_id}:
+    get:
+      tags:
+        - Registries
+      summary: Get a registry
+      responses:
+        '200':
+          description: Successfully fetched the registry
+        '404':
+          description: No such registry exists
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    delete:
+      tags:
+        - Registries
+      summary: Delete a registry
+      responses:
+        '200':
+          description: Successfully deleted the registry if it existed
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request DELETE \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D';
+
+
+            let options = {method: 'DELETE'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D"
+
+
+            response = requests.request("DELETE", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
+    post:
+      tags:
+        - Registries
+      summary: Create a repository inside a registry
+      responses:
+        '201':
+          description: Successfully created the new repository
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories';
+
+
+            let options = {method: 'POST'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories"
+
+
+            response = requests.request("POST", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Registries
+      summary: List all repositories in a registry
+      responses:
+        '200':
+          description: Successfully listed all repositories
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
+    get:
+      tags:
+        - Registries
+      summary: List all image tags of a repository
+      responses:
+        '200':
+          description: Successfully listed all image tags
+        '500':
+          description: Internal server error
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories/%7Brepository%7D
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories/%7Brepository%7D';
+
+
+            let options = {method: 'GET'};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories/%7Brepository%7D"
+
+
+            response = requests.request("GET", url)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/%7Bproject_id%7D/registries/%7Bregistry_id%7D/repositories/%7Brepository%7D\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+components:
+  schemas:
+    CreateNamespace:
+      type: object
+      properties:
+        name:
+          type: string
+  requestBodies:
+    CreateNamespace: *ref_0
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: 'Authorization: Bearer'
+      in: header
+  links: {}
+  callbacks: {}
+security: []
+
