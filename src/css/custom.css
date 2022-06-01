@@ -954,6 +954,59 @@ a.hash-link {
   top: 3.75rem !important;
 }
 
+.menu-content {
+  padding: 15px 0 0 15px;
+}
+
+.menu-content label {
+  background-color: none;
+  padding: var(--ifm-menu-link-padding-vertical)
+    var(--ifm-menu-link-padding-horizontal);
+  font-size: 0.85rem;
+}
+
+.menu-content label.active {
+  background-color: var(--ifm-menu-color-background-active);
+  border-right: 2px solid var(--ifm-color-primary);
+}
+
+.menu-content label:hover {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.redocusaurus div[id^="operation"] h3 {
+  margin-top: 30px;
+}
+
+.redocusaurus code {
+  background-color: var(--ifm-code-background) !important;
+  border: 0.1rem solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: var(--ifm-code-border-radius) !important;
+  font-family: var(--ifm-font-family-monospace) !important;
+  font-size: var(--ifm-code-font-size) !important;
+  padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal) !important;
+  vertical-align: middle !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  border: 1px solid var(--ifm-hr-border-color) !important;
+  color: white !important;
+}
+
+.redocusaurus button {
+  border-color: #18191a;
+}
+
+.redocusaurus button span {
+  font-size: 12px;
+  border: #18191a;
+}
+
+.redocusaurus div[role="button"] div,
+span {
+  font-size: 12px;
+  border: #18191a;
+}
+
 .prism-code {
   background-color: #1b1d26;
   word-break: break-word;

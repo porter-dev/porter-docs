@@ -2,7 +2,13 @@ const openAPISnippet = require("openapi-snippet");
 const yaml = require("js-yaml");
 const fs = require("fs");
 
-const targets = ["shell_curl", "node_fetch", "python_requests", "go_native"];
+const targets = [
+  "shell_curl",
+  "node_fetch",
+  "ruby_native",
+  "python_requests",
+  "go_native",
+];
 const httpRequestMethods = [
   "get",
   "head",

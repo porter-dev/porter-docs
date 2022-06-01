@@ -163,64 +163,64 @@ docusaurusConfig = {
             //     medium: "40rem",
             //     large: "85rem",
             //   },
+            spacing: {},
             colors: {
+              primary: {
+                main: "white",
+              },
+              responses: {
+                success: {
+                  backgroundColor: "#636bf211",
+                  color: "#868cfc",
+                  // contrastText: "#000",
+                },
+                info: {
+                  color: "red",
+                  tabTextColor: "red",
+                },
+                error: {
+                  backgroundColor: "rgba(245, 203, 66, 0.06)",
+                  borderColor: "rgb(245, 203, 66)",
+                  color: "rgb(245, 203, 66)",
+                },
+              },
               //     primary: {
               //       main: "rgba(246, 20, 63, 1)",
               //       light: "rgba(246, 20, 63, 0.42)",
               //     },
               success: {
-                main: "rgba(28, 184, 65, 1)",
-                light: "#81ec9a",
-                dark: "#083312",
-                contrastText: "#000",
+                main: "#636bf2",
+                // contrastText: "#000",
               },
               error: {
-                main: "rgba(28, 184, 65, 1)",
-                light: "#81ec9a",
-                dark: "#083312",
-                contrastText: "#000",
+                // This sets both the "required" fields and any error texts
+                main: "rgb(245, 203, 66)",
               },
               //     text: {
               //       primary: "rgba(0, 0, 0, 1)",
               //       secondary: "#4d4d4d",
               //     },
               http: {
-                get: "rgba(0, 200, 219, 1)",
-                post: "red",
-                put: "rgba(255, 187, 0, 1)",
-                delete: "rgba(254, 39, 35, 1)",
+                get: "#5A62F5",
+                post: "#5A62F5",
+                put: "#5A62F5",
+                delete: "#5A62F5",
+                patch: "#5A62F5",
               },
             },
             codeBlock: {
               backgroundColor: "#ffffff10",
             },
             rightPanel: {
-              backgroundColor: "#18191A",
+              backgroundColor: "#1b1d26",
+            },
+            sidebar: {
+              backgroundColor: "#202227",
             },
             typography: {
-              //     fontSize: "16px",
-              //     fontFamily: "Fira Sans, Roboto, sans-serif",
-              //     optimizeSpeed: true,
-              //     smoothing: "antialiased",
-              //     headings: {
-              //       fontWeight: "bold",
-              //       lineHeight: "1em",
-              //     },
-              // code: {
-              //   backgroundColor: "red",
-              // },
-              //     links: {
-              //       color: "rgba(246, 20, 63, 1)",
-              //       visited: "rgba(246, 20, 63, 1)",
-              //       hover: "#fa768f",
-              //     },
-              //   },
-              // sidebar: {
-              //   activeBgColor: "white",
-              //   backgroundColor: "#202227",
-              // },
-              // rightPanel: {
-              //   backgroundColor: "#25282C",
+              links: {
+                color: "#949eff",
+              },
             },
           },
         },

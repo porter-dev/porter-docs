@@ -5,17 +5,94 @@ info:
   description: |
     # Introduction
 
-    This is the Porter API. 
+    Welcome to the documentation for Porter's API. Our public API is still a
+    work-in-progress, although all endpoints prefixed with `/api/v1` will remain
+    stable. 
 
-    # Authentication
 
-    Petstore offers two forms of authentication:
-      - API Key
-      - OAuth2
-    OAuth2 - an open protocol to allow secure authorization in a simple
-    and standard method from web, mobile and desktop applications.
+    To begin using the Porter API, API tokens must be enabled for your Porter
+    project. If API tokens are enabled, you will see the following in the
+    project settings page:
+
+
+    ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/235c2839-3b43-49e4-a6c2-fc51c583a600/large)
+
+
+    <br />
+
+
+    Nearly all endpoints will have the following structure:
+
+
+
+    ```yaml
+    /api/v1/projects/{project_id}/[resources]
+    ```
+
+
+
+    For example, creating a new release (which exists inside a cluster and
+    namespace) has the following endpoint:
+
+
+
+    ```yaml
+    POST /api/v1/projects/1/clusters/1/namespaces/default/releases
+    ```
+
+    All resources are by default pluralized (i.e. `releases` instead of
+    `release`). The API supports the following HTTP Verbs:
+
+    - `GET`
+    - `POST`
+    - `PUT`
+    - `PATCH`
+    - `DELETE`
+
+    API design is based on the following actions:
+
+    - List — lists a group of resources
+    - Get — retrieves a single resource
+    - Create — creates a new resource
+    - Update — updates an existing resource
+    - Delete — deletes an existing resource
+
+    # Authorization
+
+    Requests are authenticated via a JWT token that can be obtained from the dashboard in **Project Settings:**
+
+    ![Untitled](API%20Reference%20fd48c9fca6f14ba2b066f959d4479b56/Untitled.png)
+
+    JWT tokens are signed via an `HMAC-SHA` algorithm. All API tokens are **project-scoped**, other actions that are outside the scope of a project will need to be performed using a personal access token. 
 
     <SecurityDefinitions />
+
+    **Basic Roles**
+
+    For ease of use, each API token can be granted one of three roles: admin, developer, or viewer. A token with admin permissions can read or write to any resource in the project, a token with developer permissions can read or write to any resource *except* settings (only read for settings), and a token with viewer permissions can view all resources within the project *except* settings.
+
+    **Custom Roles** 
+
+    API tokens can be assigned custom roles based on a set of custom **policies**. These policies can be created from the dashboard or the API. From the dashboard, when you create a custom policy, you can select the resources that you would like the role to access:
+
+    ![Untitled](API%20Reference%20fd48c9fca6f14ba2b066f959d4479b56/Untitled%201.png)
+
+
+    Each policy refers to various **scopes** within a project. These scopes are the following:
+
+    ```yaml
+    Project
+    -- Cluster
+    -- -- Namespace
+    -- -- -- Application
+    -- Infra
+    -- Settings
+    -- Registry
+    -- Helm Repository
+    -- Git Installation
+    ```
+
+    For each scope, a set of allowed **actions** can be granted.
   version: 1.0.0
   title: API v1
   termsOfService: "https://docs.porter.run/terms-and-privacy/terms-of-service/"
@@ -24,7 +101,10 @@ info:
     email: support@porter.run
 tags:
   - name: Namespaces
-    description: Porter Namespaces
+    description: >
+      Namespaces are a Kubernetes concept which divides resources in the cluster into 
+      separate logical groups. Each Kubernetes cluster comes with a `default` namespace, 
+      and typically a `kube-system` namespace which contains services which help Kubernetes run.
   - name: Releases
     description: Porter Releases
   - name: Registries
@@ -54,12 +134,10 @@ paths:
       responses:
         "201":
           description: Successfully created a new namespace
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
       requestBody:
         $ref: "#/components/requestBodies/CreateNamespace"
-      security:
-        - api_key: []
     get:
       tags:
         - Namespaces
@@ -68,8 +146,8 @@ paths:
       responses:
         "200":
           description: Successfully listed all namespaces
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
     get:
       tags:
@@ -81,8 +159,6 @@ paths:
           description: Successfully fetched the namespace
         "404":
           description: No such namespace exists
-        "500":
-          description: Internal server error
     delete:
       tags:
         - Namespaces
@@ -91,8 +167,8 @@ paths:
       responses:
         "200":
           description: Successfully deleted the namespace if it existed
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
     post:
       tags:
@@ -101,8 +177,6 @@ paths:
       responses:
         "201":
           description: Successfully created the release
-        "500":
-          description: Internal server error
     get:
       tags:
         - Releases
@@ -110,8 +184,8 @@ paths:
       responses:
         "200":
           description: Successfully listed all releases
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}:
     get:
       tags:
@@ -122,8 +196,6 @@ paths:
           description: Successfully fetched the release
         "404":
           description: No such release exists
-        "500":
-          description: Internal server error
     patch:
       tags:
         - Releases
@@ -133,8 +205,6 @@ paths:
           description: Successfully updated the release
         "404":
           description: No such release exists
-        "500":
-          description: Internal server error
     delete:
       tags:
         - Releases
@@ -142,8 +212,8 @@ paths:
       responses:
         "200":
           description: Successfully deleted the release if it existed
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
   /api/v1/projects/{project_id}/registries:
     post:
       tags:
@@ -152,8 +222,6 @@ paths:
       responses:
         "201":
           description: Successfully created the new registry
-        "500":
-          description: Internal server error
     get:
       tags:
         - Registries
@@ -161,8 +229,8 @@ paths:
       responses:
         "200":
           description: Successfully listed all registries
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
   /api/v1/projects/{project_id}/registries/{registry_id}:
     get:
       tags:
@@ -171,10 +239,10 @@ paths:
       responses:
         "200":
           description: Successfully fetched the registry
+        "403":
+          description: Forbidden
         "404":
           description: No such registry exists
-        "500":
-          description: Internal server error
     delete:
       tags:
         - Registries
@@ -182,8 +250,6 @@ paths:
       responses:
         "200":
           description: Successfully deleted the registry if it existed
-        "500":
-          description: Internal server error
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
     post:
       tags:
@@ -192,8 +258,6 @@ paths:
       responses:
         "201":
           description: Successfully created the new repository
-        "500":
-          description: Internal server error
     get:
       tags:
         - Registries
@@ -201,8 +265,8 @@ paths:
       responses:
         "200":
           description: Successfully listed all repositories
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
     get:
       tags:
@@ -211,8 +275,8 @@ paths:
       responses:
         "200":
           description: Successfully listed all image tags
-        "500":
-          description: Internal server error
+        "403":
+          description: Forbidden
 components:
   schemas:
     CreateNamespace:
@@ -228,10 +292,11 @@ components:
             $ref: "#/components/schemas/CreateNamespace"
       required: true
   securitySchemes:
-    api_key:
-      type: apiKey
-      name: "Authorization: Bearer"
-      in: header
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   links: {}
   callbacks: {}
-security: []
+security:
+  - Bearer: []
