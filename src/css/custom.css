@@ -65,8 +65,8 @@
   --ifm-background-color: var(--custom-background-color);
   --ifm-sidebar-background: var(--custom-background-color);
   --ifm-color-content-secondary: var(--custom-content-color-light);
-  --ifm-code-background: var(--custom-background-color-diff);
-  --ifm-code-background-dark: #2a2a2a;
+  --ifm-code-background: "none";
+  --ifm-code-background-dark: "none";
   --ifm-code-color: var(--custom-content-color);
   --ifm-color-warning: var(--custom-color-orange-600);
 
@@ -231,7 +231,7 @@ h3 {
 html,
 body {
   font-smoothing: antialiased;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
   text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -348,6 +348,14 @@ li + li {
 .main-wrapper {
   box-shadow: none;
   border-bottom: 1px solid var(--custom-border-color);
+}
+
+.redoc-wrapper {
+  scroll-behavior: auto !important;
+  /* margin-top: 3.75rem; */
+  /* position: absolute;
+  height: calc(100% - 3.75rem);
+  top: 3.75rem; */
 }
 
 .with-underline::after {
@@ -936,6 +944,67 @@ a.hash-link {
 
 .DocSearch-Input {
   font-size: 15px !important;
+}
+
+.redoc-wrapper .prism-code {
+  background-color: none important!;
+}
+
+.redocusaurus .menu-content {
+  top: 3.75rem !important;
+}
+
+.menu-content {
+  padding: 15px 0 0 15px;
+}
+
+.menu-content label {
+  background-color: none;
+  padding: var(--ifm-menu-link-padding-vertical)
+    var(--ifm-menu-link-padding-horizontal);
+  font-size: 0.85rem;
+}
+
+.menu-content label.active {
+  background-color: var(--ifm-menu-color-background-active);
+  border-right: 2px solid var(--ifm-color-primary);
+}
+
+.menu-content label:hover {
+  background-color: var(--ifm-menu-color-background-active);
+}
+
+.redocusaurus div[id^="operation"] h3 {
+  margin-top: 30px;
+}
+
+.redocusaurus code {
+  background-color: var(--ifm-code-background) !important;
+  border: 0.1rem solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: var(--ifm-code-border-radius) !important;
+  font-family: var(--ifm-font-family-monospace) !important;
+  font-size: var(--ifm-code-font-size) !important;
+  padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal) !important;
+  vertical-align: middle !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  border: 1px solid var(--ifm-hr-border-color) !important;
+  color: white !important;
+}
+
+.redocusaurus button {
+  border-color: #18191a;
+}
+
+.redocusaurus button span {
+  font-size: 12px;
+  border: #18191a;
+}
+
+.redocusaurus div[role="button"] div,
+span {
+  font-size: 12px;
+  border: #18191a;
 }
 
 .prism-code {

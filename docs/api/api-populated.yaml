@@ -1,0 +1,1490 @@
+openapi: 3.0.0
+servers:
+  - url: https://dashboard.getporter.dev
+info:
+  description: >
+    # Introduction
+
+
+    Welcome to the documentation for Porter's API. Our public API is still a
+
+    work-in-progress, although all endpoints prefixed with `/api/v1` will remain
+
+    stable. 
+
+
+
+    To begin using the Porter API, API tokens must be enabled for your Porter
+
+    project. If API tokens are enabled, you will see the following in the
+
+    project settings page:
+
+
+
+    ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/235c2839-3b43-49e4-a6c2-fc51c583a600/large)
+
+
+
+    <br />
+
+
+
+    Nearly all endpoints will have the following structure:
+
+
+
+
+    ```yaml
+
+    /api/v1/projects/{project_id}/[resources]
+
+    ```
+
+
+
+
+    For example, creating a new release (which exists inside a cluster and
+
+    namespace) has the following endpoint:
+
+
+
+
+    ```yaml
+
+    POST /api/v1/projects/1/clusters/1/namespaces/default/releases
+
+    ```
+
+
+    All resources are by default pluralized (i.e. `releases` instead of
+
+    `release`). The API supports the following HTTP Verbs:
+
+
+    - `GET`
+
+    - `POST`
+
+    - `PUT`
+
+    - `PATCH`
+
+    - `DELETE`
+
+
+    API design is based on the following actions:
+
+
+    - List — lists a group of resources
+
+    - Get — retrieves a single resource
+
+    - Create — creates a new resource
+
+    - Update — updates an existing resource
+
+    - Delete — deletes an existing resource
+
+
+    # Authorization
+
+
+    Requests are authenticated via a JWT token that can be obtained from the
+    dashboard in **Project Settings:**
+
+
+    ![Untitled](API%20Reference%20fd48c9fca6f14ba2b066f959d4479b56/Untitled.png)
+
+
+    JWT tokens are signed via an `HMAC-SHA` algorithm. All API tokens are
+    **project-scoped**, other actions that are outside the scope of a project
+    will need to be performed using a personal access token. 
+
+
+    <SecurityDefinitions />
+
+
+    **Basic Roles**
+
+
+    For ease of use, each API token can be granted one of three roles: admin,
+    developer, or viewer. A token with admin permissions can read or write to
+    any resource in the project, a token with developer permissions can read or
+    write to any resource *except* settings (only read for settings), and a
+    token with viewer permissions can view all resources within the project
+    *except* settings.
+
+
+    **Custom Roles** 
+
+
+    API tokens can be assigned custom roles based on a set of custom
+    **policies**. These policies can be created from the dashboard or the API.
+    From the dashboard, when you create a custom policy, you can select the
+    resources that you would like the role to access:
+
+
+    ![Untitled](API%20Reference%20fd48c9fca6f14ba2b066f959d4479b56/Untitled%201.png)
+
+
+
+    Each policy refers to various **scopes** within a project. These scopes are
+    the following:
+
+
+    ```yaml
+
+    Project
+
+    -- Cluster
+
+    -- -- Namespace
+
+    -- -- -- Application
+
+    -- Infra
+
+    -- Settings
+
+    -- Registry
+
+    -- Helm Repository
+
+    -- Git Installation
+
+    ```
+
+
+    For each scope, a set of allowed **actions** can be granted.
+  version: 1.0.0
+  title: API v1
+  termsOfService: https://docs.porter.run/terms-and-privacy/terms-of-service/
+  contact:
+    name: Porter Support
+    email: support@porter.run
+tags:
+  - name: Namespaces
+    description: >
+      Namespaces are a Kubernetes concept which divides resources in the cluster
+      into  separate logical groups. Each Kubernetes cluster comes with a
+      `default` namespace,  and typically a `kube-system` namespace which
+      contains services which help Kubernetes run.
+  - name: Releases
+    description: Porter Releases
+  - name: Registries
+    description: Porter Registries
+paths:
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
+    post:
+      parameters:
+        - in: path
+          name: project_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The project ID
+        - in: path
+          name: cluster_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The cluster ID
+      tags:
+        - Namespaces
+      summary: Create a new namespace
+      operationId: createNamespace
+      responses:
+        '201':
+          description: Successfully created a new namespace
+        '403':
+          description: Forbidden
+      requestBody: &ref_0
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNamespace'
+        required: true
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \
+              --header 'content-type: application/json' \
+              --data '{"name":"string"}'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';
+
+
+            let options = {
+              method: 'POST',
+              headers: {
+                Authorization: 'Bearer REPLACE_BEARER_TOKEN',
+                'content-type': 'application/json'
+              },
+              body: '{"name":"string"}'
+            };
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Post.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+            request["content-type"] = 'application/json'
+
+            request.body = "{\"name\":\"string\"}"
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces"
+
+
+            payload = {"name": "string"}
+
+            headers = {
+                "Authorization": "Bearer REPLACE_BEARER_TOKEN",
+                "content-type": "application/json"
+            }
+
+
+            response = requests.request("POST", url, json=payload,
+            headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Namespaces
+      summary: List all namespaces
+      operationId: listNamespaces
+      responses:
+        '200':
+          description: Successfully listed all namespaces
+        '403':
+          description: Forbidden
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
+    get:
+      tags:
+        - Namespaces
+      summary: Get a namespace
+      operationId: getNamespace
+      responses:
+        '200':
+          description: Successfully fetched the namespace
+        '404':
+          description: No such namespace exists
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    delete:
+      tags:
+        - Namespaces
+      summary: Delete a namespace
+      operationId: deleteNamespace
+      responses:
+        '200':
+          description: Successfully deleted the namespace if it existed
+        '403':
+          description: Forbidden
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request DELETE \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}';
+
+
+            let options = {method: 'DELETE', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Delete.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("DELETE", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
+    post:
+      tags:
+        - Releases
+      summary: Create a new release
+      responses:
+        '201':
+          description: Successfully created the release
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';
+
+
+            let options = {method: 'POST', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Post.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("POST", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Releases
+      summary: List all releases
+      responses:
+        '200':
+          description: Successfully listed all releases
+        '403':
+          description: Forbidden
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}:
+    get:
+      tags:
+        - Releases
+      summary: Get a release
+      responses:
+        '200':
+          description: Successfully fetched the release
+        '404':
+          description: No such release exists
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    patch:
+      tags:
+        - Releases
+      summary: Update a release
+      responses:
+        '200':
+          description: Successfully updated the release
+        '404':
+          description: No such release exists
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request PATCH \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}';
+
+
+            let options = {method: 'PATCH', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Patch.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("PATCH", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}\"\n\n\treq, _ := http.NewRequest(\"PATCH\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    delete:
+      tags:
+        - Releases
+      summary: Delete a release
+      responses:
+        '200':
+          description: Successfully deleted the release if it existed
+        '403':
+          description: Forbidden
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request DELETE \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}';
+
+
+            let options = {method: 'DELETE', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Delete.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("DELETE", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries:
+    post:
+      tags:
+        - Registries
+      summary: Create a new registry
+      responses:
+        '201':
+          description: Successfully created the new registry
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';
+
+
+            let options = {method: 'POST', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Post.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("POST", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Registries
+      summary: List all registries
+      responses:
+        '200':
+          description: Successfully listed all registries
+        '403':
+          description: Forbidden
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries/{registry_id}:
+    get:
+      tags:
+        - Registries
+      summary: Get a registry
+      responses:
+        '200':
+          description: Successfully fetched the registry
+        '403':
+          description: Forbidden
+        '404':
+          description: No such registry exists
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    delete:
+      tags:
+        - Registries
+      summary: Delete a registry
+      responses:
+        '200':
+          description: Successfully deleted the registry if it existed
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request DELETE \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}';
+
+
+            let options = {method: 'DELETE', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Delete.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("DELETE", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
+    post:
+      tags:
+        - Registries
+      summary: Create a repository inside a registry
+      responses:
+        '201':
+          description: Successfully created the new repository
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request POST \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories';
+
+
+            let options = {method: 'POST', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Post.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("POST", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      tags:
+        - Registries
+      summary: List all repositories in a registry
+      responses:
+        '200':
+          description: Successfully listed all repositories
+        '403':
+          description: Forbidden
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
+    get:
+      tags:
+        - Registries
+      summary: List all image tags of a repository
+      responses:
+        '200':
+          description: Successfully listed all image tags
+        '403':
+          description: Forbidden
+      x-codeSamples:
+        - lang: Shell
+          source: |-
+            curl --request GET \
+              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository} \
+              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+        - lang: Node
+          source: >-
+            const fetch = require('node-fetch');
+
+
+            let url =
+            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}';
+
+
+            let options = {method: 'GET', headers: {Authorization: 'Bearer
+            REPLACE_BEARER_TOKEN'}};
+
+
+            fetch(url, options)
+              .then(res => res.json())
+              .then(json => console.log(json))
+              .catch(err => console.error('error:' + err));
+        - lang: Ruby
+          source: >-
+            require 'uri'
+
+            require 'net/http'
+
+            require 'openssl'
+
+
+            url =
+            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}")
+
+
+            http = Net::HTTP.new(url.host, url.port)
+
+            http.use_ssl = true
+
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
+            request = Net::HTTP::Get.new(url)
+
+            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
+
+
+            response = http.request(request)
+
+            puts response.read_body
+        - lang: Python
+          source: >-
+            import requests
+
+
+            url =
+            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}"
+
+
+            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
+
+
+            response = requests.request("GET", url, headers=headers)
+
+
+            print(response.text)
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+components:
+  schemas:
+    CreateNamespace:
+      type: object
+      properties:
+        name:
+          type: string
+  requestBodies:
+    CreateNamespace: *ref_0
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  links: {}
+  callbacks: {}
+security:
+  - Bearer: []
+

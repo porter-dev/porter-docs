@@ -1,4 +1,4 @@
-module.exports = {
+docusaurusConfig = {
   title: "Porter",
   tagline: "Kubernetes powered PaaS that runs in your own cloud.",
   url: "https://docs.porter.run",
@@ -139,6 +139,90 @@ module.exports = {
         docs: false,
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
+        },
+      },
+    ],
+    [
+      "redocusaurus",
+      {
+        specs: [
+          {
+            spec: "./docs/api/api-populated.yaml",
+            route: "/api/",
+            layout: {
+              wrapperClassName: "redoc-wrapper",
+            },
+          },
+        ],
+        theme: {
+          primaryColor: "#1890ff",
+          options: { disableSearch: true, hideDownloadButton: true },
+          theme: {
+            //   breakpoints: {
+            //     small: "10rem",
+            //     medium: "40rem",
+            //     large: "85rem",
+            //   },
+            spacing: {},
+            colors: {
+              primary: {
+                main: "white",
+              },
+              responses: {
+                success: {
+                  backgroundColor: "#636bf211",
+                  color: "#868cfc",
+                  // contrastText: "#000",
+                },
+                info: {
+                  color: "red",
+                  tabTextColor: "red",
+                },
+                error: {
+                  backgroundColor: "rgba(245, 203, 66, 0.06)",
+                  borderColor: "rgb(245, 203, 66)",
+                  color: "rgb(245, 203, 66)",
+                },
+              },
+              //     primary: {
+              //       main: "rgba(246, 20, 63, 1)",
+              //       light: "rgba(246, 20, 63, 0.42)",
+              //     },
+              success: {
+                main: "#636bf2",
+                // contrastText: "#000",
+              },
+              error: {
+                // This sets both the "required" fields and any error texts
+                main: "rgb(245, 203, 66)",
+              },
+              //     text: {
+              //       primary: "rgba(0, 0, 0, 1)",
+              //       secondary: "#4d4d4d",
+              //     },
+              http: {
+                get: "#5A62F5",
+                post: "#5A62F5",
+                put: "#5A62F5",
+                delete: "#5A62F5",
+                patch: "#5A62F5",
+              },
+            },
+            codeBlock: {
+              backgroundColor: "#ffffff10",
+            },
+            rightPanel: {
+              backgroundColor: "#1b1d26",
+            },
+            sidebar: {
+              backgroundColor: "#202227",
+            },
+            typography: {
+              links: {
+                color: "#949eff",
+              },
+            },
+          },
         },
       },
     ],
@@ -364,3 +448,5 @@ module.exports = {
     ],
   ],
 };
+
+module.exports = docusaurusConfig;
