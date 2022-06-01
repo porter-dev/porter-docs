@@ -14,10 +14,6 @@ info:
     project. If API tokens are enabled, you will see the following in the
     project settings page:
 
-
-    ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/235c2839-3b43-49e4-a6c2-fc51c583a600/large)
-
-
     <br />
 
 
@@ -61,7 +57,7 @@ info:
 
     Requests are authenticated via a JWT token that can be obtained from the dashboard in **Project Settings:**
 
-    ![Untitled](API%20Reference%20fd48c9fca6f14ba2b066f959d4479b56/Untitled.png)
+    ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/30748e55-35a9-478e-f5a9-fbe126099d00/large)
 
     JWT tokens are signed via an `HMAC-SHA` algorithm. All API tokens are **project-scoped**, other actions that are outside the scope of a project will need to be performed using a personal access token. 
 
@@ -75,8 +71,7 @@ info:
 
     API tokens can be assigned custom roles based on a set of custom **policies**. These policies can be created from the dashboard or the API. From the dashboard, when you create a custom policy, you can select the resources that you would like the role to access:
 
-    ![Untitled](API%20Reference%20fd48c9fca6f14ba2b066f959d4479b56/Untitled%201.png)
-
+    ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/84af3259-4ef2-4e9d-4319-563d61fb4300/large)
 
     Each policy refers to various **scopes** within a project. These scopes are the following:
 
