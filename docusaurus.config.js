@@ -156,7 +156,10 @@ docusaurusConfig = {
         ],
         theme: {
           primaryColor: "#1890ff",
-          options: { disableSearch: true, hideDownloadButton: true },
+          options: {
+            disableSearch: true,
+            hideDownloadButton: true,
+          },
           theme: {
             //   breakpoints: {
             //     small: "10rem",

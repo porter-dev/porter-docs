@@ -1,0 +1,2421 @@
+definitions:
+  BuildConfig:
+    description: BuildConfig
+    properties:
+      builder:
+        type: string
+        x-go-name: Builder
+      buildpacks:
+        items:
+          type: string
+        type: array
+        x-go-name: Buildpacks
+      config:
+        items:
+          format: uint8
+          type: integer
+        type: array
+        x-go-name: Config
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  Chart:
+    description: |-
+      Chart is a helm package that contains metadata, a default config, zero or more
+      optionally parameterizable templates, and zero or more charts (dependencies).
+    properties:
+      files:
+        description: |-
+          Files are miscellaneous files in a chart archive,
+          e.g. README, LICENSE, etc.
+        items:
+          $ref: '#/definitions/File'
+        type: array
+        x-go-name: Files
+      lock:
+        $ref: '#/definitions/Lock'
+      metadata:
+        $ref: '#/definitions/Metadata'
+      schema:
+        description: Schema is an optional JSON schema for imposing structure on Values
+        items:
+          format: uint8
+          type: integer
+        type: array
+        x-go-name: Schema
+      templates:
+        description: Templates for this chart.
+        items:
+          $ref: '#/definitions/File'
+        type: array
+        x-go-name: Templates
+      values:
+        additionalProperties:
+          type: object
+        description: Values are default config for this chart.
+        type: object
+        x-go-name: Values
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/chart
+  ConditionStatus:
+    type: string
+    x-go-package: k8s.io/api/core/v1
+  CreateBuildConfigRequest:
+    properties:
+      builder:
+        type: string
+        x-go-name: Builder
+      buildpacks:
+        items:
+          type: string
+        type: array
+        x-go-name: Buildpacks
+      config:
+        additionalProperties:
+          type: object
+        type: object
+        x-go-name: Config
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateGitActionConfigRequest:
+    properties:
+      dockerfile_path:
+        type: string
+        x-go-name: DockerfilePath
+      folder_path:
+        type: string
+        x-go-name: FolderPath
+      git_branch:
+        type: string
+        x-go-name: GitBranch
+      git_repo:
+        type: string
+        x-go-name: GitRepo
+      git_repo_id:
+        format: uint64
+        type: integer
+        x-go-name: GitRepoID
+      image_repo_uri:
+        type: string
+        x-go-name: ImageRepoURI
+      registry_id:
+        format: uint64
+        type: integer
+        x-go-name: RegistryID
+      should_create_workflow:
+        type: boolean
+        x-go-name: ShouldCreateWorkflow
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateNamespaceRequest:
+    properties:
+      name:
+        type: string
+        x-go-name: Name
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateNamespaceResponse:
+    properties:
+      metadata:
+        properties:
+          name:
+            type: string
+            x-go-name: Name
+        type: object
+        x-go-name: Metadata
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateRegistryRepositoryRequest:
+    properties:
+      image_repo_uri:
+        type: string
+        x-go-name: ImageRepoURI
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateRegistryRequest:
+    properties:
+      acr_name:
+        type: string
+        x-go-name: ACRName
+      acr_resource_group_name:
+        description: Additional Azure-specific fields
+        type: string
+        x-go-name: ACRResourceGroupName
+      aws_integration_id:
+        format: uint64
+        type: integer
+        x-go-name: AWSIntegrationID
+      azure_integration_id:
+        format: uint64
+        type: integer
+        x-go-name: AzureIntegrationID
+      basic_integration_id:
+        format: uint64
+        type: integer
+        x-go-name: BasicIntegrationID
+      do_integration_id:
+        format: uint64
+        type: integer
+        x-go-name: DOIntegrationID
+      gcp_integration_id:
+        format: uint64
+        type: integer
+        x-go-name: GCPIntegrationID
+      name:
+        type: string
+        x-go-name: Name
+      url:
+        type: string
+        x-go-name: URL
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateRegistryResponse:
+    $ref: '#/definitions/Registry'
+  CreateReleaseBaseRequest:
+    properties:
+      name:
+        type: string
+        x-go-name: Name
+      template_name:
+        type: string
+        x-go-name: TemplateName
+      template_version:
+        type: string
+        x-go-name: TemplateVersion
+      values:
+        additionalProperties:
+          type: object
+        type: object
+        x-go-name: Values
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateReleaseRequest:
+    properties:
+      build_config:
+        $ref: '#/definitions/CreateBuildConfigRequest'
+      github_action_config:
+        $ref: '#/definitions/CreateGitActionConfigRequest'
+      image_url:
+        type: string
+        x-go-name: ImageURL
+      name:
+        type: string
+        x-go-name: Name
+      synced_env_groups:
+        items:
+          type: string
+        type: array
+        x-go-name: SyncedEnvGroups
+      tags:
+        items:
+          type: string
+        type: array
+        x-go-name: Tags
+      template_name:
+        type: string
+        x-go-name: TemplateName
+      template_version:
+        type: string
+        x-go-name: TemplateVersion
+      values:
+        additionalProperties:
+          type: object
+        type: object
+        x-go-name: Values
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  DeleteNamespaceRequest:
+    properties:
+      name:
+        type: string
+        x-go-name: Name
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  Dependency:
+    description: |-
+      Dependencies can be used to express developer intent, or to capture the state
+      of a chart.
+    properties:
+      alias:
+        description: Alias usable alias to be used for the chart
+        type: string
+        x-go-name: Alias
+      condition:
+        description: A yaml path that resolves to a boolean, used for enabling/disabling
+          charts (e.g. subchart1.enabled )
+        type: string
+        x-go-name: Condition
+      enabled:
+        description: Enabled bool determines if chart should be loaded
+        type: boolean
+        x-go-name: Enabled
+      import-values:
+        description: |-
+          ImportValues holds the mapping of source values to parent key to be imported. Each item can be a
+          string or pair of child/parent sublist items.
+        items:
+          type: object
+        type: array
+        x-go-name: ImportValues
+      name:
+        description: |-
+          Name is the name of the dependency.
+
+          This must mach the name in the dependency's Chart.yaml.
+        type: string
+        x-go-name: Name
+      repository:
+        description: |-
+          The URL to the repository.
+
+          Appending `index.yaml` to this string should result in a URL that can be
+          used to fetch the repository index.
+        type: string
+        x-go-name: Repository
+      tags:
+        description: Tags can be used to group charts for enabling/disabling together
+        items:
+          type: string
+        type: array
+        x-go-name: Tags
+      version:
+        description: |-
+          Version is the version (range) of this chart.
+
+          A lock file will always produce a single version, while a dependency
+          may contain a semantic version range.
+        type: string
+        x-go-name: Version
+    title: Dependency describes a chart upon which another chart depends.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/chart
+  FieldsV1:
+    description: |-
+      Each key is either a '.' representing the field itself, and will always map to an empty set,
+      or a string representing a sub-field or item. The string will follow one of these four formats:
+      'f:<name>', where <name> is the name of a field in a struct, or key in a map
+      'v:<value>', where <value> is the exact json formatted value of a list item
+      'i:<index>', where <index> is position of a item in a list
+      'k:<keys>', where <keys> is a map of  a list item's key fields to their unique values
+      If a key maps to an empty Fields value, the field that key represents is part of the set.
+
+      The exact format is defined in sigs.k8s.io/structured-merge-diff
+      +protobuf.options.(gogoproto.goproto_stringer)=false
+    title: FieldsV1 stores a set of fields in a data structure like a Trie, in JSON
+      format.
+    type: object
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  File:
+    description: |-
+      By convention, name is a relative path within the scope of the chart's
+      base directory.
+    properties:
+      data:
+        description: Data is the template as byte data.
+        items:
+          format: uint8
+          type: integer
+        type: array
+        x-go-name: Data
+      name:
+        description: Name is the path-like name of the template.
+        type: string
+        x-go-name: Name
+    title: File represents a file as a name/value pair.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/chart
+  FinalizerName:
+    title: FinalizerName is the name identifying a finalizer during namespace lifecycle.
+    type: string
+    x-go-package: k8s.io/api/core/v1
+  FormContent:
+    description: FormContent is a form's atomic unit
+    properties:
+      context:
+        $ref: '#/definitions/FormContext'
+      label:
+        type: string
+        x-go-name: Label
+      name:
+        type: string
+        x-go-name: Name
+      placeholder:
+        type: string
+        x-go-name: Placeholder
+      required:
+        type: boolean
+        x-go-name: Required
+      settings:
+        properties:
+          default:
+            type: object
+            x-go-name: Default
+          disableAfterLaunch:
+            type: boolean
+            x-go-name: DisableAfterLaunch
+          docs:
+            type: string
+            x-go-name: Docs
+          omitUnitFromValue:
+            type: boolean
+            x-go-name: OmitUnitFromValue
+          options:
+            type: object
+            x-go-name: Options
+          placeholder:
+            type: string
+            x-go-name: Placeholder
+          unit:
+            type: object
+            x-go-name: Unit
+        type: object
+        x-go-name: Settings
+      type:
+        type: string
+        x-go-name: Type
+      value:
+        type: object
+        x-go-name: Value
+      variable:
+        type: string
+        x-go-name: Variable
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  FormContext:
+    description: FormContext is the target context
+    properties:
+      config:
+        additionalProperties:
+          type: string
+        type: object
+        x-go-name: Config
+      type:
+        type: string
+        x-go-name: Type
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  FormSection:
+    description: FormSection is a section of a form
+    properties:
+      contents:
+        items:
+          $ref: '#/definitions/FormContent'
+        type: array
+        x-go-name: Contents
+      context:
+        $ref: '#/definitions/FormContext'
+      name:
+        type: string
+        x-go-name: Name
+      show_if:
+        type: object
+        x-go-name: ShowIf
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  FormTab:
+    description: FormTab is a tab rendered in a form
+    properties:
+      context:
+        $ref: '#/definitions/FormContext'
+      label:
+        type: string
+        x-go-name: Label
+      name:
+        type: string
+        x-go-name: Name
+      sections:
+        items:
+          $ref: '#/definitions/FormSection'
+        type: array
+        x-go-name: Sections
+      settings:
+        properties:
+          omitFromLaunch:
+            type: boolean
+            x-go-name: OmitFromLaunch
+        type: object
+        x-go-name: Settings
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  FormYAML:
+    description: FormYAML represents a chart's values.yaml form abstraction
+    properties:
+      description:
+        type: string
+        x-go-name: Description
+      hasSource:
+        type: string
+        x-go-name: HasSource
+      icon:
+        type: string
+        x-go-name: Icon
+      includeHiddenFields:
+        type: string
+        x-go-name: IncludeHiddenFields
+      isClusterScoped:
+        type: boolean
+        x-go-name: IsClusterScoped
+      name:
+        type: string
+        x-go-name: Name
+      tabs:
+        items:
+          $ref: '#/definitions/FormTab'
+        type: array
+        x-go-name: Tabs
+      tags:
+        items:
+          type: string
+        type: array
+        x-go-name: Tags
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  GetNamespaceResponse:
+    properties:
+      metadata:
+        properties:
+          name:
+            type: string
+            x-go-name: Name
+        type: object
+        x-go-name: Metadata
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  GetRegistryResponse:
+    $ref: '#/definitions/Registry'
+  GetReleaseResponse:
+    $ref: '#/definitions/Release'
+  GitActionConfig:
+    description: GitActionConfig
+    properties:
+      dockerfile_path:
+        description: The path to the dockerfile in the git repo
+        type: string
+        x-go-name: DockerfilePath
+      folder_path:
+        description: The build context
+        type: string
+        x-go-name: FolderPath
+      git_branch:
+        description: The git branch to use
+        type: string
+        x-go-name: GitBranch
+      git_repo:
+        description: The git repo in ${owner}/${repo} form
+        type: string
+        x-go-name: GitRepo
+      git_repo_id:
+        description: The git integration id
+        format: uint64
+        type: integer
+        x-go-name: GitRepoID
+      image_repo_uri:
+        description: The complete image repository uri to pull from
+        type: string
+        x-go-name: ImageRepoURI
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  Hook:
+    properties:
+      delete_policies:
+        description: DeletePolicies are the policies that indicate when to delete
+          the hook
+        items:
+          $ref: '#/definitions/HookDeletePolicy'
+        type: array
+        x-go-name: DeletePolicies
+      events:
+        description: Events are the events that this hook fires on.
+        items:
+          $ref: '#/definitions/HookEvent'
+        type: array
+        x-go-name: Events
+      kind:
+        description: Kind is the Kubernetes kind.
+        type: string
+        x-go-name: Kind
+      last_run:
+        $ref: '#/definitions/HookExecution'
+      manifest:
+        description: Manifest is the manifest contents.
+        type: string
+        x-go-name: Manifest
+      name:
+        type: string
+        x-go-name: Name
+      path:
+        description: Path is the chart-relative path to the template.
+        type: string
+        x-go-name: Path
+      weight:
+        description: Weight indicates the sort order for execution among similar Hook
+          type
+        format: int64
+        type: integer
+        x-go-name: Weight
+    title: Hook defines a hook object.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/release
+  HookDeletePolicy:
+    description: HookDeletePolicy specifies the hook delete policy
+    type: string
+    x-go-package: helm.sh/helm/v3/pkg/release
+  HookEvent:
+    description: HookEvent specifies the hook event
+    type: string
+    x-go-package: helm.sh/helm/v3/pkg/release
+  HookExecution:
+    properties:
+      completed_at:
+        description: CompletedAt indicates the date/time this hook was completed.
+        format: date-time
+        type: string
+        x-go-name: CompletedAt
+      phase:
+        $ref: '#/definitions/HookPhase'
+      started_at:
+        description: StartedAt indicates the date/time this hook was started
+        format: date-time
+        type: string
+        x-go-name: StartedAt
+    title: A HookExecution records the result for the last execution of a hook for
+      a given release.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/release
+  HookPhase:
+    description: A HookPhase indicates the state of a hook execution
+    type: string
+    x-go-package: helm.sh/helm/v3/pkg/release
+  Image:
+    description: Image is a Docker image type
+    properties:
+      digest:
+        description: The sha256 digest of the image manifest.
+        type: string
+        x-go-name: Digest
+      manifest:
+        description: The image manifest associated with the image.
+        type: string
+        x-go-name: Manifest
+      pushed_at:
+        description: When the image was pushed
+        format: date-time
+        type: string
+        x-go-name: PushedAt
+      repository_name:
+        description: The name of the repository associated with the image.
+        type: string
+        x-go-name: RepositoryName
+      tag:
+        description: The tag used for the image.
+        type: string
+        x-go-name: Tag
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  Info:
+    properties:
+      deleted:
+        description: Deleted tracks when this object was deleted.
+        format: date-time
+        type: string
+        x-go-name: Deleted
+      description:
+        description: Description is human-friendly "log entry" about this release.
+        type: string
+        x-go-name: Description
+      first_deployed:
+        description: FirstDeployed is when the release was first deployed.
+        format: date-time
+        type: string
+        x-go-name: FirstDeployed
+      last_deployed:
+        description: LastDeployed is when the release was last deployed.
+        format: date-time
+        type: string
+        x-go-name: LastDeployed
+      notes:
+        description: Contains the rendered templates/NOTES.txt if available
+        type: string
+        x-go-name: Notes
+      status:
+        $ref: '#/definitions/Status'
+    title: Info describes release information.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/release
+  ListImagesResponse:
+    items:
+      $ref: '#/definitions/Image'
+    type: array
+    x-go-name: ListImageResponse
+    x-go-package: github.com/porter-dev/porter/api/types
+  ListMeta:
+    description: |-
+      ListMeta describes metadata that synthetic resources must have, including lists and
+      various status objects. A resource may have only one of {ObjectMeta, ListMeta}.
+    properties:
+      continue:
+        description: |-
+          continue may be set if the user set a limit on the number of items returned, and indicates that
+          the server has more data available. The value is opaque and may be used to issue another request
+          to the endpoint that served this list to retrieve the next set of available objects. Continuing a
+          consistent list may not be possible if the server configuration has changed or more than a few
+          minutes have passed. The resourceVersion field returned when using this continue value will be
+          identical to the value in the first response, unless you have received this token from an error
+          message.
+        type: string
+        x-go-name: Continue
+      remainingItemCount:
+        description: |-
+          remainingItemCount is the number of subsequent items in the list which are not included in this
+          list response. If the list request contained label or field selectors, then the number of
+          remaining items is unknown and the field will be left unset and omitted during serialization.
+          If the list is complete (either because it is not chunking or because this is the last chunk),
+          then there are no more remaining items and this field will be left unset and omitted during
+          serialization.
+          Servers older than v1.15 do not set this field.
+          The intended use of the remainingItemCount is *estimating* the size of a collection. Clients
+          should not rely on the remainingItemCount to be set or to be exact.
+          +optional
+        format: int64
+        type: integer
+        x-go-name: RemainingItemCount
+      resourceVersion:
+        description: |-
+          String that identifies the server's internal version of this object that
+          can be used by clients to determine when objects have changed.
+          Value must be treated as opaque by clients and passed unmodified back to the server.
+          Populated by the system.
+          Read-only.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+          +optional
+        type: string
+        x-go-name: ResourceVersion
+      selfLink:
+        description: |-
+          selfLink is a URL representing this object.
+          Populated by the system.
+          Read-only.
+
+          DEPRECATED
+          Kubernetes will stop propagating this field in 1.20 release and the field is planned
+          to be removed in 1.21 release.
+          +optional
+        type: string
+        x-go-name: SelfLink
+    type: object
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  ListNamespacesResponse:
+    properties:
+      apiVersion:
+        description: |-
+          APIVersion defines the versioned schema of this representation of an object.
+          Servers should convert recognized schemas to the latest internal value, and
+          may reject unrecognized values.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+          +optional
+        type: string
+        x-go-name: APIVersion
+      continue:
+        description: |-
+          continue may be set if the user set a limit on the number of items returned, and indicates that
+          the server has more data available. The value is opaque and may be used to issue another request
+          to the endpoint that served this list to retrieve the next set of available objects. Continuing a
+          consistent list may not be possible if the server configuration has changed or more than a few
+          minutes have passed. The resourceVersion field returned when using this continue value will be
+          identical to the value in the first response, unless you have received this token from an error
+          message.
+        type: string
+        x-go-name: Continue
+      items:
+        description: |-
+          Items is the list of Namespace objects in the list.
+          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+        items:
+          $ref: '#/definitions/Namespace'
+        type: array
+        x-go-name: Items
+      kind:
+        description: |-
+          Kind is a string value representing the REST resource this object represents.
+          Servers may infer this from the endpoint the client submits requests to.
+          Cannot be updated.
+          In CamelCase.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+          +optional
+        type: string
+        x-go-name: Kind
+      remainingItemCount:
+        description: |-
+          remainingItemCount is the number of subsequent items in the list which are not included in this
+          list response. If the list request contained label or field selectors, then the number of
+          remaining items is unknown and the field will be left unset and omitted during serialization.
+          If the list is complete (either because it is not chunking or because this is the last chunk),
+          then there are no more remaining items and this field will be left unset and omitted during
+          serialization.
+          Servers older than v1.15 do not set this field.
+          The intended use of the remainingItemCount is *estimating* the size of a collection. Clients
+          should not rely on the remainingItemCount to be set or to be exact.
+          +optional
+        format: int64
+        type: integer
+        x-go-name: RemainingItemCount
+      resourceVersion:
+        description: |-
+          String that identifies the server's internal version of this object that
+          can be used by clients to determine when objects have changed.
+          Value must be treated as opaque by clients and passed unmodified back to the server.
+          Populated by the system.
+          Read-only.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+          +optional
+        type: string
+        x-go-name: ResourceVersion
+      selfLink:
+        description: |-
+          selfLink is a URL representing this object.
+          Populated by the system.
+          Read-only.
+
+          DEPRECATED
+          Kubernetes will stop propagating this field in 1.20 release and the field is planned
+          to be removed in 1.21 release.
+          +optional
+        type: string
+        x-go-name: SelfLink
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  ListRegistriesResponse:
+    items:
+      $ref: '#/definitions/Registry'
+    type: array
+    x-go-name: RegistryListResponse
+    x-go-package: github.com/porter-dev/porter/api/types
+  ListRegistryRepositoriesResponse:
+    items:
+      $ref: '#/definitions/RegistryRepository'
+    type: array
+    x-go-name: ListRegistryRepositoryResponse
+    x-go-package: github.com/porter-dev/porter/api/types
+  ListReleasesResponse:
+    items:
+      $ref: '#/definitions/Release'
+    type: array
+    x-go-package: github.com/porter-dev/porter/api/types
+  Lock:
+    description: It represents the state that the dependencies should be in.
+    properties:
+      dependencies:
+        description: Dependencies is the list of dependencies that this lock file
+          has locked.
+        items:
+          $ref: '#/definitions/Dependency'
+        type: array
+        x-go-name: Dependencies
+      digest:
+        description: Digest is a hash of the dependencies in Chart.yaml.
+        type: string
+        x-go-name: Digest
+      generated:
+        description: Generated is the date the lock file was last generated.
+        format: date-time
+        type: string
+        x-go-name: Generated
+    title: Lock is a lock file for dependencies.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/chart
+  Maintainer:
+    properties:
+      email:
+        description: Email is an optional email address to contact the named maintainer
+        type: string
+        x-go-name: Email
+      name:
+        description: Name is a user name or organization name
+        type: string
+        x-go-name: Name
+      url:
+        description: URL is an optional URL to an address for the named maintainer
+        type: string
+        x-go-name: URL
+    title: Maintainer describes a Chart maintainer.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/chart
+  ManagedFieldsEntry:
+    description: |-
+      ManagedFieldsEntry is a workflow-id, a FieldSet and the group version of the resource
+      that the fieldset applies to.
+    properties:
+      apiVersion:
+        description: |-
+          APIVersion defines the version of this resource that this field set
+          applies to. The format is "group/version" just like the top-level
+          APIVersion field. It is necessary to track the version of a field
+          set because it cannot be automatically converted.
+        type: string
+        x-go-name: APIVersion
+      fieldsType:
+        description: |-
+          FieldsType is the discriminator for the different fields format and version.
+          There is currently only one possible value: "FieldsV1"
+        type: string
+        x-go-name: FieldsType
+      fieldsV1:
+        $ref: '#/definitions/FieldsV1'
+      manager:
+        description: Manager is an identifier of the workflow managing these fields.
+        type: string
+        x-go-name: Manager
+      operation:
+        $ref: '#/definitions/ManagedFieldsOperationType'
+      subresource:
+        description: |-
+          Subresource is the name of the subresource used to update that object, or
+          empty string if the object was updated through the main resource. The
+          value of this field is used to distinguish between managers, even if they
+          share the same name. For example, a status update will be distinct from a
+          regular update using the same manager name.
+          Note that the APIVersion field is not related to the Subresource field and
+          it always corresponds to the version of the main resource.
+        type: string
+        x-go-name: Subresource
+      time:
+        $ref: '#/definitions/Time'
+    type: object
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  ManagedFieldsOperationType:
+    title: ManagedFieldsOperationType is the type of operation which lead to a ManagedFieldsEntry
+      being created.
+    type: string
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  Metadata:
+    properties:
+      annotations:
+        additionalProperties:
+          type: string
+        description: |-
+          Annotations are additional mappings uninterpreted by Helm,
+          made available for inspection by other applications.
+        type: object
+        x-go-name: Annotations
+      apiVersion:
+        description: The API Version of this chart. Required.
+        type: string
+        x-go-name: APIVersion
+      appVersion:
+        description: The version of the application enclosed inside of this chart.
+        type: string
+        x-go-name: AppVersion
+      condition:
+        description: The condition to check to enable chart
+        type: string
+        x-go-name: Condition
+      dependencies:
+        description: Dependencies are a list of dependencies for a chart.
+        items:
+          $ref: '#/definitions/Dependency'
+        type: array
+        x-go-name: Dependencies
+      deprecated:
+        description: Whether or not this chart is deprecated
+        type: boolean
+        x-go-name: Deprecated
+      description:
+        description: A one-sentence description of the chart
+        type: string
+        x-go-name: Description
+      home:
+        description: The URL to a relevant project page, git repo, or contact person
+        type: string
+        x-go-name: Home
+      icon:
+        description: The URL to an icon file.
+        type: string
+        x-go-name: Icon
+      keywords:
+        description: A list of string keywords
+        items:
+          type: string
+        type: array
+        x-go-name: Keywords
+      kubeVersion:
+        description: KubeVersion is a SemVer constraint specifying the version of
+          Kubernetes required.
+        type: string
+        x-go-name: KubeVersion
+      maintainers:
+        description: A list of name and URL/email address combinations for the maintainer(s)
+        items:
+          $ref: '#/definitions/Maintainer'
+        type: array
+        x-go-name: Maintainers
+      name:
+        description: The name of the chart. Required.
+        type: string
+        x-go-name: Name
+      sources:
+        description: Source is the URL to the source code of this chart
+        items:
+          type: string
+        type: array
+        x-go-name: Sources
+      tags:
+        description: The tags to check to enable chart
+        type: string
+        x-go-name: Tags
+      type:
+        description: 'Specifies the chart type: application or library'
+        type: string
+        x-go-name: Type
+      version:
+        description: A SemVer 2 conformant version string of the chart. Required.
+        type: string
+        x-go-name: Version
+    title: Metadata for a Chart file. This models the structure of a Chart.yaml file.
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/chart
+  Namespace:
+    description: Use of multiple namespaces is optional.
+    properties:
+      annotations:
+        additionalProperties:
+          type: string
+        description: |-
+          Annotations is an unstructured key value map stored with a resource that may be
+          set by external tools to store and retrieve arbitrary metadata. They are not
+          queryable and should be preserved when modifying objects.
+          More info: http://kubernetes.io/docs/user-guide/annotations
+          +optional
+        type: object
+        x-go-name: Annotations
+      apiVersion:
+        description: |-
+          APIVersion defines the versioned schema of this representation of an object.
+          Servers should convert recognized schemas to the latest internal value, and
+          may reject unrecognized values.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+          +optional
+        type: string
+        x-go-name: APIVersion
+      clusterName:
+        description: |-
+          The name of the cluster which the object belongs to.
+          This is used to distinguish resources with same name and namespace in different clusters.
+          This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.
+          +optional
+        type: string
+        x-go-name: ClusterName
+      creationTimestamp:
+        $ref: '#/definitions/Time'
+      deletionGracePeriodSeconds:
+        description: |-
+          Number of seconds allowed for this object to gracefully terminate before
+          it will be removed from the system. Only set when deletionTimestamp is also set.
+          May only be shortened.
+          Read-only.
+          +optional
+        format: int64
+        type: integer
+        x-go-name: DeletionGracePeriodSeconds
+      deletionTimestamp:
+        $ref: '#/definitions/Time'
+      finalizers:
+        description: |-
+          Must be empty before the object is deleted from the registry. Each entry
+          is an identifier for the responsible component that will remove the entry
+          from the list. If the deletionTimestamp of the object is non-nil, entries
+          in this list can only be removed.
+          Finalizers may be processed and removed in any order.  Order is NOT enforced
+          because it introduces significant risk of stuck finalizers.
+          finalizers is a shared field, any actor with permission can reorder it.
+          If the finalizer list is processed in order, then this can lead to a situation
+          in which the component responsible for the first finalizer in the list is
+          waiting for a signal (field value, external system, or other) produced by a
+          component responsible for a finalizer later in the list, resulting in a deadlock.
+          Without enforced ordering finalizers are free to order amongst themselves and
+          are not vulnerable to ordering changes in the list.
+          +optional
+          +patchStrategy=merge
+        items:
+          type: string
+        type: array
+        x-go-name: Finalizers
+      generateName:
+        description: |-
+          GenerateName is an optional prefix, used by the server, to generate a unique
+          name ONLY IF the Name field has not been provided.
+          If this field is used, the name returned to the client will be different
+          than the name passed. This value will also be combined with a unique suffix.
+          The provided value has the same validation rules as the Name field,
+          and may be truncated by the length of the suffix required to make the value
+          unique on the server.
+
+          If this field is specified and the generated name exists, the server will
+          NOT return a 409 - instead, it will either return 201 Created or 500 with Reason
+          ServerTimeout indicating a unique name could not be found in the time allotted, and the client
+          should retry (optionally after the time indicated in the Retry-After header).
+
+          Applied only if Name is not specified.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#idempotency
+          +optional
+        type: string
+        x-go-name: GenerateName
+      generation:
+        description: |-
+          A sequence number representing a specific generation of the desired state.
+          Populated by the system. Read-only.
+          +optional
+        format: int64
+        type: integer
+        x-go-name: Generation
+      kind:
+        description: |-
+          Kind is a string value representing the REST resource this object represents.
+          Servers may infer this from the endpoint the client submits requests to.
+          Cannot be updated.
+          In CamelCase.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+          +optional
+        type: string
+        x-go-name: Kind
+      labels:
+        additionalProperties:
+          type: string
+        description: |-
+          Map of string keys and values that can be used to organize and categorize
+          (scope and select) objects. May match selectors of replication controllers
+          and services.
+          More info: http://kubernetes.io/docs/user-guide/labels
+          +optional
+        type: object
+        x-go-name: Labels
+      managedFields:
+        description: |-
+          ManagedFields maps workflow-id and version to the set of fields
+          that are managed by that workflow. This is mostly for internal
+          housekeeping, and users typically shouldn't need to set or
+          understand this field. A workflow can be the user's name, a
+          controller's name, or the name of a specific apply path like
+          "ci-cd". The set of fields is always in the version that the
+          workflow used when modifying the object.
+
+          +optional
+        items:
+          $ref: '#/definitions/ManagedFieldsEntry'
+        type: array
+        x-go-name: ManagedFields
+      name:
+        description: |-
+          Name must be unique within a namespace. Is required when creating resources, although
+          some resources may allow a client to request the generation of an appropriate name
+          automatically. Name is primarily intended for creation idempotence and configuration
+          definition.
+          Cannot be updated.
+          More info: http://kubernetes.io/docs/user-guide/identifiers#names
+          +optional
+        type: string
+        x-go-name: Name
+      namespace:
+        description: |-
+          Namespace defines the space within which each name must be unique. An empty namespace is
+          equivalent to the "default" namespace, but "default" is the canonical representation.
+          Not all objects are required to be scoped to a namespace - the value of this field for
+          those objects will be empty.
+
+          Must be a DNS_LABEL.
+          Cannot be updated.
+          More info: http://kubernetes.io/docs/user-guide/namespaces
+          +optional
+        type: string
+        x-go-name: Namespace
+      ownerReferences:
+        description: |-
+          List of objects depended by this object. If ALL objects in the list have
+          been deleted, this object will be garbage collected. If this object is managed by a controller,
+          then an entry in this list will point to this controller, with the controller field set to true.
+          There cannot be more than one managing controller.
+          +optional
+          +patchMergeKey=uid
+          +patchStrategy=merge
+        items:
+          $ref: '#/definitions/OwnerReference'
+        type: array
+        x-go-name: OwnerReferences
+      resourceVersion:
+        description: |-
+          An opaque value that represents the internal version of this object that can
+          be used by clients to determine when objects have changed. May be used for optimistic
+          concurrency, change detection, and the watch operation on a resource or set of resources.
+          Clients must treat these values as opaque and passed unmodified back to the server.
+          They may only be valid for a particular resource or set of resources.
+
+          Populated by the system.
+          Read-only.
+          Value must be treated as opaque by clients and .
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+          +optional
+        type: string
+        x-go-name: ResourceVersion
+      selfLink:
+        description: |-
+          SelfLink is a URL representing this object.
+          Populated by the system.
+          Read-only.
+
+          DEPRECATED
+          Kubernetes will stop propagating this field in 1.20 release and the field is planned
+          to be removed in 1.21 release.
+          +optional
+        type: string
+        x-go-name: SelfLink
+      spec:
+        $ref: '#/definitions/NamespaceSpec'
+      status:
+        $ref: '#/definitions/NamespaceStatus'
+      uid:
+        $ref: '#/definitions/UID'
+    title: Namespace provides a scope for Names.
+    type: object
+    x-go-package: k8s.io/api/core/v1
+  NamespaceCondition:
+    properties:
+      lastTransitionTime:
+        $ref: '#/definitions/Time'
+      message:
+        description: +optional
+        type: string
+        x-go-name: Message
+      reason:
+        description: +optional
+        type: string
+        x-go-name: Reason
+      status:
+        $ref: '#/definitions/ConditionStatus'
+      type:
+        $ref: '#/definitions/NamespaceConditionType'
+    title: NamespaceCondition contains details about state of namespace.
+    type: object
+    x-go-package: k8s.io/api/core/v1
+  NamespaceConditionType:
+    description: +enum
+    type: string
+    x-go-package: k8s.io/api/core/v1
+  NamespaceList:
+    properties:
+      apiVersion:
+        description: |-
+          APIVersion defines the versioned schema of this representation of an object.
+          Servers should convert recognized schemas to the latest internal value, and
+          may reject unrecognized values.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+          +optional
+        type: string
+        x-go-name: APIVersion
+      continue:
+        description: |-
+          continue may be set if the user set a limit on the number of items returned, and indicates that
+          the server has more data available. The value is opaque and may be used to issue another request
+          to the endpoint that served this list to retrieve the next set of available objects. Continuing a
+          consistent list may not be possible if the server configuration has changed or more than a few
+          minutes have passed. The resourceVersion field returned when using this continue value will be
+          identical to the value in the first response, unless you have received this token from an error
+          message.
+        type: string
+        x-go-name: Continue
+      items:
+        description: |-
+          Items is the list of Namespace objects in the list.
+          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+        items:
+          $ref: '#/definitions/Namespace'
+        type: array
+        x-go-name: Items
+      kind:
+        description: |-
+          Kind is a string value representing the REST resource this object represents.
+          Servers may infer this from the endpoint the client submits requests to.
+          Cannot be updated.
+          In CamelCase.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+          +optional
+        type: string
+        x-go-name: Kind
+      remainingItemCount:
+        description: |-
+          remainingItemCount is the number of subsequent items in the list which are not included in this
+          list response. If the list request contained label or field selectors, then the number of
+          remaining items is unknown and the field will be left unset and omitted during serialization.
+          If the list is complete (either because it is not chunking or because this is the last chunk),
+          then there are no more remaining items and this field will be left unset and omitted during
+          serialization.
+          Servers older than v1.15 do not set this field.
+          The intended use of the remainingItemCount is *estimating* the size of a collection. Clients
+          should not rely on the remainingItemCount to be set or to be exact.
+          +optional
+        format: int64
+        type: integer
+        x-go-name: RemainingItemCount
+      resourceVersion:
+        description: |-
+          String that identifies the server's internal version of this object that
+          can be used by clients to determine when objects have changed.
+          Value must be treated as opaque by clients and passed unmodified back to the server.
+          Populated by the system.
+          Read-only.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+          +optional
+        type: string
+        x-go-name: ResourceVersion
+      selfLink:
+        description: |-
+          selfLink is a URL representing this object.
+          Populated by the system.
+          Read-only.
+
+          DEPRECATED
+          Kubernetes will stop propagating this field in 1.20 release and the field is planned
+          to be removed in 1.21 release.
+          +optional
+        type: string
+        x-go-name: SelfLink
+    title: NamespaceList is a list of Namespaces.
+    type: object
+    x-go-package: k8s.io/api/core/v1
+  NamespacePhase:
+    description: +enum
+    type: string
+    x-go-package: k8s.io/api/core/v1
+  NamespaceSpec:
+    properties:
+      finalizers:
+        description: |-
+          Finalizers is an opaque list of values that must be empty to permanently remove object from storage.
+          More info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/
+          +optional
+        items:
+          $ref: '#/definitions/FinalizerName'
+        type: array
+        x-go-name: Finalizers
+    title: NamespaceSpec describes the attributes on a Namespace.
+    type: object
+    x-go-package: k8s.io/api/core/v1
+  NamespaceStatus:
+    properties:
+      conditions:
+        description: |-
+          Represents the latest available observations of a namespace's current state.
+          +optional
+          +patchMergeKey=type
+          +patchStrategy=merge
+        items:
+          $ref: '#/definitions/NamespaceCondition'
+        type: array
+        x-go-name: Conditions
+      phase:
+        $ref: '#/definitions/NamespacePhase'
+    title: NamespaceStatus is information about the current status of a Namespace.
+    type: object
+    x-go-package: k8s.io/api/core/v1
+  ObjectMeta:
+    description: |-
+      ObjectMeta is metadata that all persisted resources must have, which includes all objects
+      users must create.
+    properties:
+      annotations:
+        additionalProperties:
+          type: string
+        description: |-
+          Annotations is an unstructured key value map stored with a resource that may be
+          set by external tools to store and retrieve arbitrary metadata. They are not
+          queryable and should be preserved when modifying objects.
+          More info: http://kubernetes.io/docs/user-guide/annotations
+          +optional
+        type: object
+        x-go-name: Annotations
+      clusterName:
+        description: |-
+          The name of the cluster which the object belongs to.
+          This is used to distinguish resources with same name and namespace in different clusters.
+          This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.
+          +optional
+        type: string
+        x-go-name: ClusterName
+      creationTimestamp:
+        $ref: '#/definitions/Time'
+      deletionGracePeriodSeconds:
+        description: |-
+          Number of seconds allowed for this object to gracefully terminate before
+          it will be removed from the system. Only set when deletionTimestamp is also set.
+          May only be shortened.
+          Read-only.
+          +optional
+        format: int64
+        type: integer
+        x-go-name: DeletionGracePeriodSeconds
+      deletionTimestamp:
+        $ref: '#/definitions/Time'
+      finalizers:
+        description: |-
+          Must be empty before the object is deleted from the registry. Each entry
+          is an identifier for the responsible component that will remove the entry
+          from the list. If the deletionTimestamp of the object is non-nil, entries
+          in this list can only be removed.
+          Finalizers may be processed and removed in any order.  Order is NOT enforced
+          because it introduces significant risk of stuck finalizers.
+          finalizers is a shared field, any actor with permission can reorder it.
+          If the finalizer list is processed in order, then this can lead to a situation
+          in which the component responsible for the first finalizer in the list is
+          waiting for a signal (field value, external system, or other) produced by a
+          component responsible for a finalizer later in the list, resulting in a deadlock.
+          Without enforced ordering finalizers are free to order amongst themselves and
+          are not vulnerable to ordering changes in the list.
+          +optional
+          +patchStrategy=merge
+        items:
+          type: string
+        type: array
+        x-go-name: Finalizers
+      generateName:
+        description: |-
+          GenerateName is an optional prefix, used by the server, to generate a unique
+          name ONLY IF the Name field has not been provided.
+          If this field is used, the name returned to the client will be different
+          than the name passed. This value will also be combined with a unique suffix.
+          The provided value has the same validation rules as the Name field,
+          and may be truncated by the length of the suffix required to make the value
+          unique on the server.
+
+          If this field is specified and the generated name exists, the server will
+          NOT return a 409 - instead, it will either return 201 Created or 500 with Reason
+          ServerTimeout indicating a unique name could not be found in the time allotted, and the client
+          should retry (optionally after the time indicated in the Retry-After header).
+
+          Applied only if Name is not specified.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#idempotency
+          +optional
+        type: string
+        x-go-name: GenerateName
+      generation:
+        description: |-
+          A sequence number representing a specific generation of the desired state.
+          Populated by the system. Read-only.
+          +optional
+        format: int64
+        type: integer
+        x-go-name: Generation
+      labels:
+        additionalProperties:
+          type: string
+        description: |-
+          Map of string keys and values that can be used to organize and categorize
+          (scope and select) objects. May match selectors of replication controllers
+          and services.
+          More info: http://kubernetes.io/docs/user-guide/labels
+          +optional
+        type: object
+        x-go-name: Labels
+      managedFields:
+        description: |-
+          ManagedFields maps workflow-id and version to the set of fields
+          that are managed by that workflow. This is mostly for internal
+          housekeeping, and users typically shouldn't need to set or
+          understand this field. A workflow can be the user's name, a
+          controller's name, or the name of a specific apply path like
+          "ci-cd". The set of fields is always in the version that the
+          workflow used when modifying the object.
+
+          +optional
+        items:
+          $ref: '#/definitions/ManagedFieldsEntry'
+        type: array
+        x-go-name: ManagedFields
+      name:
+        description: |-
+          Name must be unique within a namespace. Is required when creating resources, although
+          some resources may allow a client to request the generation of an appropriate name
+          automatically. Name is primarily intended for creation idempotence and configuration
+          definition.
+          Cannot be updated.
+          More info: http://kubernetes.io/docs/user-guide/identifiers#names
+          +optional
+        type: string
+        x-go-name: Name
+      namespace:
+        description: |-
+          Namespace defines the space within which each name must be unique. An empty namespace is
+          equivalent to the "default" namespace, but "default" is the canonical representation.
+          Not all objects are required to be scoped to a namespace - the value of this field for
+          those objects will be empty.
+
+          Must be a DNS_LABEL.
+          Cannot be updated.
+          More info: http://kubernetes.io/docs/user-guide/namespaces
+          +optional
+        type: string
+        x-go-name: Namespace
+      ownerReferences:
+        description: |-
+          List of objects depended by this object. If ALL objects in the list have
+          been deleted, this object will be garbage collected. If this object is managed by a controller,
+          then an entry in this list will point to this controller, with the controller field set to true.
+          There cannot be more than one managing controller.
+          +optional
+          +patchMergeKey=uid
+          +patchStrategy=merge
+        items:
+          $ref: '#/definitions/OwnerReference'
+        type: array
+        x-go-name: OwnerReferences
+      resourceVersion:
+        description: |-
+          An opaque value that represents the internal version of this object that can
+          be used by clients to determine when objects have changed. May be used for optimistic
+          concurrency, change detection, and the watch operation on a resource or set of resources.
+          Clients must treat these values as opaque and passed unmodified back to the server.
+          They may only be valid for a particular resource or set of resources.
+
+          Populated by the system.
+          Read-only.
+          Value must be treated as opaque by clients and .
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
+          +optional
+        type: string
+        x-go-name: ResourceVersion
+      selfLink:
+        description: |-
+          SelfLink is a URL representing this object.
+          Populated by the system.
+          Read-only.
+
+          DEPRECATED
+          Kubernetes will stop propagating this field in 1.20 release and the field is planned
+          to be removed in 1.21 release.
+          +optional
+        type: string
+        x-go-name: SelfLink
+      uid:
+        $ref: '#/definitions/UID'
+    type: object
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  OwnerReference:
+    description: |-
+      OwnerReference contains enough information to let you identify an owning
+      object. An owning object must be in the same namespace as the dependent, or
+      be cluster-scoped, so there is no namespace field.
+      +structType=atomic
+    properties:
+      apiVersion:
+        description: API version of the referent.
+        type: string
+        x-go-name: APIVersion
+      blockOwnerDeletion:
+        description: |-
+          If true, AND if the owner has the "foregroundDeletion" finalizer, then
+          the owner cannot be deleted from the key-value store until this
+          reference is removed.
+          Defaults to false.
+          To set this field, a user needs "delete" permission of the owner,
+          otherwise 422 (Unprocessable Entity) will be returned.
+          +optional
+        type: boolean
+        x-go-name: BlockOwnerDeletion
+      controller:
+        description: |-
+          If true, this reference points to the managing controller.
+          +optional
+        type: boolean
+        x-go-name: Controller
+      kind:
+        description: |-
+          Kind of the referent.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+        type: string
+        x-go-name: Kind
+      name:
+        description: |-
+          Name of the referent.
+          More info: http://kubernetes.io/docs/user-guide/identifiers#names
+        type: string
+        x-go-name: Name
+      uid:
+        $ref: '#/definitions/UID'
+    type: object
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  PorterRelease:
+    properties:
+      build_config:
+        $ref: '#/definitions/BuildConfig'
+      git_action_config:
+        $ref: '#/definitions/GitActionConfig'
+      id:
+        format: uint64
+        type: integer
+        x-go-name: ID
+      image_repo_uri:
+        type: string
+        x-go-name: ImageRepoURI
+      latest_version:
+        type: string
+        x-go-name: LatestVersion
+      tags:
+        items:
+          type: string
+        type: array
+        x-go-name: Tags
+      webhook_token:
+        type: string
+        x-go-name: WebhookToken
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  Registry:
+    properties:
+      aws_integration_id:
+        description: The AWS integration that was used to create or connect the registry
+        format: uint64
+        type: integer
+        x-go-name: AWSIntegrationID
+      azure_integration_id:
+        description: The Azure integration that was used to create or connect the
+          registry
+        format: uint64
+        type: integer
+        x-go-name: AzureIntegrationID
+      basic_integration_id:
+        description: 'The basic integration that was used to connect the registry:'
+        format: uint64
+        type: integer
+        x-go-name: BasicIntegrationID
+      do_integration_id:
+        description: |-
+          The DO integration that was used to create or connect the registry:
+          this points to an OAuthIntegrationID
+        format: uint64
+        type: integer
+        x-go-name: DOIntegrationID
+      gcp_integration_id:
+        description: The GCP integration that was used to create or connect the registry
+        format: uint64
+        type: integer
+        x-go-name: GCPIntegrationID
+      id:
+        format: uint64
+        type: integer
+        x-go-name: ID
+      infra_id:
+        description: The infra id, if registry was provisioned with Porter
+        format: uint64
+        type: integer
+        x-go-name: InfraID
+      name:
+        description: Name of the registry
+        type: string
+        x-go-name: Name
+      project_id:
+        description: The project that this integration belongs to
+        format: uint64
+        type: integer
+        x-go-name: ProjectID
+      service:
+        $ref: '#/definitions/RegistryService'
+      url:
+        description: URL of the registry
+        type: string
+        x-go-name: URL
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  RegistryRepository:
+    description: Repository is a collection of images
+    properties:
+      created_at:
+        description: When the repository was created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      name:
+        description: Name of the repository
+        type: string
+        x-go-name: Name
+      uri:
+        description: The URI of the repository
+        type: string
+        x-go-name: URI
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  RegistryService:
+    type: string
+    x-go-package: github.com/porter-dev/porter/api/types
+  Release:
+    description: |-
+      Release describes a deployment of a chart, together with the chart
+      and the variables used to deploy that chart.
+    properties:
+      chart:
+        $ref: '#/definitions/Chart'
+      config:
+        additionalProperties:
+          type: object
+        description: |-
+          Config is the set of extra Values added to the chart.
+          These values override the default values inside of the chart.
+        type: object
+        x-go-name: Config
+      hooks:
+        description: Hooks are all of the hooks declared for this release.
+        items:
+          $ref: '#/definitions/Hook'
+        type: array
+        x-go-name: Hooks
+      info:
+        $ref: '#/definitions/Info'
+      manifest:
+        description: Manifest is the string representation of the rendered template.
+        type: string
+        x-go-name: Manifest
+      name:
+        description: Name is the name of the release
+        type: string
+        x-go-name: Name
+      namespace:
+        description: Namespace is the kubernetes namespace of the release.
+        type: string
+        x-go-name: Namespace
+      version:
+        description: Version is an int which represents the revision of the release.
+        format: int64
+        type: integer
+        x-go-name: Version
+    type: object
+    x-go-package: helm.sh/helm/v3/pkg/release
+  Status:
+    description: Status is the status of a release
+    type: string
+    x-go-package: helm.sh/helm/v3/pkg/release
+  Time:
+    description: |-
+      Programs using times should typically store and pass them as values,
+      not pointers. That is, time variables and struct fields should be of
+      type time.Time, not *time.Time.
+
+      A Time value can be used by multiple goroutines simultaneously except
+      that the methods GobDecode, UnmarshalBinary, UnmarshalJSON and
+      UnmarshalText are not concurrency-safe.
+
+      Time instants can be compared using the Before, After, and Equal methods.
+      The Sub method subtracts two instants, producing a Duration.
+      The Add method adds a Time and a Duration, producing a Time.
+
+      The zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.
+      As this time is unlikely to come up in practice, the IsZero method gives
+      a simple way of detecting a time that has not been initialized explicitly.
+
+      Each Time has associated with it a Location, consulted when computing the
+      presentation form of the time, such as in the Format, Hour, and Year methods.
+      The methods Local, UTC, and In return a Time with a specific location.
+      Changing the location in this way changes only the presentation; it does not
+      change the instant in time being denoted and therefore does not affect the
+      computations described in earlier paragraphs.
+
+      Representations of a Time value saved by the GobEncode, MarshalBinary,
+      MarshalJSON, and MarshalText methods store the Time.Location's offset, but not
+      the location name. They therefore lose information about Daylight Saving Time.
+
+      In addition to the required “wall clock” reading, a Time may contain an optional
+      reading of the current process's monotonic clock, to provide additional precision
+      for comparison or subtraction.
+      See the “Monotonic Clocks” section in the package documentation for details.
+
+      Note that the Go == operator compares not just the time instant but also the
+      Location and the monotonic clock reading. Therefore, Time values should not
+      be used as map or database keys without first guaranteeing that the
+      identical Location has been set for all values, which can be achieved
+      through use of the UTC or Local method, and that the monotonic clock reading
+      has been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)
+      to t == u, since t.Equal uses the most accurate comparison available and
+      correctly handles the case when only one of its arguments has a monotonic
+      clock reading.
+    format: date-time
+    title: A Time represents an instant in time with nanosecond precision.
+    type: string
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  TypeMeta:
+    description: +k8s:deepcopy-gen=false
+    properties:
+      apiVersion:
+        description: |-
+          APIVersion defines the versioned schema of this representation of an object.
+          Servers should convert recognized schemas to the latest internal value, and
+          may reject unrecognized values.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+          +optional
+        type: string
+        x-go-name: APIVersion
+      kind:
+        description: |-
+          Kind is a string value representing the REST resource this object represents.
+          Servers may infer this from the endpoint the client submits requests to.
+          Cannot be updated.
+          In CamelCase.
+          More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+          +optional
+        type: string
+        x-go-name: Kind
+    title: |-
+      TypeMeta describes an individual object in an API response or request
+      with strings representing the type of the object and its API schema version.
+      Structures that are versioned or persisted should inline TypeMeta.
+    type: object
+    x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+  UID:
+    description: |-
+      UID is a type that holds unique ID values, including UUIDs.  Because we
+      don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+      intent and helps make sure that UIDs and names do not get conflated.
+    type: string
+    x-go-package: k8s.io/apimachinery/pkg/types
+  UpdateReleaseRequest:
+    properties:
+      values:
+        type: string
+        x-go-name: Values
+      version:
+        type: string
+        x-go-name: ChartVersion
+    type: object
+    x-go-name: UpgradeReleaseRequest
+    x-go-package: github.com/porter-dev/porter/api/types
+paths:
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
+    get:
+      description: Lists namespaces
+      operationId: listNamespaces
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully listed namespaces
+          schema:
+            $ref: '#/definitions/ListNamespacesResponse'
+        "403":
+          description: Forbidden
+      summary: List all namespaces
+      tags:
+      - Namespaces
+    post:
+      description: Creates a new namespace
+      operationId: createNamespace
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace to create
+        in: body
+        name: CreateNamespaceRequest
+        schema:
+          $ref: '#/definitions/CreateNamespaceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created a new namespace
+          schema:
+            $ref: '#/definitions/CreateNamespaceResponse'
+        "403":
+          description: Forbidden
+      summary: Create a new namespace
+      tags:
+      - Namespaces
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
+    delete:
+      description: Deletes a namespace
+      operationId: deleteNamespace
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted namespace
+        "403":
+          description: Forbidden
+      summary: Delete a namespace
+      tags:
+      - Namespaces
+    get:
+      description: Gets a namespace
+      operationId: getNamespace
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully got the namespace
+          schema:
+            $ref: '#/definitions/GetNamespaceResponse'
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      summary: Get a namespace
+      tags:
+      - Namespaces
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
+    get:
+      description: List releases
+      operationId: listReleases
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: the pagination limit
+        example: 50
+        format: int64
+        in: query
+        name: limit
+        type: integer
+        x-go-name: Limit
+      - description: how many items to skip
+        example: 10
+        format: int64
+        in: query
+        name: skip
+        type: integer
+        x-go-name: Skip
+      - description: whether to sort by date
+        example: false
+        in: query
+        name: byDate
+        type: boolean
+        x-go-name: ByDate
+      - description: which helm statuses to filter by
+        in: query
+        items:
+          type: string
+        name: statusFilter
+        type: array
+        x-go-name: StatusFilter
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully listed releases
+          schema:
+            $ref: '#/definitions/ListReleasesResponse'
+        "403":
+          description: Forbidden
+      summary: List releases
+      tags:
+      - Releases
+    post:
+      description: Creates a new release
+      operationId: createRelease
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release to create
+        in: body
+        name: CreateReleaseRequest
+        schema:
+          $ref: '#/definitions/CreateReleaseRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created the release
+        "403":
+          description: Forbidden
+      summary: Create a new release
+      tags:
+      - Releases
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}:
+    delete:
+      description: Deletes a release
+      operationId: deleteRelease
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release name
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      - description: The release version (`0` for latest version)
+        format: uint64
+        in: path
+        minimum: 0
+        name: version
+        required: true
+        type: integer
+        x-go-name: Version
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted the release
+        "403":
+          description: Forbidden
+      summary: Delete a release
+      tags:
+      - Releases
+    get:
+      description: Gets a release
+      operationId: getRelease
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release name
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      - description: The release version (`0` for latest version)
+        format: uint64
+        in: path
+        minimum: 0
+        name: version
+        required: true
+        type: integer
+        x-go-name: Version
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully got the release
+          schema:
+            $ref: '#/definitions/GetReleaseResponse'
+        "403":
+          description: Forbidden
+      summary: Get a release
+      tags:
+      - Releases
+    patch:
+      description: Updates a release
+      operationId: updateRelease
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release name
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      - description: The release version (`0` for latest version)
+        format: uint64
+        in: path
+        minimum: 0
+        name: version
+        required: true
+        type: integer
+        x-go-name: Version
+      - description: The release to update
+        in: body
+        name: UpdateReleaseRequest
+        schema:
+          $ref: '#/definitions/UpdateReleaseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated the release
+        "403":
+          description: Forbidden
+      summary: Update a release
+      tags:
+      - Releases
+  /api/v1/projects/{project_id}/registries:
+    get:
+      description: Lists registries
+      operationId: listRegistries
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - name: registry_id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully listed registries
+          schema:
+            $ref: '#/definitions/ListRegistriesResponse'
+        "403":
+          description: Forbidden
+      summary: List image registries
+      tags:
+      - Registries
+    post:
+      description: Connects a new image registry
+      operationId: createRegistry
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry to connect
+        in: body
+        name: CreateRegistryRequest
+        schema:
+          $ref: '#/definitions/CreateRegistryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully connected the registry
+          schema:
+            $ref: '#/definitions/CreateRegistryResponse'
+        "403":
+          description: Forbidden
+      summary: Connect an image registry
+      tags:
+      - Registries
+  /api/v1/projects/{project_id}/registries/{registry_id}:
+    delete:
+      operationId: deleteRegistry
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully disconnected image registry
+        "403":
+          description: Forbidden
+      summary: Disconnect image registry
+      tags:
+      - Registries
+    get:
+      description: Gets an image registry
+      operationId: getRegistry
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully got the registry
+          schema:
+            $ref: '#/definitions/GetRegistryResponse'
+        "403":
+          description: Forbidden
+      summary: Get an image registry
+      tags:
+      - Registries
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
+    get:
+      description: Lists image repositories inside the image registry given by `registry_id`
+      operationId: listRegistryRepositories
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully listed image repositories
+          schema:
+            $ref: '#/definitions/ListRegistryRepositoriesResponse'
+        "403":
+          description: Forbidden
+      summary: List image repositories
+      tags:
+      - Registries
+    post:
+      description: |-
+        Creates an image repository inside the registry specified by `registry_id`. This method **only** creates repositories for ECR-integrated
+        repositories.
+      operationId: createRegistryRepository
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The repository to create
+        in: body
+        name: CreateRepositoryRequest
+        schema:
+          $ref: '#/definitions/CreateRegistryRepositoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created the image repository
+        "403":
+          description: Forbidden
+      summary: Create image repository
+      tags:
+      - Registries
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
+    get:
+      operationId: listRegistryImages
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: the image repository name
+        in: path
+        name: repository
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully listed images
+          schema:
+            $ref: '#/definitions/ListImagesResponse'
+        "403":
+          description: Forbidden
+      summary: List images
+      tags:
+      - Registries
+swagger: "2.0"

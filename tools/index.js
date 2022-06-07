@@ -46,7 +46,7 @@ const addRequestSamples = (swaggerJson) => {
           });
           swagger.paths[singlePath][method]["x-codeSamples"] = samples;
         } catch (error) {
-          console.log(error);
+          console.log(singlePath, method, error);
         }
       });
   }
@@ -57,4 +57,8 @@ const addRequestSamples = (swaggerJson) => {
 const args = process.argv.slice(2);
 const openApi = yaml.load(fs.readFileSync(args[0], "utf8"));
 
-console.log(yaml.dump(addRequestSamples(openApi)));
+fs.writeFile(args[1], yaml.dump(addRequestSamples(openApi)), (err) => {
+  if (err) {
+    console.error(err);
+  }
+});
