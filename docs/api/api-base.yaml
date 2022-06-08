@@ -104,6 +104,8 @@ tags:
     description: Porter Releases
   - name: Registries
     description: Porter Registries
+  - name: Stacks
+    description: Porter Stacks 
 components:
   securitySchemes:
     Bearer:

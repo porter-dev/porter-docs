@@ -223,6 +223,80 @@ definitions:
         x-go-name: Values
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackAppResourceRequest:
+    properties:
+      name:
+        description: The name of the resource.
+        type: string
+        x-go-name: Name
+      source_config_name:
+        description: The name of the source config (must exist inside `source_configs`).
+        type: string
+        x-go-name: SourceConfigName
+      template_name:
+        description: The name of the template in the Helm registry, such as `web`
+        type: string
+        x-go-name: TemplateName
+      template_version:
+        description: The version of the template in the Helm registry, such as `v0.50.0`
+        type: string
+        x-go-name: TemplateVersion
+      values:
+        additionalProperties:
+          type: object
+        description: The values to pass in to the template.
+        type: object
+        x-go-name: Values
+    required:
+    - template_name
+    - template_version
+    - name
+    - source_config_name
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackRequest:
+    properties:
+      app_resources:
+        description: A list of app resources to create. An app resource is an application
+          helm chart, such as a `web` or `worker` template.
+        items:
+          $ref: '#/definitions/CreateStackAppResourceRequest'
+        type: array
+        x-go-name: AppResources
+      name:
+        description: The display name of the stack
+        type: string
+        x-go-name: Name
+      source_configs:
+        description: |-
+          A list of configurations which can build an application. Each application resource must use at least one
+          source config in order to build application from source. The source config can be specified as a Docker image
+          registry or linked to a remote Git repository.
+        items:
+          $ref: '#/definitions/CreateStackSourceConfigRequest'
+        type: array
+        x-go-name: SourceConfigs
+    required:
+    - name
+    - app_resources
+    - source_configs
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackSourceConfigRequest:
+    properties:
+      build:
+        $ref: '#/definitions/StackSourceConfigBuild'
+      image_repo_uri:
+        type: string
+        x-go-name: ImageRepoURI
+      name:
+        type: string
+        x-go-name: Name
+    required:
+    - name
+    - image_repo_uri
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   DeleteNamespaceRequest:
     properties:
       name:
@@ -1684,6 +1758,179 @@ definitions:
         x-go-name: Version
     type: object
     x-go-package: helm.sh/helm/v3/pkg/release
+  Stack:
+    properties:
+      created_at:
+        description: The time that the stack was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: A unique id for the stack
+        type: string
+        x-go-name: ID
+      name:
+        description: The display name of the stack
+        type: string
+        x-go-name: Name
+      resources:
+        description: The list of resources deployed in this stack
+        items:
+          $ref: '#/definitions/StackResource'
+        type: array
+        x-go-name: Resources
+      revisions:
+        description: The list of revisions deployed for this stack
+        items:
+          $ref: '#/definitions/StackRevision'
+        type: array
+        x-go-name: Revisions
+      updated_at:
+        description: The time that the stack was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackResource:
+    properties:
+      created_at:
+        description: The time that this resource was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: The id for this resource
+        type: string
+        x-go-name: ID
+      name:
+        description: The name of the resource
+        type: string
+        x-go-name: Name
+      stack_id:
+        description: The id of the stack which this resource belongs to
+        type: string
+        x-go-name: StackID
+      stack_source_config:
+        $ref: '#/definitions/StackSourceConfig'
+      updated_at:
+        description: The time that this resource was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackRevision:
+    properties:
+      created_at:
+        description: The time that this revision was created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: The id of the revision
+        format: uint64
+        type: integer
+        x-go-name: ID
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfig:
+    properties:
+      build:
+        $ref: '#/definitions/StackSourceConfigBuild'
+      created_at:
+        description: The time that the source configuration was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: The unique id of the stack source config
+        type: string
+        x-go-name: ID
+      image_repo_uri:
+        description: The complete image repo uri used by the source
+        type: string
+        x-go-name: ImageRepoURI
+      name:
+        description: The display name of the stack source
+        type: string
+        x-go-name: Name
+      updated_at:
+        description: The time that the source configuration was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuild:
+    properties:
+      buildpack:
+        $ref: '#/definitions/StackSourceConfigBuildPack'
+      dockerfile:
+        $ref: '#/definitions/StackSourceConfigBuildDockerfile'
+      folder_path:
+        description: The path to the build context (the root folder of the application).
+          For example, `.` or `./app`
+        type: string
+        x-go-name: FolderPath
+      git:
+        $ref: '#/definitions/StackSourceConfigBuildGit'
+      method:
+        description: 'The build method to use: can be `docker` (for dockerfiles),
+          or `pack` (for buildpacks)'
+        type: string
+        x-go-name: Method
+    required:
+    - method
+    - folder_path
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuildDockerfile:
+    properties:
+      dockerfile_path:
+        description: The path to the dockerfile from the root directory. Defaults
+          to `./Dockerfile`.
+        type: string
+        x-go-name: DockerfilePath
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuildGit:
+    properties:
+      git_branch:
+        description: The git branch to use
+        type: string
+        x-go-name: GitBranch
+      git_integration_id:
+        description: The integration id of the github or gitlab integration
+        format: uint64
+        type: integer
+        x-go-name: GitIntegrationID
+      git_integration_kind:
+        description: 'The git integration kind: can be `github` or `gitlab`'
+        type: string
+        x-go-name: GitIntegrationKind
+      git_repo:
+        description: The git repo in ${owner}/${repo} form
+        type: string
+        x-go-name: GitRepo
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuildPack:
+    properties:
+      builder:
+        description: The buildpack builder to use
+        type: string
+        x-go-name: Builder
+      buildpacks:
+        description: A list of buildpacks to use
+        items:
+          type: string
+        type: array
+        x-go-name: Buildpacks
+    required:
+    - builder
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   Status:
     description: Status is the status of a release
     type: string
@@ -2194,6 +2441,119 @@ paths:
       summary: Update a release
       tags:
       - Releases
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/stacks:
+    post:
+      description: Creates a stack
+      operationId: createStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The stack to create
+        in: body
+        name: CreateStackRequest
+        schema:
+          $ref: '#/definitions/CreateStackRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created the stack
+          schema:
+            $ref: '#/definitions/Stack'
+        "403":
+          description: Forbidden
+      summary: Create a stack
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/stacks/{stack_id}:
+    delete:
+      description: Deletes a stack
+      operationId: deleteStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted the stack
+        "403":
+          description: Forbidden
+      summary: Delete a stack
+      tags:
+      - Stacks
+    get:
+      description: Gets a stack
+      operationId: getStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully got the stack
+          schema:
+            $ref: '#/definitions/Stack'
+        "403":
+          description: Forbidden
+      summary: Get a stack
+      tags:
+      - Stacks
   /api/v1/projects/{project_id}/registries:
     get:
       description: Lists registries
