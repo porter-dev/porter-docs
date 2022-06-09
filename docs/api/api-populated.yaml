@@ -654,15 +654,15 @@ paths:
         - Stacks
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"name\":\"string\"}]}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"app_resources\":[{\"name\":\"string\",\"repo_url\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"app_resources\":[{\"name\":\"string\",\"repo_url\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"repo_url\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\npayload = {\n    \"app_resources\": [\n        {\n            \"name\": \"string\",\n            \"source_config_name\": \"string\",\n            \"template_name\": \"string\",\n            \"template_version\": \"string\",\n            \"values\": {\n                \"property1\": {},\n                \"property2\": {}\n            }\n        }\n    ],\n    \"name\": \"string\",\n    \"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"image_repo_uri\": \"string\",\n            \"name\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\npayload = {\n    \"app_resources\": [\n        {\n            \"name\": \"string\",\n            \"repo_url\": \"string\",\n            \"source_config_name\": \"string\",\n            \"template_name\": \"string\",\n            \"template_version\": \"string\",\n            \"values\": {\n                \"property1\": {},\n                \"property2\": {}\n            }\n        }\n    ],\n    \"name\": \"string\",\n    \"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"image_repo_uri\": \"string\",\n            \"image_tag\": \"string\",\n            \"name\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\n\tpayload := strings.NewReader(\"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\n\tpayload := strings.NewReader(\"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"repo_url\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateStackRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}:
     delete:
@@ -1377,7 +1377,16 @@ components:
           name: name
       properties:
         metadata:
-          $ref: '#/components/schemas/CreateNamespaceResponse_metadata'
+          $ref: '#/components/schemas/CreateNamespaceResponseMeta'
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateNamespaceResponseMeta:
+      example:
+        name: name
+      properties:
+        name:
+          type: string
+          x-go-name: Name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateRegistryRepositoryRequest:
@@ -1524,6 +1533,7 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     CreateStackAppResourceRequest:
       example:
+        repo_url: repo_url
         template_name: template_name
         template_version: template_version
         values:
@@ -1535,6 +1545,10 @@ components:
           description: The name of the resource.
           type: string
           x-go-name: Name
+        repo_url:
+          description: The URL of the Helm registry to pull the template from
+          type: string
+          x-go-name: TemplateRepoURL
         source_config_name:
           description: The name of the source config (must exist inside `source_configs`).
           type: string
@@ -1556,6 +1570,7 @@ components:
           x-go-name: Values
       required:
         - name
+        - repo_url
         - source_config_name
         - template_name
         - template_version
@@ -1571,7 +1586,7 @@ components:
                 git_integration_kind: git_integration_kind
                 git_repo: git_repo
                 git_branch: git_branch
-                git_integration_id: 6
+                git_integration_id: 1
               method: method
               dockerfile:
                 dockerfile_path: dockerfile_path
@@ -1582,13 +1597,14 @@ components:
                 builder: builder
               folder_path: folder_path
             name: name
+            image_tag: image_tag
           - image_repo_uri: image_repo_uri
             build:
               git:
                 git_integration_kind: git_integration_kind
                 git_repo: git_repo
                 git_branch: git_branch
-                git_integration_id: 6
+                git_integration_id: 1
               method: method
               dockerfile:
                 dockerfile_path: dockerfile_path
@@ -1599,14 +1615,17 @@ components:
                 builder: builder
               folder_path: folder_path
             name: name
+            image_tag: image_tag
         app_resources:
-          - template_name: template_name
+          - repo_url: repo_url
+            template_name: template_name
             template_version: template_version
             values:
               key: "{}"
             name: name
             source_config_name: source_config_name
-          - template_name: template_name
+          - repo_url: repo_url
+            template_name: template_name
             template_version: template_version
             values:
               key: "{}"
@@ -1646,7 +1665,7 @@ components:
             git_integration_kind: git_integration_kind
             git_repo: git_repo
             git_branch: git_branch
-            git_integration_id: 6
+            git_integration_id: 1
           method: method
           dockerfile:
             dockerfile_path: dockerfile_path
@@ -1657,17 +1676,22 @@ components:
             builder: builder
           folder_path: folder_path
         name: name
+        image_tag: image_tag
       properties:
         build:
           $ref: '#/components/schemas/StackSourceConfigBuild'
         image_repo_uri:
           type: string
           x-go-name: ImageRepoURI
+        image_tag:
+          type: string
+          x-go-name: ImageTag
         name:
           type: string
           x-go-name: Name
       required:
         - image_repo_uri
+        - image_tag
         - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
@@ -2275,7 +2299,7 @@ components:
           name: name
       properties:
         metadata:
-          $ref: '#/components/schemas/CreateNamespaceResponse_metadata'
+          $ref: '#/components/schemas/GetNamespaceResponse_metadata'
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     GetRegistryResponse:
@@ -3999,17 +4023,27 @@ components:
         name: name
         created_at: 2000-01-23T04:56:07.000+00:00
         revisions:
-          - created_at: 2000-01-23T04:56:07.000+00:00
-            id: 1
-          - created_at: 2000-01-23T04:56:07.000+00:00
-            id: 1
+          - stack_id: stack_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            id: 5
+            status: status
+          - stack_id: stack_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            id: 5
+            status: status
         id: id
         latest_revision:
+          stack_id: stack_id
           created_at: 2000-01-23T04:56:07.000+00:00
           resources:
-            - updated_at: 2000-01-23T04:56:07.000+00:00
+            - stack_app_data:
+                template_name: template_name
+                template_version: template_version
+                template_repo_url: template_repo_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
               stack_id: stack_id
               name: name
+              stack_revision_id: 6
               stack_source_config:
                 image_repo_uri: image_repo_uri
                 updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4018,7 +4052,7 @@ components:
                     git_integration_kind: git_integration_kind
                     git_repo: git_repo
                     git_branch: git_branch
-                    git_integration_id: 6
+                    git_integration_id: 1
                   method: method
                   dockerfile:
                     dockerfile_path: dockerfile_path
@@ -4028,15 +4062,22 @@ components:
                       - buildpacks
                     builder: builder
                   folder_path: folder_path
+                stack_id: stack_id
                 name: name
+                stack_revision_id: 5
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 image_tag: image_tag
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
-            - updated_at: 2000-01-23T04:56:07.000+00:00
+            - stack_app_data:
+                template_name: template_name
+                template_version: template_version
+                template_repo_url: template_repo_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
               stack_id: stack_id
               name: name
+              stack_revision_id: 6
               stack_source_config:
                 image_repo_uri: image_repo_uri
                 updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4045,7 +4086,7 @@ components:
                     git_integration_kind: git_integration_kind
                     git_repo: git_repo
                     git_branch: git_branch
-                    git_integration_id: 6
+                    git_integration_id: 1
                   method: method
                   dockerfile:
                     dockerfile_path: dockerfile_path
@@ -4055,7 +4096,9 @@ components:
                       - buildpacks
                     builder: builder
                   folder_path: folder_path
+                stack_id: stack_id
                 name: name
+                stack_revision_id: 5
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 image_tag: image_tag
@@ -4070,7 +4113,7 @@ components:
                   git_integration_kind: git_integration_kind
                   git_repo: git_repo
                   git_branch: git_branch
-                  git_integration_id: 6
+                  git_integration_id: 1
                 method: method
                 dockerfile:
                   dockerfile_path: dockerfile_path
@@ -4080,7 +4123,9 @@ components:
                     - buildpacks
                   builder: builder
                 folder_path: folder_path
+              stack_id: stack_id
               name: name
+              stack_revision_id: 5
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
@@ -4091,7 +4136,7 @@ components:
                   git_integration_kind: git_integration_kind
                   git_repo: git_repo
                   git_branch: git_branch
-                  git_integration_id: 6
+                  git_integration_id: 1
                 method: method
                 dockerfile:
                   dockerfile_path: dockerfile_path
@@ -4101,10 +4146,13 @@ components:
                     - buildpacks
                   builder: builder
                 folder_path: folder_path
+              stack_id: stack_id
               name: name
+              stack_revision_id: 5
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
+          status: status
       properties:
         created_at:
           description: The time that the stack was initially created
@@ -4136,9 +4184,14 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     StackResource:
       example:
+        stack_app_data:
+          template_name: template_name
+          template_version: template_version
+          template_repo_url: template_repo_url
         updated_at: 2000-01-23T04:56:07.000+00:00
         stack_id: stack_id
         name: name
+        stack_revision_id: 6
         stack_source_config:
           image_repo_uri: image_repo_uri
           updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4147,7 +4200,7 @@ components:
               git_integration_kind: git_integration_kind
               git_repo: git_repo
               git_branch: git_branch
-              git_integration_id: 6
+              git_integration_id: 1
             method: method
             dockerfile:
               dockerfile_path: dockerfile_path
@@ -4157,7 +4210,9 @@ components:
                 - buildpacks
               builder: builder
             folder_path: folder_path
+          stack_id: stack_id
           name: name
+          stack_revision_id: 5
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           image_tag: image_tag
@@ -4177,10 +4232,17 @@ components:
           description: The name of the resource
           type: string
           x-go-name: Name
+        stack_app_data:
+          $ref: '#/components/schemas/StackResourceAppData'
         stack_id:
-          description: The id of the stack which this resource belongs to
+          description: The stack ID that this resource belongs to
           type: string
           x-go-name: StackID
+        stack_revision_id:
+          description: The numerical revision id that this resource belongs to
+          format: uint64
+          type: integer
+          x-go-name: StackRevisionID
         stack_source_config:
           $ref: '#/components/schemas/StackSourceConfig'
         updated_at:
@@ -4190,13 +4252,39 @@ components:
           x-go-name: UpdatedAt
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
+    StackResourceAppData:
+      example:
+        template_name: template_name
+        template_version: template_version
+        template_repo_url: template_repo_url
+      properties:
+        template_name:
+          description: "The name of the template in the Helm registry, such as `web`"
+          type: string
+          x-go-name: TemplateName
+        template_repo_url:
+          description: The URL of the Helm registry to pull the template from
+          type: string
+          x-go-name: TemplateRepoURL
+        template_version:
+          description: "The version of the template in the Helm registry, such as `v0.50.0`"
+          type: string
+          x-go-name: TemplateVersion
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
     StackRevision:
       example:
+        stack_id: stack_id
         created_at: 2000-01-23T04:56:07.000+00:00
         resources:
-          - updated_at: 2000-01-23T04:56:07.000+00:00
+          - stack_app_data:
+              template_name: template_name
+              template_version: template_version
+              template_repo_url: template_repo_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
             stack_id: stack_id
             name: name
+            stack_revision_id: 6
             stack_source_config:
               image_repo_uri: image_repo_uri
               updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4205,7 +4293,7 @@ components:
                   git_integration_kind: git_integration_kind
                   git_repo: git_repo
                   git_branch: git_branch
-                  git_integration_id: 6
+                  git_integration_id: 1
                 method: method
                 dockerfile:
                   dockerfile_path: dockerfile_path
@@ -4215,15 +4303,22 @@ components:
                     - buildpacks
                   builder: builder
                 folder_path: folder_path
+              stack_id: stack_id
               name: name
+              stack_revision_id: 5
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-          - updated_at: 2000-01-23T04:56:07.000+00:00
+          - stack_app_data:
+              template_name: template_name
+              template_version: template_version
+              template_repo_url: template_repo_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
             stack_id: stack_id
             name: name
+            stack_revision_id: 6
             stack_source_config:
               image_repo_uri: image_repo_uri
               updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4232,7 +4327,7 @@ components:
                   git_integration_kind: git_integration_kind
                   git_repo: git_repo
                   git_branch: git_branch
-                  git_integration_id: 6
+                  git_integration_id: 1
                 method: method
                 dockerfile:
                   dockerfile_path: dockerfile_path
@@ -4242,7 +4337,9 @@ components:
                     - buildpacks
                   builder: builder
                 folder_path: folder_path
+              stack_id: stack_id
               name: name
+              stack_revision_id: 5
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
@@ -4257,7 +4354,7 @@ components:
                 git_integration_kind: git_integration_kind
                 git_repo: git_repo
                 git_branch: git_branch
-                git_integration_id: 6
+                git_integration_id: 1
               method: method
               dockerfile:
                 dockerfile_path: dockerfile_path
@@ -4267,7 +4364,9 @@ components:
                   - buildpacks
                 builder: builder
               folder_path: folder_path
+            stack_id: stack_id
             name: name
+            stack_revision_id: 5
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             image_tag: image_tag
@@ -4278,7 +4377,7 @@ components:
                 git_integration_kind: git_integration_kind
                 git_repo: git_repo
                 git_branch: git_branch
-                git_integration_id: 6
+                git_integration_id: 1
               method: method
               dockerfile:
                 dockerfile_path: dockerfile_path
@@ -4288,10 +4387,13 @@ components:
                   - buildpacks
                 builder: builder
               folder_path: folder_path
+            stack_id: stack_id
             name: name
+            stack_revision_id: 5
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             image_tag: image_tag
+        status: status
       properties:
         created_at:
           description: The time that this revision was created
@@ -4314,12 +4416,21 @@ components:
             $ref: '#/components/schemas/StackSourceConfig'
           type: array
           x-go-name: SourceConfigs
+        stack_id:
+          description: The stack ID that this source config belongs to
+          type: string
+          x-go-name: StackID
+        status:
+          type: string
+          x-go-package: github.com/porter-dev/porter/api/types
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     StackRevisionMeta:
       example:
+        stack_id: stack_id
         created_at: 2000-01-23T04:56:07.000+00:00
-        id: 1
+        id: 5
+        status: status
       properties:
         created_at:
           description: The time that this revision was created
@@ -4331,7 +4442,17 @@ components:
           format: uint64
           type: integer
           x-go-name: ID
+        stack_id:
+          description: The stack ID that this source config belongs to
+          type: string
+          x-go-name: StackID
+        status:
+          type: string
+          x-go-package: github.com/porter-dev/porter/api/types
       type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    StackRevisionStatus:
+      type: string
       x-go-package: github.com/porter-dev/porter/api/types
     StackSourceConfig:
       example:
@@ -4342,7 +4463,7 @@ components:
             git_integration_kind: git_integration_kind
             git_repo: git_repo
             git_branch: git_branch
-            git_integration_id: 6
+            git_integration_id: 1
           method: method
           dockerfile:
             dockerfile_path: dockerfile_path
@@ -4352,7 +4473,9 @@ components:
               - buildpacks
             builder: builder
           folder_path: folder_path
+        stack_id: stack_id
         name: name
+        stack_revision_id: 5
         created_at: 2000-01-23T04:56:07.000+00:00
         id: id
         image_tag: image_tag
@@ -4380,6 +4503,15 @@ components:
           description: The display name of the stack source
           type: string
           x-go-name: Name
+        stack_id:
+          description: The stack ID that this source config belongs to
+          type: string
+          x-go-name: StackID
+        stack_revision_id:
+          description: The numerical revision id that this source config belongs to
+          format: uint64
+          type: integer
+          x-go-name: StackRevisionID
         updated_at:
           description: The time that the source configuration was last updated
           format: date-time
@@ -4393,7 +4525,7 @@ components:
           git_integration_kind: git_integration_kind
           git_repo: git_repo
           git_branch: git_branch
-          git_integration_id: 6
+          git_integration_id: 1
         method: method
         dockerfile:
           dockerfile_path: dockerfile_path
@@ -4438,7 +4570,7 @@ components:
         git_integration_kind: git_integration_kind
         git_repo: git_repo
         git_branch: git_branch
-        git_integration_id: 6
+        git_integration_id: 1
       properties:
         git_branch:
           description: The git branch to use
@@ -4650,15 +4782,6 @@ components:
           x-go-name: ImageRepoURI
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
-    CreateNamespaceResponse_metadata:
-      example:
-        name: name
-      properties:
-        name:
-          type: string
-          x-go-name: Name
-      type: object
-      x-go-name: Metadata
     FormContent_settings:
       example:
         default: "{}"
@@ -4704,6 +4827,15 @@ components:
           x-go-name: OmitFromLaunch
       type: object
       x-go-name: Settings
+    GetNamespaceResponse_metadata:
+      example:
+        name: name
+      properties:
+        name:
+          type: string
+          x-go-name: Name
+      type: object
+      x-go-name: Metadata
   securitySchemes:
     Bearer:
       type: http

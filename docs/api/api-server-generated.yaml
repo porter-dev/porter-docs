@@ -116,12 +116,14 @@ definitions:
   CreateNamespaceResponse:
     properties:
       metadata:
-        properties:
-          name:
-            type: string
-            x-go-name: Name
-        type: object
-        x-go-name: Metadata
+        $ref: '#/definitions/CreateNamespaceResponseMeta'
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateNamespaceResponseMeta:
+    properties:
+      name:
+        type: string
+        x-go-name: Name
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   CreateRegistryRepositoryRequest:
@@ -229,6 +231,10 @@ definitions:
         description: The name of the resource.
         type: string
         x-go-name: Name
+      repo_url:
+        description: The URL of the Helm registry to pull the template from
+        type: string
+        x-go-name: TemplateRepoURL
       source_config_name:
         description: The name of the source config (must exist inside `source_configs`).
         type: string
@@ -248,6 +254,7 @@ definitions:
         type: object
         x-go-name: Values
     required:
+    - repo_url
     - template_name
     - template_version
     - name
@@ -289,12 +296,16 @@ definitions:
       image_repo_uri:
         type: string
         x-go-name: ImageRepoURI
+      image_tag:
+        type: string
+        x-go-name: ImageTag
       name:
         type: string
         x-go-name: Name
     required:
     - name
     - image_repo_uri
+    - image_tag
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   DeleteNamespaceRequest:
@@ -1825,10 +1836,17 @@ definitions:
         description: The name of the resource
         type: string
         x-go-name: Name
+      stack_app_data:
+        $ref: '#/definitions/StackResourceAppData'
       stack_id:
-        description: The id of the stack which this resource belongs to
+        description: The stack ID that this resource belongs to
         type: string
         x-go-name: StackID
+      stack_revision_id:
+        description: The numerical revision id that this resource belongs to
+        format: uint64
+        type: integer
+        x-go-name: StackRevisionID
       stack_source_config:
         $ref: '#/definitions/StackSourceConfig'
       updated_at:
@@ -1836,6 +1854,22 @@ definitions:
         format: date-time
         type: string
         x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackResourceAppData:
+    properties:
+      template_name:
+        description: The name of the template in the Helm registry, such as `web`
+        type: string
+        x-go-name: TemplateName
+      template_repo_url:
+        description: The URL of the Helm registry to pull the template from
+        type: string
+        x-go-name: TemplateRepoURL
+      template_version:
+        description: The version of the template in the Helm registry, such as `v0.50.0`
+        type: string
+        x-go-name: TemplateVersion
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   StackRevision:
@@ -1861,6 +1895,12 @@ definitions:
           $ref: '#/definitions/StackSourceConfig'
         type: array
         x-go-name: SourceConfigs
+      stack_id:
+        description: The stack ID that this source config belongs to
+        type: string
+        x-go-name: StackID
+      status:
+        $ref: '#/definitions/StackRevisionStatus'
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   StackRevisionMeta:
@@ -1875,7 +1915,16 @@ definitions:
         format: uint64
         type: integer
         x-go-name: ID
+      stack_id:
+        description: The stack ID that this source config belongs to
+        type: string
+        x-go-name: StackID
+      status:
+        $ref: '#/definitions/StackRevisionStatus'
     type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackRevisionStatus:
+    type: string
     x-go-package: github.com/porter-dev/porter/api/types
   StackSourceConfig:
     properties:
@@ -1902,6 +1951,15 @@ definitions:
         description: The display name of the stack source
         type: string
         x-go-name: Name
+      stack_id:
+        description: The stack ID that this source config belongs to
+        type: string
+        x-go-name: StackID
+      stack_revision_id:
+        description: The numerical revision id that this source config belongs to
+        format: uint64
+        type: integer
+        x-go-name: StackRevisionID
       updated_at:
         description: The time that the source configuration was last updated
         format: date-time
