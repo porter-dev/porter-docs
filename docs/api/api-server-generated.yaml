@@ -1743,10 +1743,10 @@ definitions:
     type: string
     x-go-package: github.com/porter-dev/porter/api/types
   Release:
-    description: |-
-      Release describes a deployment of a chart, together with the chart
-      and the variables used to deploy that chart.
+    description: Release is a helm release with a form attached
     properties:
+      build_config:
+        $ref: '#/definitions/BuildConfig'
       chart:
         $ref: '#/definitions/Chart'
       config:
@@ -1757,14 +1757,28 @@ definitions:
           These values override the default values inside of the chart.
         type: object
         x-go-name: Config
+      form:
+        $ref: '#/definitions/FormYAML'
+      git_action_config:
+        $ref: '#/definitions/GitActionConfig'
       hooks:
         description: Hooks are all of the hooks declared for this release.
         items:
           $ref: '#/definitions/Hook'
         type: array
         x-go-name: Hooks
+      id:
+        format: uint64
+        type: integer
+        x-go-name: ID
+      image_repo_uri:
+        type: string
+        x-go-name: ImageRepoURI
       info:
         $ref: '#/definitions/Info'
+      latest_version:
+        type: string
+        x-go-name: LatestVersion
       manifest:
         description: Manifest is the string representation of the rendered template.
         type: string
@@ -1777,13 +1791,21 @@ definitions:
         description: Namespace is the kubernetes namespace of the release.
         type: string
         x-go-name: Namespace
+      tags:
+        items:
+          type: string
+        type: array
+        x-go-name: Tags
       version:
         description: Version is an int which represents the revision of the release.
         format: int64
         type: integer
         x-go-name: Version
+      webhook_token:
+        type: string
+        x-go-name: WebhookToken
     type: object
-    x-go-package: helm.sh/helm/v3/pkg/release
+    x-go-package: github.com/porter-dev/porter/api/types
   Stack:
     properties:
       created_at:
@@ -1923,6 +1945,14 @@ definitions:
     x-go-package: github.com/porter-dev/porter/api/types
   StackRevisionStatus:
     type: string
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackRollbackRequest:
+    properties:
+      target_revision:
+        format: uint64
+        type: integer
+        x-go-name: TargetRevision
+    type: object
     x-go-package: github.com/porter-dev/porter/api/types
   StackSourceConfig:
     properties:
@@ -2728,6 +2758,77 @@ paths:
         "403":
           description: Forbidden
       summary: Get a stack
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{stack_revision_number}:
+    get:
+      description: Gets a stack revision
+      operationId: getStackRevision
+      parameters:
+      - name: project_id
+      - name: cluster_id
+      - name: namespace
+      - name: stack_id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully got the stack revision
+          schema:
+            $ref: '#/definitions/StackRevision'
+        "403":
+          description: Forbidden
+      summary: Get a stack revision
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/rollback:
+    post:
+      description: Performs a rollback for a stack
+      operationId: rollbackStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      - description: The target revision to roll back to
+        in: body
+        name: StackRollbackRequest
+        schema:
+          $ref: '#/definitions/StackRollbackRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully rolled the stack back
+          schema:
+            $ref: '#/definitions/Stack'
+        "403":
+          description: Forbidden
+      summary: Rollback stack
       tags:
       - Stacks
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source:
