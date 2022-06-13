@@ -112,6 +112,7 @@ definitions:
     properties:
       name:
         description: the name of the namespace to create
+        example: sampleNS
         type: string
         x-go-name: Name
     type: object
@@ -126,38 +127,60 @@ definitions:
   CreateRegistryRequest:
     properties:
       acr_name:
+        description: ACR name (**Azure only**)
         type: string
         x-go-name: ACRName
       acr_resource_group_name:
-        description: Additional Azure-specific fields
+        description: ACR resource group name (**Azure only**)
         type: string
         x-go-name: ACRResourceGroupName
       aws_integration_id:
+        description: The AWS integration ID to be used for this registry
+        example: 1
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: AWSIntegrationID
       azure_integration_id:
+        description: The Azure integration ID to be used for this registry
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: AzureIntegrationID
       basic_integration_id:
+        description: The Basic integration ID to be used for this registry
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: BasicIntegrationID
       do_integration_id:
+        description: The DigitalOcean integration ID to be used for this registry
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: DOIntegrationID
       gcp_integration_id:
+        description: The GCP integration ID to be used for this registry
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: GCPIntegrationID
       name:
+        description: Name of the container registry
+        example: my-ecr-reg
         type: string
         x-go-name: Name
       url:
+        description: URL of the container registry
+        example: 123456789.dkr.ecr.us-west-2.amazonaws.com
         type: string
         x-go-name: URL
+    required:
+      - name
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   CreateRegistryResponse:
@@ -213,15 +236,6 @@ definitions:
           type: object
         type: object
         x-go-name: Values
-    type: object
-    x-go-package: github.com/porter-dev/porter/api/types
-  DeleteNamespaceRequest:
-    description: DeleteNamespaceRequest represents the namespace to delete
-    properties:
-      name:
-        description: the name of the namespace to delete
-        type: string
-        x-go-name: Name
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   Dependency:
@@ -769,31 +783,36 @@ definitions:
     title: Metadata for a Chart file. This models the structure of a Chart.yaml file.
     type: object
     x-go-package: helm.sh/helm/v3/pkg/chart
-  NamespacePhase:
-    description: +enum
-    type: string
-    x-go-package: k8s.io/api/core/v1
   NamespaceResponse:
     description:
       NamespaceResponse represents the response type of requests to the
       namespace resource
     properties:
       creationTimestamp:
-        description: the creation timestamp of the namespace in RFC 1123 format
+        description: the creation timestamp in UTC of the namespace in RFC 1123 format
+        example: Mon, 13 Jun 2022 17:49:12 GMT
         type: string
         x-go-name: CreationTimestamp
       deletionTimestamp:
         description:
-          the deletion timestamp of the namespace in RFC 1123 format, if
-          the namespace is deleted
+          the deletion timestamp in UTC of the namespace in RFC 1123 format,
+          if the namespace is deleted
+        example: Mon, 13 Jun 2022 17:49:12 GMT
         type: string
         x-go-name: DeletionTimestamp
       name:
         description: the name of the namespace
+        example: default
         type: string
         x-go-name: Name
       status:
-        $ref: "#/definitions/NamespacePhase"
+        description: the status of the namespace
+        enum:
+          - active
+          - terminating
+        example: active
+        type: string
+        x-go-name: Status
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   PorterRelease:
@@ -826,55 +845,83 @@ definitions:
     properties:
       aws_integration_id:
         description: The AWS integration that was used to create or connect the registry
+        example: 1
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: AWSIntegrationID
       azure_integration_id:
         description:
           The Azure integration that was used to create or connect the
           registry
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: AzureIntegrationID
       basic_integration_id:
-        description: "The basic integration that was used to connect the registry:"
+        description: The basic integration that was used to connect the registry.
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: BasicIntegrationID
       do_integration_id:
         description: |-
           The DO integration that was used to create or connect the registry:
           this points to an OAuthIntegrationID
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: DOIntegrationID
       gcp_integration_id:
         description: The GCP integration that was used to create or connect the registry
+        example: 0
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: GCPIntegrationID
       id:
+        description: The ID of the registry
+        example: 2
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: ID
       infra_id:
         description: The infra id, if registry was provisioned with Porter
+        example: 2
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: InfraID
       name:
         description: Name of the registry
+        example: my-ecr-reg
         type: string
         x-go-name: Name
       project_id:
         description: The project that this integration belongs to
+        example: 1
         format: uint64
+        minimum: 1
         type: integer
         x-go-name: ProjectID
       service:
-        $ref: "#/definitions/RegistryService"
+        description: The integration service for this registry
+        enum:
+          - gcr
+          - ecr
+          - acr
+          - docr
+          - dockerhub
+        example: ecr
+        type: string
+        x-go-name: Service
       url:
         description: URL of the registry
+        example: 123456789.dkr.ecr.us-west-2.amazonaws.com
         type: string
         x-go-name: URL
     type: object
@@ -896,9 +943,6 @@ definitions:
         type: string
         x-go-name: URI
     type: object
-    x-go-package: github.com/porter-dev/porter/api/types
-  RegistryService:
-    type: string
     x-go-package: github.com/porter-dev/porter/api/types
   Release:
     description: Release is a helm release with a form attached
@@ -971,18 +1015,24 @@ definitions:
   UpdateReleaseRequest:
     properties:
       values:
-        type: string
+        additionalProperties:
+          type: object
+        type: object
         x-go-name: Values
       version:
         type: string
         x-go-name: ChartVersion
+    required:
+      - values
     type: object
-    x-go-name: UpgradeReleaseRequest
+    x-go-name: V1UpgradeReleaseRequest
     x-go-package: github.com/porter-dev/porter/api/types
 paths:
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
     get:
-      description: Lists namespaces
+      description: |-
+        Lists all namespaces in the cluster denoted by `cluster_id`. The cluster should belong to
+        the project denoted by `project_id`.
       operationId: listNamespaces
       parameters:
         - description: The project id
@@ -1014,7 +1064,9 @@ paths:
       tags:
         - Namespaces
     post:
-      description: Creates a new namespace
+      description: |-
+        Creates a new namespace in the cluster denoted by `cluster_id`. The cluster should belong to the project
+        denoted by `project_id`.
       operationId: createNamespace
       parameters:
         - description: The project id
@@ -1054,7 +1106,10 @@ paths:
         - Namespaces
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
     delete:
-      description: Deletes a namespace
+      description: |-
+        Deletes a namespace with the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
+        Note that this endpoint does not indicate if the namespace does not exist.
       operationId: deleteNamespace
       parameters:
         - description: The project id
@@ -1090,7 +1145,9 @@ paths:
       tags:
         - Namespaces
     get:
-      description: Gets a namespace
+      description: |-
+        Gets a namespace denoted by the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
       operationId: getNamespace
       parameters:
         - description: The project id
@@ -1231,8 +1288,16 @@ paths:
       responses:
         "201":
           description: Successfully created the release
+        "400":
+          description: A malformed or bad request
         "403":
           description: Forbidden
+        "404":
+          description: A subresource was not found
+        "409":
+          description: A conflict occurred with another external service
+        "412":
+          description: A precondition failed for the request
       summary: Create a new release
       tags:
         - Releases
@@ -1330,7 +1395,7 @@ paths:
       produces:
         - application/json
       responses:
-        "201":
+        "200":
           description: Successfully got the release
           schema:
             $ref: "#/definitions/GetReleaseResponse"
@@ -1389,6 +1454,8 @@ paths:
       responses:
         "200":
           description: Successfully updated the release
+        "400":
+          description: A malformed or bad request
         "403":
           description: Forbidden
       summary: Update a release
@@ -1444,8 +1511,12 @@ paths:
           description: Successfully connected the registry
           schema:
             $ref: "#/definitions/CreateRegistryResponse"
+        "400":
+          description: A malformed or bad request
         "403":
           description: Forbidden
+        "404":
+          description: A subresource was not found
       summary: Connect an image registry
       tags:
         - Registries
@@ -1502,7 +1573,7 @@ paths:
       produces:
         - application/json
       responses:
-        "201":
+        "200":
           description: Successfully got the registry
           schema:
             $ref: "#/definitions/GetRegistryResponse"

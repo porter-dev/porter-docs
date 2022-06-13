@@ -6,7 +6,9 @@ security:
 paths:
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
     get:
-      description: Lists namespaces
+      description: |-
+        Lists all namespaces in the cluster denoted by `cluster_id`. The cluster should belong to
+        the project denoted by `project_id`.
       operationId: listNamespaces
       parameters:
         - description: The project id
@@ -54,7 +56,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     post:
-      description: Creates a new namespace
+      description: |-
+        Creates a new namespace in the cluster denoted by `cluster_id`. The cluster should belong to the project
+        denoted by `project_id`.
       operationId: createNamespace
       parameters:
         - description: The project id
@@ -102,19 +106,22 @@ paths:
         - Namespaces
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"string\"}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"sampleNS\"}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"sampleNS\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"sampleNS\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\npayload = {\"name\": \"string\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\npayload = {\"name\": \"sampleNS\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"sampleNS\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateNamespaceRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
     delete:
-      description: Deletes a namespace
+      description: |-
+        Deletes a namespace with the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
+        Note that this endpoint does not indicate if the namespace does not exist.
       operationId: deleteNamespace
       parameters:
         - description: The project id
@@ -167,7 +174,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
-      description: Gets a namespace
+      description: |-
+        Gets a namespace denoted by the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
       operationId: getNamespace
       parameters:
         - description: The project id
@@ -359,9 +368,21 @@ paths:
         "201":
           content: {}
           description: Successfully created the release
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
+        "404":
+          content: {}
+          description: A subresource was not found
+        "409":
+          content: {}
+          description: A conflict occurred with another external service
+        "412":
+          content: {}
+          description: A precondition failed for the request
       summary: Create a new release
       tags:
         - Releases
@@ -500,7 +521,7 @@ paths:
             x-go-name: Version
           x-go-name: Version
       responses:
-        "201":
+        "200":
           content:
             application/json:
               schema:
@@ -584,6 +605,9 @@ paths:
         "200":
           content: {}
           description: Successfully updated the release
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
@@ -592,15 +616,15 @@ paths:
         - Releases
       x-codeSamples:
         - lang: Shell
-          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"values\":\"string\",\"version\":\"string\"}'"
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"values\":\"string\",\"version\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"values\\\":\\\"string\\\",\\\"version\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\npayload = {\n    \"values\": \"string\",\n    \"version\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\npayload = {\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    },\n    \"version\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\tpayload := strings.NewReader(\"{\\\"values\\\":\\\"string\\\",\\\"version\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\tpayload := strings.NewReader(\"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: UpdateReleaseRequest
   /api/v1/projects/{project_id}/registries:
     get:
@@ -669,23 +693,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateRegistryResponse'
           description: Successfully connected the registry
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
+        "404":
+          content: {}
+          description: A subresource was not found
       summary: Connect an image registry
       tags:
         - Registries
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":0,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"string\",\"url\":\"string\"}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":1,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"my-ecr-reg\",\"url\":\"123456789.dkr.ecr.us-west-2.amazonaws.com\"}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":0,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"string\",\"url\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":1,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"my-ecr-reg\",\"url\":\"123456789.dkr.ecr.us-west-2.amazonaws.com\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":0,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"string\\\",\\\"url\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":1,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"my-ecr-reg\\\",\\\"url\\\":\\\"123456789.dkr.ecr.us-west-2.amazonaws.com\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\npayload = {\n    \"acr_name\": \"string\",\n    \"acr_resource_group_name\": \"string\",\n    \"aws_integration_id\": 0,\n    \"azure_integration_id\": 0,\n    \"basic_integration_id\": 0,\n    \"do_integration_id\": 0,\n    \"gcp_integration_id\": 0,\n    \"name\": \"string\",\n    \"url\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\npayload = {\n    \"acr_name\": \"string\",\n    \"acr_resource_group_name\": \"string\",\n    \"aws_integration_id\": 1,\n    \"azure_integration_id\": 0,\n    \"basic_integration_id\": 0,\n    \"do_integration_id\": 0,\n    \"gcp_integration_id\": 0,\n    \"name\": \"my-ecr-reg\",\n    \"url\": \"123456789.dkr.ecr.us-west-2.amazonaws.com\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\tpayload := strings.NewReader(\"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":0,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"string\\\",\\\"url\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\tpayload := strings.NewReader(\"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":1,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"my-ecr-reg\\\",\\\"url\\\":\\\"123456789.dkr.ecr.us-west-2.amazonaws.com\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateRegistryRequest
   /api/v1/projects/{project_id}/registries/{registry_id}:
     delete:
@@ -757,7 +787,7 @@ paths:
             x-go-name: RegistryID
           x-go-name: RegistryID
       responses:
-        "201":
+        "200":
           content:
             application/json:
               schema:
@@ -1179,10 +1209,11 @@ components:
     CreateNamespaceRequest:
       description: CreateNamespaceRequest represents the request body to create a namespace
       example:
-        name: name
+        name: sampleNS
       properties:
         name:
           description: the name of the namespace to create
+          example: sampleNS
           type: string
           x-go-name: Name
       type: object
@@ -1198,49 +1229,71 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     CreateRegistryRequest:
       example:
-        do_integration_id: 5
-        azure_integration_id: 6
-        gcp_integration_id: 5
-        basic_integration_id: 1
-        name: name
+        do_integration_id: 0
+        azure_integration_id: 0
+        gcp_integration_id: 0
+        basic_integration_id: 0
+        name: my-ecr-reg
         acr_name: acr_name
-        aws_integration_id: 0
+        aws_integration_id: 1
         acr_resource_group_name: acr_resource_group_name
-        url: url
+        url: 123456789.dkr.ecr.us-west-2.amazonaws.com
       properties:
         acr_name:
+          description: ACR name (**Azure only**)
           type: string
           x-go-name: ACRName
         acr_resource_group_name:
-          description: Additional Azure-specific fields
+          description: ACR resource group name (**Azure only**)
           type: string
           x-go-name: ACRResourceGroupName
         aws_integration_id:
+          description: The AWS integration ID to be used for this registry
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AWSIntegrationID
         azure_integration_id:
+          description: The Azure integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AzureIntegrationID
         basic_integration_id:
+          description: The Basic integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: BasicIntegrationID
         do_integration_id:
+          description: The DigitalOcean integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: DOIntegrationID
         gcp_integration_id:
+          description: The GCP integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: GCPIntegrationID
         name:
+          description: Name of the container registry
+          example: my-ecr-reg
           type: string
           x-go-name: Name
         url:
+          description: URL of the container registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
           type: string
           x-go-name: URL
+      required:
+        - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateRegistryResponse:
@@ -1328,15 +1381,6 @@ components:
             type: object
           type: object
           x-go-name: Values
-      type: object
-      x-go-package: github.com/porter-dev/porter/api/types
-    DeleteNamespaceRequest:
-      description: DeleteNamespaceRequest represents the namespace to delete
-      properties:
-        name:
-          description: the name of the namespace to delete
-          type: string
-          x-go-name: Name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     Dependency:
@@ -2364,34 +2408,37 @@ components:
       title: Metadata for a Chart file. This models the structure of a Chart.yaml file.
       type: object
       x-go-package: helm.sh/helm/v3/pkg/chart
-    NamespacePhase:
-      description: +enum
-      type: string
-      x-go-package: k8s.io/api/core/v1
     NamespaceResponse:
       description: NamespaceResponse represents the response type of requests to the namespace resource
       example:
-        creationTimestamp: creationTimestamp
-        name: name
-        deletionTimestamp: deletionTimestamp
-        status: status
+        creationTimestamp: "Mon, 13 Jun 2022 17:49:12 GMT"
+        name: default
+        deletionTimestamp: "Mon, 13 Jun 2022 17:49:12 GMT"
+        status: active
       properties:
         creationTimestamp:
-          description: the creation timestamp of the namespace in RFC 1123 format
+          description: the creation timestamp in UTC of the namespace in RFC 1123 format
+          example: "Mon, 13 Jun 2022 17:49:12 GMT"
           type: string
           x-go-name: CreationTimestamp
         deletionTimestamp:
-          description: "the deletion timestamp of the namespace in RFC 1123 format, if the namespace is deleted"
+          description: "the deletion timestamp in UTC of the namespace in RFC 1123 format, if the namespace is deleted"
+          example: "Mon, 13 Jun 2022 17:49:12 GMT"
           type: string
           x-go-name: DeletionTimestamp
         name:
           description: the name of the namespace
+          example: default
           type: string
           x-go-name: Name
         status:
-          description: +enum
+          description: the status of the namespace
+          enum:
+            - active
+            - terminating
+          example: active
           type: string
-          x-go-package: k8s.io/api/core/v1
+          x-go-name: Status
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     PorterRelease:
@@ -2422,68 +2469,95 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     Registry:
       example:
-        do_integration_id: 5
-        infra_id: 7
-        azure_integration_id: 6
-        gcp_integration_id: 5
-        basic_integration_id: 1
-        project_id: 9
-        service: service
-        name: name
+        do_integration_id: 0
+        infra_id: 2
+        azure_integration_id: 0
+        gcp_integration_id: 0
+        basic_integration_id: 0
+        project_id: 1
+        service: ecr
+        name: my-ecr-reg
         id: 2
-        aws_integration_id: 0
-        url: url
+        aws_integration_id: 1
+        url: 123456789.dkr.ecr.us-west-2.amazonaws.com
       properties:
         aws_integration_id:
           description: The AWS integration that was used to create or connect the registry
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AWSIntegrationID
         azure_integration_id:
           description: The Azure integration that was used to create or connect the registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AzureIntegrationID
         basic_integration_id:
-          description: 'The basic integration that was used to connect the registry:'
+          description: The basic integration that was used to connect the registry.
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: BasicIntegrationID
         do_integration_id:
           description: |-
             The DO integration that was used to create or connect the registry:
             this points to an OAuthIntegrationID
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: DOIntegrationID
         gcp_integration_id:
           description: The GCP integration that was used to create or connect the registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: GCPIntegrationID
         id:
+          description: The ID of the registry
+          example: 2
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: ID
         infra_id:
           description: "The infra id, if registry was provisioned with Porter"
+          example: 2
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: InfraID
         name:
           description: Name of the registry
+          example: my-ecr-reg
           type: string
           x-go-name: Name
         project_id:
           description: The project that this integration belongs to
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: ProjectID
         service:
+          description: The integration service for this registry
+          enum:
+            - gcr
+            - ecr
+            - acr
+            - docr
+            - dockerhub
+          example: ecr
           type: string
-          x-go-package: github.com/porter-dev/porter/api/types
+          x-go-name: Service
         url:
           description: URL of the registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
           type: string
           x-go-name: URL
       type: object
@@ -2509,9 +2583,6 @@ components:
           type: string
           x-go-name: URI
       type: object
-      x-go-package: github.com/porter-dev/porter/api/types
-    RegistryService:
-      type: string
       x-go-package: github.com/porter-dev/porter/api/types
     Release:
       description: Release is a helm release with a form attached
@@ -2966,23 +3037,30 @@ components:
       x-go-package: helm.sh/helm/v3/pkg/release
     UpdateReleaseRequest:
       example:
-        values: values
+        values:
+          key: "{}"
         version: version
       properties:
         values:
-          type: string
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
           x-go-name: Values
         version:
           type: string
           x-go-name: ChartVersion
+      required:
+        - values
       type: object
-      x-go-name: UpgradeReleaseRequest
+      x-go-name: V1UpgradeReleaseRequest
       x-go-package: github.com/porter-dev/porter/api/types
     createNamespace_request:
       description: CreateNamespaceRequest represents the request body to create a namespace
       properties:
         name:
           description: the name of the namespace to create
+          example: sampleNS
           type: string
           x-go-name: Name
       type: object
@@ -3026,49 +3104,76 @@ components:
     updateRelease_request:
       properties:
         values:
-          type: string
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
           x-go-name: Values
         version:
           type: string
           x-go-name: ChartVersion
+      required:
+        - values
       type: object
-      x-go-name: UpgradeReleaseRequest
+      x-go-name: V1UpgradeReleaseRequest
       x-go-package: github.com/porter-dev/porter/api/types
     createRegistry_request:
       properties:
         acr_name:
+          description: ACR name (**Azure only**)
           type: string
           x-go-name: ACRName
         acr_resource_group_name:
-          description: Additional Azure-specific fields
+          description: ACR resource group name (**Azure only**)
           type: string
           x-go-name: ACRResourceGroupName
         aws_integration_id:
+          description: The AWS integration ID to be used for this registry
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AWSIntegrationID
         azure_integration_id:
+          description: The Azure integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AzureIntegrationID
         basic_integration_id:
+          description: The Basic integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: BasicIntegrationID
         do_integration_id:
+          description: The DigitalOcean integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: DOIntegrationID
         gcp_integration_id:
+          description: The GCP integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: GCPIntegrationID
         name:
+          description: Name of the container registry
+          example: my-ecr-reg
           type: string
           x-go-name: Name
         url:
+          description: URL of the container registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
           type: string
           x-go-name: URL
+      required:
+        - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     createRegistryRepository_request:
