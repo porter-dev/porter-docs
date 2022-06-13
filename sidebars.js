@@ -314,6 +314,8 @@ const sidebars = {
         "other/kubernetes-101",
         "other/deleting-dangling-resources",
         "other/connecting-to-cloudsql",
+        "other/modify-autoscaling-limits",
+        "other/aws-vpc-peering",
         {
           type: "category",
           label: "Cluster Upgrades",
