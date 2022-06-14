@@ -1,1477 +1,2625 @@
 openapi: 3.0.0
 servers:
-  - url: https://dashboard.getporter.dev
-info:
-  description: >
-    # Introduction
-
-
-    Welcome to the documentation for Porter's API. Our public API is still a
-
-    work-in-progress, although all endpoints prefixed with `/api/v1` will remain
-
-    stable. 
-
-
-
-    To begin using the Porter API, API tokens must be enabled for your Porter
-
-    project. If API tokens are enabled, you will see the following in the
-
-    project settings page:
-
-
-    <br />
-
-
-
-    Nearly all endpoints will have the following structure:
-
-
-
-
-    ```yaml
-
-    /api/v1/projects/{project_id}/[resources]
-
-    ```
-
-
-
-
-    For example, creating a new release (which exists inside a cluster and
-
-    namespace) has the following endpoint:
-
-
-
-
-    ```yaml
-
-    POST /api/v1/projects/1/clusters/1/namespaces/default/releases
-
-    ```
-
-
-    All resources are by default pluralized (i.e. `releases` instead of
-
-    `release`). The API supports the following HTTP Verbs:
-
-
-    - `GET`
-
-    - `POST`
-
-    - `PUT`
-
-    - `PATCH`
-
-    - `DELETE`
-
-
-    API design is based on the following actions:
-
-
-    - List — lists a group of resources
-
-    - Get — retrieves a single resource
-
-    - Create — creates a new resource
-
-    - Update — updates an existing resource
-
-    - Delete — deletes an existing resource
-
-
-    # Authorization
-
-
-    Requests are authenticated via a JWT token that can be obtained from the
-    dashboard in **Project Settings:**
-
-
-    ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/30748e55-35a9-478e-f5a9-fbe126099d00/large)
-
-
-    JWT tokens are signed via an `HMAC-SHA` algorithm. All API tokens are
-    **project-scoped**, other actions that are outside the scope of a project
-    will need to be performed using a personal access token. 
-
-
-    <SecurityDefinitions />
-
-
-    **Basic Roles**
-
-
-    For ease of use, each API token can be granted one of three roles: admin,
-    developer, or viewer. A token with admin permissions can read or write to
-    any resource in the project, a token with developer permissions can read or
-    write to any resource *except* settings (only read for settings), and a
-    token with viewer permissions can view all resources within the project
-    *except* settings.
-
-
-    **Custom Roles** 
-
-
-    API tokens can be assigned custom roles based on a set of custom
-    **policies**. These policies can be created from the dashboard or the API.
-    From the dashboard, when you create a custom policy, you can select the
-    resources that you would like the role to access:
-
-
-    ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/84af3259-4ef2-4e9d-4319-563d61fb4300/large)
-
-
-    Each policy refers to various **scopes** within a project. These scopes are
-    the following:
-
-
-    ```yaml
-
-    Project
-
-    -- Cluster
-
-    -- -- Namespace
-
-    -- -- -- Application
-
-    -- Infra
-
-    -- Settings
-
-    -- Registry
-
-    -- Helm Repository
-
-    -- Git Installation
-
-    ```
-
-
-    For each scope, a set of allowed **actions** can be granted.
-  version: 1.0.0
-  title: API v1
-  termsOfService: https://docs.porter.run/terms-and-privacy/terms-of-service/
-  contact:
-    name: Porter Support
-    email: support@porter.run
-tags:
-  - name: Namespaces
-    description: >
-      Namespaces are a Kubernetes concept which divides resources in the cluster
-      into  separate logical groups. Each Kubernetes cluster comes with a
-      `default` namespace,  and typically a `kube-system` namespace which
-      contains services which help Kubernetes run.
-  - name: Releases
-    description: Porter Releases
-  - name: Registries
-    description: Porter Registries
+  - url: "https://dashboard.getporter.dev"
+security:
+  - Bearer: []
 paths:
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
-    post:
+    get:
+      description: |-
+        Lists all namespaces in the cluster denoted by `cluster_id`. The cluster should belong to
+        the project denoted by `project_id`.
+      operationId: listNamespaces
       parameters:
-        - in: path
+        - description: The project id
+          in: path
           name: project_id
           required: true
           schema:
-            type: integer
+            format: uint64
             minimum: 1
-          description: The project ID
-        - in: path
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
           name: cluster_id
           required: true
           schema:
-            type: integer
+            format: uint64
             minimum: 1
-          description: The cluster ID
-      tags:
-        - Namespaces
-      summary: Create a new namespace
-      operationId: createNamespace
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
       responses:
-        '201':
-          description: Successfully created a new namespace
-        '403':
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListNamespacesResponse'
+          description: Successfully listed namespaces
+        "403":
+          content: {}
           description: Forbidden
-      requestBody: &ref_0
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateNamespace'
-        required: true
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request POST \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \
-              --header 'content-type: application/json' \
-              --data '{"name":"string"}'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';
-
-
-            let options = {
-              method: 'POST',
-              headers: {
-                Authorization: 'Bearer REPLACE_BEARER_TOKEN',
-                'content-type': 'application/json'
-              },
-              body: '{"name":"string"}'
-            };
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Post.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-            request["content-type"] = 'application/json'
-
-            request.body = "{\"name\":\"string\"}"
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces"
-
-
-            payload = {"name": "string"}
-
-            headers = {
-                "Authorization": "Bearer REPLACE_BEARER_TOKEN",
-                "content-type": "application/json"
-            }
-
-
-            response = requests.request("POST", url, json=payload,
-            headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-    get:
-      tags:
-        - Namespaces
       summary: List all namespaces
-      operationId: listNamespaces
-      responses:
-        '200':
-          description: Successfully listed all namespaces
-        '403':
-          description: Forbidden
+      tags:
+        - Namespaces
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
-    get:
-      tags:
-        - Namespaces
-      summary: Get a namespace
-      operationId: getNamespace
+    post:
+      description: |-
+        Creates a new namespace in the cluster denoted by `cluster_id`. The cluster should belong to the project
+        denoted by `project_id`.
+      operationId: createNamespace
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/createNamespace_request'
+        description: The namespace to create
+        required: false
       responses:
-        '200':
-          description: Successfully fetched the namespace
-        '404':
-          description: No such namespace exists
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-    delete:
-      tags:
-        - Namespaces
-      summary: Delete a namespace
-      operationId: deleteNamespace
-      responses:
-        '200':
-          description: Successfully deleted the namespace if it existed
-        '403':
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamespaceResponse'
+          description: Successfully created a new namespace
+        "403":
+          content: {}
           description: Forbidden
+        "412":
+          content: {}
+          description: Namespace already exists
+      summary: Create a new namespace
+      tags:
+        - Namespaces
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request DELETE \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"sampleNS\"}'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}';
-
-
-            let options = {method: 'DELETE', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"sampleNS\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Delete.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"sampleNS\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("DELETE", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\npayload = {\"name\": \"sampleNS\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"sampleNS\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: CreateNamespaceRequest
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
+    delete:
+      description: |-
+        Deletes a namespace with the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
+        Note that this endpoint does not indicate if the namespace does not exist.
+      operationId: deleteNamespace
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+      responses:
+        "200":
+          content: {}
+          description: Successfully deleted namespace
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Delete a namespace
+      tags:
+        - Namespaces
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request DELETE \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}';\n\nlet options = {method: 'DELETE', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      description: |-
+        Gets a namespace denoted by the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
+      operationId: getNamespace
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamespaceResponse'
+          description: Successfully got the namespace
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Get a namespace
+      tags:
+        - Namespaces
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
-    post:
+    get:
+      description: List releases
+      operationId: listReleases
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: the pagination limit
+          in: query
+          name: limit
+          schema:
+            format: int64
+            type: integer
+            x-go-name: Limit
+          x-go-name: Limit
+        - description: how many items to skip
+          in: query
+          name: skip
+          schema:
+            format: int64
+            type: integer
+            x-go-name: Skip
+          x-go-name: Skip
+        - description: whether to sort by date
+          in: query
+          name: byDate
+          schema:
+            type: boolean
+            x-go-name: ByDate
+          x-go-name: ByDate
+        - description: which helm statuses to filter by
+          explode: false
+          in: query
+          name: statusFilter
+          schema:
+            items:
+              type: string
+            type: array
+            x-go-name: StatusFilter
+          style: form
+          x-go-name: StatusFilter
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReleasesResponse'
+          description: Successfully listed releases
+        "403":
+          content: {}
+          description: Forbidden
+      summary: List releases
       tags:
         - Releases
-      summary: Create a new release
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases?limit=50&skip=10&byDate=false&statusFilter=SOME_ARRAY_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases?limit=50&skip=10&byDate=false&statusFilter=SOME_ARRAY_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases?limit=50&skip=10&byDate=false&statusFilter=SOME_ARRAY_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\nquerystring = {\"limit\":\"50\",\"skip\":\"10\",\"byDate\":\"false\",\"statusFilter\":\"SOME_ARRAY_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases?limit=50&skip=10&byDate=false&statusFilter=SOME_ARRAY_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    post:
+      description: Creates a new release
+      operationId: createRelease
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/createRelease_request'
+        description: The release to create
+        required: false
       responses:
-        '201':
+        "201":
+          content: {}
           description: Successfully created the release
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request POST \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';
-
-
-            let options = {method: 'POST', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Post.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("POST", url, headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-    get:
-      tags:
-        - Releases
-      summary: List all releases
-      responses:
-        '200':
-          description: Successfully listed all releases
-        '403':
+        "400":
+          content: {}
+          description: A malformed or bad request
+        "403":
+          content: {}
           description: Forbidden
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}:
-    get:
+        "404":
+          content: {}
+          description: A subresource was not found
+        "409":
+          content: {}
+          description: A conflict occurred with another external service
+        "412":
+          content: {}
+          description: A precondition failed for the request
+      summary: Create a new release
       tags:
         - Releases
-      summary: Get a release
-      responses:
-        '200':
-          description: Successfully fetched the release
-        '404':
-          description: No such release exists
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\npayload = {\n    \"build_config\": {\n        \"builder\": \"string\",\n        \"buildpacks\": [\"string\"],\n        \"config\": {\n            \"property1\": {},\n            \"property2\": {}\n        }\n    },\n    \"git_action_config\": {\n        \"dockerfile_path\": \"string\",\n        \"folder_path\": \"string\",\n        \"git_branch\": \"string\",\n        \"git_repo\": \"string\",\n        \"git_repo_id\": 0,\n        \"gitlab_integration_id\": 0,\n        \"image_repo_uri\": \"string\",\n        \"registry_id\": 0,\n        \"should_create_workflow\": True\n    },\n    \"image_url\": \"string\",\n    \"name\": \"string\",\n    \"synced_env_groups\": [\"string\"],\n    \"tags\": [\"string\"],\n    \"template_name\": \"string\",\n    \"template_version\": \"string\",\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-    patch:
-      tags:
-        - Releases
-      summary: Update a release
-      responses:
-        '200':
-          description: Successfully updated the release
-        '404':
-          description: No such release exists
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request PATCH \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}';
-
-
-            let options = {method: 'PATCH', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Patch.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("PATCH", url, headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}\"\n\n\treq, _ := http.NewRequest(\"PATCH\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\tpayload := strings.NewReader(\"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: CreateReleaseRequest
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}:
     delete:
+      description: Deletes a release
+      operationId: deleteRelease
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The release name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+        - description: The release version (`0` for latest version)
+          in: path
+          name: version
+          required: true
+          schema:
+            format: uint64
+            minimum: 0
+            type: integer
+            x-go-name: Version
+          x-go-name: Version
+      responses:
+        "200":
+          content: {}
+          description: Successfully deleted the release
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Delete a release
       tags:
         - Releases
-      summary: Delete a release
-      responses:
-        '200':
-          description: Successfully deleted the release if it existed
-        '403':
-          description: Forbidden
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request DELETE \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request DELETE \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}';
-
-
-            let options = {method: 'DELETE', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {method: 'DELETE', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Delete.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("DELETE", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{release}/{version}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-  /api/v1/projects/{project_id}/registries:
-    post:
-      tags:
-        - Registries
-      summary: Create a new registry
-      responses:
-        '201':
-          description: Successfully created the new registry
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request POST \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';
-
-
-            let options = {method: 'POST', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Post.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("POST", url, headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
-      tags:
-        - Registries
-      summary: List all registries
+      description: Gets a release
+      operationId: getRelease
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The release name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+        - description: The release version (`0` for latest version)
+          in: path
+          name: version
+          required: true
+          schema:
+            format: uint64
+            minimum: 0
+            type: integer
+            x-go-name: Version
+          x-go-name: Version
       responses:
-        '200':
-          description: Successfully listed all registries
-        '403':
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReleaseResponse'
+          description: Successfully got the release
+        "403":
+          content: {}
           description: Forbidden
+      summary: Get a release
+      tags:
+        - Releases
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    patch:
+      description: Updates a release
+      operationId: updateRelease
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The release name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+        - description: The release version (`0` for latest version)
+          in: path
+          name: version
+          required: true
+          schema:
+            format: uint64
+            minimum: 0
+            type: integer
+            x-go-name: Version
+          x-go-name: Version
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/updateRelease_request'
+        description: The release to update
+        required: false
+      responses:
+        "200":
+          content: {}
+          description: Successfully updated the release
+        "400":
+          content: {}
+          description: A malformed or bad request
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Update a release
+      tags:
+        - Releases
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\npayload = {\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    },\n    \"version\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\tpayload := strings.NewReader(\"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: UpdateReleaseRequest
+  /api/v1/projects/{project_id}/registries:
+    get:
+      description: Lists registries
+      operationId: listRegistries
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRegistriesResponse'
+          description: Successfully listed registries
+        "403":
+          content: {}
+          description: Forbidden
+      summary: List image registries
+      tags:
+        - Registries
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-  /api/v1/projects/{project_id}/registries/{registry_id}:
-    get:
-      tags:
-        - Registries
-      summary: Get a registry
+    post:
+      description: Connects a new image registry
+      operationId: createRegistry
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/createRegistry_request'
+        description: The registry to connect
+        required: false
       responses:
-        '200':
-          description: Successfully fetched the registry
-        '403':
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRegistryResponse'
+          description: Successfully connected the registry
+        "400":
+          content: {}
+          description: A malformed or bad request
+        "403":
+          content: {}
           description: Forbidden
-        '404':
-          description: No such registry exists
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-    delete:
+        "404":
+          content: {}
+          description: A subresource was not found
+      summary: Connect an image registry
       tags:
         - Registries
-      summary: Delete a registry
-      responses:
-        '200':
-          description: Successfully deleted the registry if it existed
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request DELETE \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":1,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"my-ecr-reg\",\"url\":\"123456789.dkr.ecr.us-west-2.amazonaws.com\"}'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}';
-
-
-            let options = {method: 'DELETE', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":1,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"my-ecr-reg\",\"url\":\"123456789.dkr.ecr.us-west-2.amazonaws.com\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Delete.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":1,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"my-ecr-reg\\\",\\\"url\\\":\\\"123456789.dkr.ecr.us-west-2.amazonaws.com\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("DELETE", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\npayload = {\n    \"acr_name\": \"string\",\n    \"acr_resource_group_name\": \"string\",\n    \"aws_integration_id\": 1,\n    \"azure_integration_id\": 0,\n    \"basic_integration_id\": 0,\n    \"do_integration_id\": 0,\n    \"gcp_integration_id\": 0,\n    \"name\": \"my-ecr-reg\",\n    \"url\": \"123456789.dkr.ecr.us-west-2.amazonaws.com\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\tpayload := strings.NewReader(\"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":1,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"my-ecr-reg\\\",\\\"url\\\":\\\"123456789.dkr.ecr.us-west-2.amazonaws.com\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: CreateRegistryRequest
+  /api/v1/projects/{project_id}/registries/{registry_id}:
+    delete:
+      operationId: deleteRegistry
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: registry_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+      responses:
+        "200":
+          content: {}
+          description: Successfully disconnected image registry
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Disconnect image registry
+      tags:
+        - Registries
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request DELETE \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}';\n\nlet options = {method: 'DELETE', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-  /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
-    post:
-      tags:
-        - Registries
-      summary: Create a repository inside a registry
-      responses:
-        '201':
-          description: Successfully created the new repository
-      x-codeSamples:
-        - lang: Shell
-          source: |-
-            curl --request POST \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
-        - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories';
-
-
-            let options = {method: 'POST', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
-        - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Post.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
-        - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("POST", url, headers=headers)
-
-
-            print(response.text)
-        - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\"\n\n\treq, _ := http.NewRequest(\"POST\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
+      description: Gets an image registry
+      operationId: getRegistry
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: registry_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRegistryResponse'
+          description: Successfully got the registry
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Get an image registry
       tags:
         - Registries
-      summary: List all repositories in a registry
-      responses:
-        '200':
-          description: Successfully listed all repositories
-        '403':
-          description: Forbidden
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
+    get:
+      description: Lists image repositories inside the image registry given by `registry_id`
+      operationId: listRegistryRepositories
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: registry_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRegistryRepositoriesResponse'
+          description: Successfully listed image repositories
+        "403":
+          content: {}
+          description: Forbidden
+      summary: List image repositories
+      tags:
+        - Registries
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
-  /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
-    get:
+    post:
+      description: |-
+        Creates an image repository inside the registry specified by `registry_id`. This method **only** creates repositories for ECR-integrated
+        repositories.
+      operationId: createRegistryRepository
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: registry_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/createRegistryRepository_request'
+        description: The repository to create
+        required: false
+      responses:
+        "201":
+          content: {}
+          description: Successfully created the image repository
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Create image repository
       tags:
         - Registries
-      summary: List all image tags of a repository
-      responses:
-        '200':
-          description: Successfully listed all image tags
-        '403':
-          description: Forbidden
       x-codeSamples:
         - lang: Shell
-          source: |-
-            curl --request GET \
-              --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository} \
-              --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"image_repo_uri\":\"string\"}'"
         - lang: Node
-          source: >-
-            const fetch = require('node-fetch');
-
-
-            let url =
-            'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}';
-
-
-            let options = {method: 'GET', headers: {Authorization: 'Bearer
-            REPLACE_BEARER_TOKEN'}};
-
-
-            fetch(url, options)
-              .then(res => res.json())
-              .then(json => console.log(json))
-              .catch(err => console.error('error:' + err));
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"image_repo_uri\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: >-
-            require 'uri'
-
-            require 'net/http'
-
-            require 'openssl'
-
-
-            url =
-            URI("https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}")
-
-
-            http = Net::HTTP.new(url.host, url.port)
-
-            http.use_ssl = true
-
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-
-            request = Net::HTTP::Get.new(url)
-
-            request["Authorization"] = 'Bearer REPLACE_BEARER_TOKEN'
-
-
-            response = http.request(request)
-
-            puts response.read_body
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"image_repo_uri\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: >-
-            import requests
-
-
-            url =
-            "https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}"
-
-
-            headers = {"Authorization": "Bearer REPLACE_BEARER_TOKEN"}
-
-
-            response = requests.request("GET", url, headers=headers)
-
-
-            print(response.text)
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\"\n\npayload = {\"image_repo_uri\": \"string\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories\"\n\n\tpayload := strings.NewReader(\"{\\\"image_repo_uri\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: CreateRepositoryRequest
+  /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
+    get:
+      operationId: listRegistryImages
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The registry id
+          in: path
+          name: registry_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: RegistryID
+          x-go-name: RegistryID
+        - description: The image repository name
+          in: path
+          name: repository
+          required: true
+          schema:
+            type: string
+        - description: "The number of images to list.\nFor ECR images, a maximum of 1000 is allowed.\n"
+          in: query
+          name: num
+          schema:
+            minimum: 1
+            type: integer
+        - description: "The next page string used for pagination, from a previous request."
+          in: query
+          name: next
+          schema:
+            type: string
+        - description: "The next page number used for pagination, from a previous request."
+          in: query
+          name: next_page
+          schema:
+            minimum: 2
+            type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1ListImageResponse'
+          description: Successfully listed images
+        "400":
+          content: {}
+          description: A malformed or bad request
+        "403":
+          content: {}
+          description: Forbidden
+      summary: List images
+      tags:
+        - Registries
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nquerystring = {\"num\":\"SOME_INTEGER_VALUE\",\"next\":\"SOME_STRING_VALUE\",\"next_page\":\"SOME_INTEGER_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
 components:
   schemas:
-    CreateNamespace:
+    BuildConfig:
+      description: BuildConfig
+      properties:
+        builder:
+          type: string
+          x-go-name: Builder
+        buildpacks:
+          items:
+            type: string
+          type: array
+          x-go-name: Buildpacks
+        config:
+          items:
+            format: uint8
+            type: integer
+          type: array
+          x-go-name: Config
       type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    Chart:
+      description: "Chart is a helm package that contains metadata, a default config, zero or more\noptionally parameterizable templates, and zero or more charts (dependencies)."
+      example:
+        schema:
+          - 6
+          - 6
+        metadata:
+          maintainers:
+            - name: name
+              email: email
+              url: url
+            - name: name
+              email: email
+              url: url
+          appVersion: appVersion
+          keywords:
+            - keywords
+            - keywords
+          sources:
+            - sources
+            - sources
+          deprecated: true
+          icon: icon
+          annotations:
+            key: annotations
+          description: description
+          type: type
+          version: version
+          dependencies:
+            - condition: condition
+              name: name
+              alias: alias
+              repository: repository
+              import-values:
+                - "{}"
+                - "{}"
+              version: version
+              enabled: true
+              tags:
+                - tags
+                - tags
+            - condition: condition
+              name: name
+              alias: alias
+              repository: repository
+              import-values:
+                - "{}"
+                - "{}"
+              version: version
+              enabled: true
+              tags:
+                - tags
+                - tags
+          home: home
+          tags: tags
+          condition: condition
+          apiVersion: apiVersion
+          kubeVersion: kubeVersion
+          name: name
+        templates:
+          - data:
+              - 0
+              - 0
+            name: name
+          - data:
+              - 0
+              - 0
+            name: name
+        values:
+          key: "{}"
+        files:
+          - data:
+              - 0
+              - 0
+            name: name
+          - data:
+              - 0
+              - 0
+            name: name
+        lock:
+          generated: 2000-01-23T04:56:07.000+00:00
+          digest: digest
+          dependencies:
+            - condition: condition
+              name: name
+              alias: alias
+              repository: repository
+              import-values:
+                - "{}"
+                - "{}"
+              version: version
+              enabled: true
+              tags:
+                - tags
+                - tags
+            - condition: condition
+              name: name
+              alias: alias
+              repository: repository
+              import-values:
+                - "{}"
+                - "{}"
+              version: version
+              enabled: true
+              tags:
+                - tags
+                - tags
+      properties:
+        files:
+          description: "Files are miscellaneous files in a chart archive,\ne.g. README, LICENSE, etc."
+          items:
+            $ref: '#/components/schemas/File'
+          type: array
+          x-go-name: Files
+        lock:
+          $ref: '#/components/schemas/Lock'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        schema:
+          description: Schema is an optional JSON schema for imposing structure on Values
+          items:
+            format: uint8
+            type: integer
+          type: array
+          x-go-name: Schema
+        templates:
+          description: Templates for this chart.
+          items:
+            $ref: '#/components/schemas/File'
+          type: array
+          x-go-name: Templates
+        values:
+          additionalProperties:
+            properties: {}
+            type: object
+          description: Values are default config for this chart.
+          type: object
+          x-go-name: Values
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/chart
+    CreateBuildConfigRequest:
+      example:
+        buildpacks:
+          - buildpacks
+          - buildpacks
+        builder: builder
+        config:
+          key: "{}"
+      properties:
+        builder:
+          type: string
+          x-go-name: Builder
+        buildpacks:
+          items:
+            type: string
+          type: array
+          x-go-name: Buildpacks
+        config:
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
+          x-go-name: Config
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateGitActionConfigRequest:
+      example:
+        image_repo_uri: image_repo_uri
+        should_create_workflow: true
+        git_repo: git_repo
+        git_repo_id: 0
+        git_branch: git_branch
+        dockerfile_path: dockerfile_path
+        gitlab_integration_id: 6
+        folder_path: folder_path
+        registry_id: 1
+      properties:
+        dockerfile_path:
+          type: string
+          x-go-name: DockerfilePath
+        folder_path:
+          type: string
+          x-go-name: FolderPath
+        git_branch:
+          type: string
+          x-go-name: GitBranch
+        git_repo:
+          type: string
+          x-go-name: GitRepo
+        git_repo_id:
+          format: uint64
+          type: integer
+          x-go-name: GitRepoID
+        gitlab_integration_id:
+          format: uint64
+          type: integer
+          x-go-name: GitlabIntegrationID
+        image_repo_uri:
+          type: string
+          x-go-name: ImageRepoURI
+        registry_id:
+          format: uint64
+          type: integer
+          x-go-name: RegistryID
+        should_create_workflow:
+          type: boolean
+          x-go-name: ShouldCreateWorkflow
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateNamespaceRequest:
+      description: CreateNamespaceRequest represents the request body to create a namespace
+      example:
+        name: sampleNS
+      properties:
+        name:
+          description: the name of the namespace to create
+          example: sampleNS
+          type: string
+          x-go-name: Name
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateRegistryRepositoryRequest:
+      example:
+        image_repo_uri: image_repo_uri
+      properties:
+        image_repo_uri:
+          type: string
+          x-go-name: ImageRepoURI
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateRegistryRequest:
+      example:
+        do_integration_id: 0
+        azure_integration_id: 0
+        gcp_integration_id: 0
+        basic_integration_id: 0
+        name: my-ecr-reg
+        acr_name: acr_name
+        aws_integration_id: 1
+        acr_resource_group_name: acr_resource_group_name
+        url: 123456789.dkr.ecr.us-west-2.amazonaws.com
+      properties:
+        acr_name:
+          description: ACR name (**Azure only**)
+          type: string
+          x-go-name: ACRName
+        acr_resource_group_name:
+          description: ACR resource group name (**Azure only**)
+          type: string
+          x-go-name: ACRResourceGroupName
+        aws_integration_id:
+          description: The AWS integration ID to be used for this registry
+          example: 1
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: AWSIntegrationID
+        azure_integration_id:
+          description: The Azure integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: AzureIntegrationID
+        basic_integration_id:
+          description: The Basic integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: BasicIntegrationID
+        do_integration_id:
+          description: The DigitalOcean integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: DOIntegrationID
+        gcp_integration_id:
+          description: The GCP integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: GCPIntegrationID
+        name:
+          description: Name of the container registry
+          example: my-ecr-reg
+          type: string
+          x-go-name: Name
+        url:
+          description: URL of the container registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
+          type: string
+          x-go-name: URL
+      required:
+        - name
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateRegistryResponse:
+      $ref: '#/components/schemas/Registry'
+    CreateReleaseBaseRequest:
       properties:
         name:
           type: string
-  requestBodies:
-    CreateNamespace: *ref_0
+          x-go-name: Name
+        template_name:
+          type: string
+          x-go-name: TemplateName
+        template_version:
+          type: string
+          x-go-name: TemplateVersion
+        values:
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
+          x-go-name: Values
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateReleaseRequest:
+      example:
+        synced_env_groups:
+          - synced_env_groups
+          - synced_env_groups
+        git_action_config:
+          image_repo_uri: image_repo_uri
+          should_create_workflow: true
+          git_repo: git_repo
+          git_repo_id: 0
+          git_branch: git_branch
+          dockerfile_path: dockerfile_path
+          gitlab_integration_id: 6
+          folder_path: folder_path
+          registry_id: 1
+        template_name: template_name
+        template_version: template_version
+        image_url: image_url
+        values:
+          key: "{}"
+        name: name
+        build_config:
+          buildpacks:
+            - buildpacks
+            - buildpacks
+          builder: builder
+          config:
+            key: "{}"
+        tags:
+          - tags
+          - tags
+      properties:
+        build_config:
+          $ref: '#/components/schemas/CreateBuildConfigRequest'
+        git_action_config:
+          $ref: '#/components/schemas/CreateGitActionConfigRequest'
+        image_url:
+          type: string
+          x-go-name: ImageURL
+        name:
+          type: string
+          x-go-name: Name
+        synced_env_groups:
+          items:
+            type: string
+          type: array
+          x-go-name: SyncedEnvGroups
+        tags:
+          items:
+            type: string
+          type: array
+          x-go-name: Tags
+        template_name:
+          type: string
+          x-go-name: TemplateName
+        template_version:
+          type: string
+          x-go-name: TemplateVersion
+        values:
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
+          x-go-name: Values
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    Dependency:
+      description: "Dependencies can be used to express developer intent, or to capture the state\nof a chart."
+      example:
+        condition: condition
+        name: name
+        alias: alias
+        repository: repository
+        import-values:
+          - "{}"
+          - "{}"
+        version: version
+        enabled: true
+        tags:
+          - tags
+          - tags
+      properties:
+        alias:
+          description: Alias usable alias to be used for the chart
+          type: string
+          x-go-name: Alias
+        condition:
+          description: "A yaml path that resolves to a boolean, used for enabling/disabling charts (e.g. subchart1.enabled )"
+          type: string
+          x-go-name: Condition
+        enabled:
+          description: Enabled bool determines if chart should be loaded
+          type: boolean
+          x-go-name: Enabled
+        import-values:
+          description: |-
+            ImportValues holds the mapping of source values to parent key to be imported. Each item can be a
+            string or pair of child/parent sublist items.
+          items:
+            properties: {}
+            type: object
+          type: array
+          x-go-name: ImportValues
+        name:
+          description: |-
+            Name is the name of the dependency.
+
+            This must mach the name in the dependency's Chart.yaml.
+          type: string
+          x-go-name: Name
+        repository:
+          description: |-
+            The URL to the repository.
+
+            Appending `index.yaml` to this string should result in a URL that can be
+            used to fetch the repository index.
+          type: string
+          x-go-name: Repository
+        tags:
+          description: Tags can be used to group charts for enabling/disabling together
+          items:
+            type: string
+          type: array
+          x-go-name: Tags
+        version:
+          description: "Version is the version (range) of this chart.\n\nA lock file will always produce a single version, while a dependency\nmay contain a semantic version range."
+          type: string
+          x-go-name: Version
+      title: Dependency describes a chart upon which another chart depends.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/chart
+    File:
+      description: "By convention, name is a relative path within the scope of the chart's\nbase directory."
+      example:
+        data:
+          - 0
+          - 0
+        name: name
+      properties:
+        data:
+          description: Data is the template as byte data.
+          items:
+            format: uint8
+            type: integer
+          type: array
+          x-go-name: Data
+        name:
+          description: Name is the path-like name of the template.
+          type: string
+          x-go-name: Name
+      title: File represents a file as a name/value pair.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/chart
+    FormContent:
+      description: FormContent is a form's atomic unit
+      properties:
+        context:
+          $ref: '#/components/schemas/FormContext'
+        label:
+          type: string
+          x-go-name: Label
+        name:
+          type: string
+          x-go-name: Name
+        placeholder:
+          type: string
+          x-go-name: Placeholder
+        required:
+          type: boolean
+          x-go-name: Required
+        settings:
+          $ref: '#/components/schemas/FormContent_settings'
+        type:
+          type: string
+          x-go-name: Type
+        value:
+          properties: {}
+          type: object
+          x-go-name: Value
+        variable:
+          type: string
+          x-go-name: Variable
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    FormContext:
+      description: FormContext is the target context
+      properties:
+        config:
+          additionalProperties:
+            type: string
+          type: object
+          x-go-name: Config
+        type:
+          type: string
+          x-go-name: Type
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    FormSection:
+      description: FormSection is a section of a form
+      properties:
+        contents:
+          items:
+            $ref: '#/components/schemas/FormContent'
+          type: array
+          x-go-name: Contents
+        context:
+          $ref: '#/components/schemas/FormContext'
+        name:
+          type: string
+          x-go-name: Name
+        show_if:
+          properties: {}
+          type: object
+          x-go-name: ShowIf
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    FormTab:
+      description: FormTab is a tab rendered in a form
+      properties:
+        context:
+          $ref: '#/components/schemas/FormContext'
+        label:
+          type: string
+          x-go-name: Label
+        name:
+          type: string
+          x-go-name: Name
+        sections:
+          items:
+            $ref: '#/components/schemas/FormSection'
+          type: array
+          x-go-name: Sections
+        settings:
+          $ref: '#/components/schemas/FormTab_settings'
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    FormYAML:
+      description: FormYAML represents a chart's values.yaml form abstraction
+      properties:
+        description:
+          type: string
+          x-go-name: Description
+        hasSource:
+          type: string
+          x-go-name: HasSource
+        icon:
+          type: string
+          x-go-name: Icon
+        includeHiddenFields:
+          type: string
+          x-go-name: IncludeHiddenFields
+        isClusterScoped:
+          type: boolean
+          x-go-name: IsClusterScoped
+        name:
+          type: string
+          x-go-name: Name
+        tabs:
+          items:
+            $ref: '#/components/schemas/FormTab'
+          type: array
+          x-go-name: Tabs
+        tags:
+          items:
+            type: string
+          type: array
+          x-go-name: Tags
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    GetRegistryResponse:
+      $ref: '#/components/schemas/Registry'
+    GetReleaseResponse:
+      $ref: '#/components/schemas/Release'
+    GitActionConfig:
+      description: GitActionConfig
+      properties:
+        dockerfile_path:
+          description: The path to the dockerfile in the git repo
+          type: string
+          x-go-name: DockerfilePath
+        folder_path:
+          description: The build context
+          type: string
+          x-go-name: FolderPath
+        git_branch:
+          description: The git branch to use
+          type: string
+          x-go-name: GitBranch
+        git_repo:
+          description: "The git repo in ${owner}/${repo} form"
+          type: string
+          x-go-name: GitRepo
+        git_repo_id:
+          description: The github integration ID
+          format: uint64
+          type: integer
+          x-go-name: GitRepoID
+        gitlab_integration_id:
+          description: The gitlab integration ID
+          format: uint64
+          type: integer
+          x-go-name: GitlabIntegrationID
+        image_repo_uri:
+          description: The complete image repository uri to pull from
+          type: string
+          x-go-name: ImageRepoURI
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    Hook:
+      example:
+        path: path
+        kind: kind
+        manifest: manifest
+        name: name
+        weight: 1
+        last_run:
+          phase: phase
+          completed_at: 2000-01-23T04:56:07.000+00:00
+          started_at: 2000-01-23T04:56:07.000+00:00
+        events:
+          - null
+          - null
+        delete_policies:
+          - null
+          - null
+      properties:
+        delete_policies:
+          description: DeletePolicies are the policies that indicate when to delete the hook
+          items:
+            $ref: '#/components/schemas/HookDeletePolicy'
+          type: array
+          x-go-name: DeletePolicies
+        events:
+          description: Events are the events that this hook fires on.
+          items:
+            $ref: '#/components/schemas/HookEvent'
+          type: array
+          x-go-name: Events
+        kind:
+          description: Kind is the Kubernetes kind.
+          type: string
+          x-go-name: Kind
+        last_run:
+          $ref: '#/components/schemas/HookExecution'
+        manifest:
+          description: Manifest is the manifest contents.
+          type: string
+          x-go-name: Manifest
+        name:
+          type: string
+          x-go-name: Name
+        path:
+          description: Path is the chart-relative path to the template.
+          type: string
+          x-go-name: Path
+        weight:
+          description: Weight indicates the sort order for execution among similar Hook type
+          format: int64
+          type: integer
+          x-go-name: Weight
+      title: Hook defines a hook object.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/release
+    HookDeletePolicy:
+      description: HookDeletePolicy specifies the hook delete policy
+      type: string
+      x-go-package: helm.sh/helm/v3/pkg/release
+    HookEvent:
+      description: HookEvent specifies the hook event
+      type: string
+      x-go-package: helm.sh/helm/v3/pkg/release
+    HookExecution:
+      example:
+        phase: phase
+        completed_at: 2000-01-23T04:56:07.000+00:00
+        started_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        completed_at:
+          description: CompletedAt indicates the date/time this hook was completed.
+          format: date-time
+          type: string
+          x-go-name: CompletedAt
+        phase:
+          description: A HookPhase indicates the state of a hook execution
+          type: string
+          x-go-package: helm.sh/helm/v3/pkg/release
+        started_at:
+          description: StartedAt indicates the date/time this hook was started
+          format: date-time
+          type: string
+          x-go-name: StartedAt
+      title: A HookExecution records the result for the last execution of a hook for a given release.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/release
+    HookPhase:
+      description: A HookPhase indicates the state of a hook execution
+      type: string
+      x-go-package: helm.sh/helm/v3/pkg/release
+    Image:
+      description: Image is a Docker image type
+      example:
+        pushed_at: 2000-01-23T04:56:07.000+00:00
+        manifest: manifest
+        digest: digest
+        tag: tag
+        repository_name: repository_name
+      properties:
+        digest:
+          description: The sha256 digest of the image manifest.
+          type: string
+          x-go-name: Digest
+        manifest:
+          description: The image manifest associated with the image.
+          type: string
+          x-go-name: Manifest
+        pushed_at:
+          description: When the image was pushed
+          format: date-time
+          type: string
+          x-go-name: PushedAt
+        repository_name:
+          description: The name of the repository associated with the image.
+          type: string
+          x-go-name: RepositoryName
+        tag:
+          description: The tag used for the image.
+          type: string
+          x-go-name: Tag
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    Info:
+      example:
+        last_deployed: 2000-01-23T04:56:07.000+00:00
+        deleted: 2000-01-23T04:56:07.000+00:00
+        notes: notes
+        first_deployed: 2000-01-23T04:56:07.000+00:00
+        description: description
+        status: status
+      properties:
+        deleted:
+          description: Deleted tracks when this object was deleted.
+          format: date-time
+          type: string
+          x-go-name: Deleted
+        description:
+          description: Description is human-friendly "log entry" about this release.
+          type: string
+          x-go-name: Description
+        first_deployed:
+          description: FirstDeployed is when the release was first deployed.
+          format: date-time
+          type: string
+          x-go-name: FirstDeployed
+        last_deployed:
+          description: LastDeployed is when the release was last deployed.
+          format: date-time
+          type: string
+          x-go-name: LastDeployed
+        notes:
+          description: Contains the rendered templates/NOTES.txt if available
+          type: string
+          x-go-name: Notes
+        status:
+          description: Status is the status of a release
+          type: string
+          x-go-package: helm.sh/helm/v3/pkg/release
+      title: Info describes release information.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/release
+    ListImagesResponse:
+      items:
+        $ref: '#/components/schemas/Image'
+      type: array
+      x-go-name: ListImageResponse
+      x-go-package: github.com/porter-dev/porter/api/types
+    ListNamespacesResponse:
+      description: ListNamespacesResponse represents the list of all namespaces
+      items:
+        $ref: '#/components/schemas/NamespaceResponse'
+      type: array
+      x-go-package: github.com/porter-dev/porter/api/types
+    ListRegistriesResponse:
+      items:
+        $ref: '#/components/schemas/Registry'
+      type: array
+      x-go-name: RegistryListResponse
+      x-go-package: github.com/porter-dev/porter/api/types
+    ListRegistryRepositoriesResponse:
+      items:
+        $ref: '#/components/schemas/RegistryRepository'
+      type: array
+      x-go-name: ListRegistryRepositoryResponse
+      x-go-package: github.com/porter-dev/porter/api/types
+    ListReleasesResponse:
+      items:
+        $ref: '#/components/schemas/Release'
+      type: array
+      x-go-package: github.com/porter-dev/porter/api/types
+    Lock:
+      description: It represents the state that the dependencies should be in.
+      example:
+        generated: 2000-01-23T04:56:07.000+00:00
+        digest: digest
+        dependencies:
+          - condition: condition
+            name: name
+            alias: alias
+            repository: repository
+            import-values:
+              - "{}"
+              - "{}"
+            version: version
+            enabled: true
+            tags:
+              - tags
+              - tags
+          - condition: condition
+            name: name
+            alias: alias
+            repository: repository
+            import-values:
+              - "{}"
+              - "{}"
+            version: version
+            enabled: true
+            tags:
+              - tags
+              - tags
+      properties:
+        dependencies:
+          description: Dependencies is the list of dependencies that this lock file has locked.
+          items:
+            $ref: '#/components/schemas/Dependency'
+          type: array
+          x-go-name: Dependencies
+        digest:
+          description: Digest is a hash of the dependencies in Chart.yaml.
+          type: string
+          x-go-name: Digest
+        generated:
+          description: Generated is the date the lock file was last generated.
+          format: date-time
+          type: string
+          x-go-name: Generated
+      title: Lock is a lock file for dependencies.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/chart
+    Maintainer:
+      example:
+        name: name
+        email: email
+        url: url
+      properties:
+        email:
+          description: Email is an optional email address to contact the named maintainer
+          type: string
+          x-go-name: Email
+        name:
+          description: Name is a user name or organization name
+          type: string
+          x-go-name: Name
+        url:
+          description: URL is an optional URL to an address for the named maintainer
+          type: string
+          x-go-name: URL
+      title: Maintainer describes a Chart maintainer.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/chart
+    Metadata:
+      example:
+        maintainers:
+          - name: name
+            email: email
+            url: url
+          - name: name
+            email: email
+            url: url
+        appVersion: appVersion
+        keywords:
+          - keywords
+          - keywords
+        sources:
+          - sources
+          - sources
+        deprecated: true
+        icon: icon
+        annotations:
+          key: annotations
+        description: description
+        type: type
+        version: version
+        dependencies:
+          - condition: condition
+            name: name
+            alias: alias
+            repository: repository
+            import-values:
+              - "{}"
+              - "{}"
+            version: version
+            enabled: true
+            tags:
+              - tags
+              - tags
+          - condition: condition
+            name: name
+            alias: alias
+            repository: repository
+            import-values:
+              - "{}"
+              - "{}"
+            version: version
+            enabled: true
+            tags:
+              - tags
+              - tags
+        home: home
+        tags: tags
+        condition: condition
+        apiVersion: apiVersion
+        kubeVersion: kubeVersion
+        name: name
+      properties:
+        annotations:
+          additionalProperties:
+            type: string
+          description: "Annotations are additional mappings uninterpreted by Helm,\nmade available for inspection by other applications."
+          type: object
+          x-go-name: Annotations
+        apiVersion:
+          description: The API Version of this chart. Required.
+          type: string
+          x-go-name: APIVersion
+        appVersion:
+          description: The version of the application enclosed inside of this chart.
+          type: string
+          x-go-name: AppVersion
+        condition:
+          description: The condition to check to enable chart
+          type: string
+          x-go-name: Condition
+        dependencies:
+          description: Dependencies are a list of dependencies for a chart.
+          items:
+            $ref: '#/components/schemas/Dependency'
+          type: array
+          x-go-name: Dependencies
+        deprecated:
+          description: Whether or not this chart is deprecated
+          type: boolean
+          x-go-name: Deprecated
+        description:
+          description: A one-sentence description of the chart
+          type: string
+          x-go-name: Description
+        home:
+          description: "The URL to a relevant project page, git repo, or contact person"
+          type: string
+          x-go-name: Home
+        icon:
+          description: The URL to an icon file.
+          type: string
+          x-go-name: Icon
+        keywords:
+          description: A list of string keywords
+          items:
+            type: string
+          type: array
+          x-go-name: Keywords
+        kubeVersion:
+          description: KubeVersion is a SemVer constraint specifying the version of Kubernetes required.
+          type: string
+          x-go-name: KubeVersion
+        maintainers:
+          description: A list of name and URL/email address combinations for the maintainer(s)
+          items:
+            $ref: '#/components/schemas/Maintainer'
+          type: array
+          x-go-name: Maintainers
+        name:
+          description: The name of the chart. Required.
+          type: string
+          x-go-name: Name
+        sources:
+          description: Source is the URL to the source code of this chart
+          items:
+            type: string
+          type: array
+          x-go-name: Sources
+        tags:
+          description: The tags to check to enable chart
+          type: string
+          x-go-name: Tags
+        type:
+          description: "Specifies the chart type: application or library"
+          type: string
+          x-go-name: Type
+        version:
+          description: A SemVer 2 conformant version string of the chart. Required.
+          type: string
+          x-go-name: Version
+      title: Metadata for a Chart file. This models the structure of a Chart.yaml file.
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/chart
+    NamespaceResponse:
+      description: NamespaceResponse represents the response type of requests to the namespace resource
+      example:
+        creationTimestamp: "Mon, 13 Jun 2022 17:49:12 GMT"
+        name: default
+        deletionTimestamp: "Mon, 13 Jun 2022 17:49:12 GMT"
+        status: active
+      properties:
+        creationTimestamp:
+          description: the creation timestamp in UTC of the namespace in RFC 1123 format
+          example: "Mon, 13 Jun 2022 17:49:12 GMT"
+          type: string
+          x-go-name: CreationTimestamp
+        deletionTimestamp:
+          description: "the deletion timestamp in UTC of the namespace in RFC 1123 format, if the namespace is deleted"
+          example: "Mon, 13 Jun 2022 17:49:12 GMT"
+          type: string
+          x-go-name: DeletionTimestamp
+        name:
+          description: the name of the namespace
+          example: default
+          type: string
+          x-go-name: Name
+        status:
+          description: the status of the namespace
+          enum:
+            - active
+            - terminating
+          example: active
+          type: string
+          x-go-name: Status
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    PorterRelease:
+      properties:
+        build_config:
+          $ref: '#/components/schemas/BuildConfig'
+        git_action_config:
+          $ref: '#/components/schemas/GitActionConfig'
+        id:
+          format: uint64
+          type: integer
+          x-go-name: ID
+        image_repo_uri:
+          type: string
+          x-go-name: ImageRepoURI
+        latest_version:
+          type: string
+          x-go-name: LatestVersion
+        tags:
+          items:
+            type: string
+          type: array
+          x-go-name: Tags
+        webhook_token:
+          type: string
+          x-go-name: WebhookToken
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    Registry:
+      example:
+        do_integration_id: 0
+        infra_id: 2
+        azure_integration_id: 0
+        gcp_integration_id: 0
+        basic_integration_id: 0
+        project_id: 1
+        service: ecr
+        name: my-ecr-reg
+        id: 2
+        aws_integration_id: 1
+        url: 123456789.dkr.ecr.us-west-2.amazonaws.com
+      properties:
+        aws_integration_id:
+          description: The AWS integration that was used to create or connect the registry
+          example: 1
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: AWSIntegrationID
+        azure_integration_id:
+          description: The Azure integration that was used to create or connect the registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: AzureIntegrationID
+        basic_integration_id:
+          description: The basic integration that was used to connect the registry.
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: BasicIntegrationID
+        do_integration_id:
+          description: |-
+            The DO integration that was used to create or connect the registry:
+            this points to an OAuthIntegrationID
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: DOIntegrationID
+        gcp_integration_id:
+          description: The GCP integration that was used to create or connect the registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: GCPIntegrationID
+        id:
+          description: The ID of the registry
+          example: 2
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: ID
+        infra_id:
+          description: "The infra id, if registry was provisioned with Porter"
+          example: 2
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: InfraID
+        name:
+          description: Name of the registry
+          example: my-ecr-reg
+          type: string
+          x-go-name: Name
+        project_id:
+          description: The project that this integration belongs to
+          example: 1
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: ProjectID
+        service:
+          description: The integration service for this registry
+          enum:
+            - gcr
+            - ecr
+            - acr
+            - docr
+            - dockerhub
+          example: ecr
+          type: string
+          x-go-name: Service
+        url:
+          description: URL of the registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
+          type: string
+          x-go-name: URL
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    RegistryRepository:
+      description: Repository is a collection of images
+      example:
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        uri: uri
+      properties:
+        created_at:
+          description: When the repository was created
+          format: date-time
+          type: string
+          x-go-name: CreatedAt
+        name:
+          description: Name of the repository
+          type: string
+          x-go-name: Name
+        uri:
+          description: The URI of the repository
+          type: string
+          x-go-name: URI
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    Release:
+      description: "Release describes a deployment of a chart, together with the chart\nand the variables used to deploy that chart."
+      example:
+        manifest: manifest
+        name: name
+        namespace: namespace
+        chart:
+          schema:
+            - 6
+            - 6
+          metadata:
+            maintainers:
+              - name: name
+                email: email
+                url: url
+              - name: name
+                email: email
+                url: url
+            appVersion: appVersion
+            keywords:
+              - keywords
+              - keywords
+            sources:
+              - sources
+              - sources
+            deprecated: true
+            icon: icon
+            annotations:
+              key: annotations
+            description: description
+            type: type
+            version: version
+            dependencies:
+              - condition: condition
+                name: name
+                alias: alias
+                repository: repository
+                import-values:
+                  - "{}"
+                  - "{}"
+                version: version
+                enabled: true
+                tags:
+                  - tags
+                  - tags
+              - condition: condition
+                name: name
+                alias: alias
+                repository: repository
+                import-values:
+                  - "{}"
+                  - "{}"
+                version: version
+                enabled: true
+                tags:
+                  - tags
+                  - tags
+            home: home
+            tags: tags
+            condition: condition
+            apiVersion: apiVersion
+            kubeVersion: kubeVersion
+            name: name
+          templates:
+            - data:
+                - 0
+                - 0
+              name: name
+            - data:
+                - 0
+                - 0
+              name: name
+          values:
+            key: "{}"
+          files:
+            - data:
+                - 0
+                - 0
+              name: name
+            - data:
+                - 0
+                - 0
+              name: name
+          lock:
+            generated: 2000-01-23T04:56:07.000+00:00
+            digest: digest
+            dependencies:
+              - condition: condition
+                name: name
+                alias: alias
+                repository: repository
+                import-values:
+                  - "{}"
+                  - "{}"
+                version: version
+                enabled: true
+                tags:
+                  - tags
+                  - tags
+              - condition: condition
+                name: name
+                alias: alias
+                repository: repository
+                import-values:
+                  - "{}"
+                  - "{}"
+                version: version
+                enabled: true
+                tags:
+                  - tags
+                  - tags
+        config:
+          key: "{}"
+        hooks:
+          - path: path
+            kind: kind
+            manifest: manifest
+            name: name
+            weight: 1
+            last_run:
+              phase: phase
+              completed_at: 2000-01-23T04:56:07.000+00:00
+              started_at: 2000-01-23T04:56:07.000+00:00
+            events:
+              - null
+              - null
+            delete_policies:
+              - null
+              - null
+          - path: path
+            kind: kind
+            manifest: manifest
+            name: name
+            weight: 1
+            last_run:
+              phase: phase
+              completed_at: 2000-01-23T04:56:07.000+00:00
+              started_at: 2000-01-23T04:56:07.000+00:00
+            events:
+              - null
+              - null
+            delete_policies:
+              - null
+              - null
+        version: 5
+        info:
+          last_deployed: 2000-01-23T04:56:07.000+00:00
+          deleted: 2000-01-23T04:56:07.000+00:00
+          notes: notes
+          first_deployed: 2000-01-23T04:56:07.000+00:00
+          description: description
+          status: status
+      properties:
+        chart:
+          $ref: '#/components/schemas/Chart'
+        config:
+          additionalProperties:
+            properties: {}
+            type: object
+          description: |-
+            Config is the set of extra Values added to the chart.
+            These values override the default values inside of the chart.
+          type: object
+          x-go-name: Config
+        hooks:
+          description: Hooks are all of the hooks declared for this release.
+          items:
+            $ref: '#/components/schemas/Hook'
+          type: array
+          x-go-name: Hooks
+        info:
+          $ref: '#/components/schemas/Info'
+        manifest:
+          description: Manifest is the string representation of the rendered template.
+          type: string
+          x-go-name: Manifest
+        name:
+          description: Name is the name of the release
+          type: string
+          x-go-name: Name
+        namespace:
+          description: Namespace is the kubernetes namespace of the release.
+          type: string
+          x-go-name: Namespace
+        version:
+          description: Version is an int which represents the revision of the release.
+          format: int64
+          type: integer
+          x-go-name: Version
+      type: object
+      x-go-package: helm.sh/helm/v3/pkg/release
+    Status:
+      description: Status is the status of a release
+      type: string
+      x-go-package: helm.sh/helm/v3/pkg/release
+    UpdateReleaseRequest:
+      example:
+        values:
+          key: "{}"
+        version: version
+      properties:
+        values:
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
+          x-go-name: Values
+        version:
+          type: string
+          x-go-name: ChartVersion
+      required:
+        - values
+      type: object
+      x-go-name: V1UpgradeReleaseRequest
+      x-go-package: github.com/porter-dev/porter/api/types
+    V1ListImageResponse:
+      example:
+        next: next
+        num_page: 0
+        images:
+          - pushed_at: 2000-01-23T04:56:07.000+00:00
+            manifest: manifest
+            digest: digest
+            tag: tag
+            repository_name: repository_name
+          - pushed_at: 2000-01-23T04:56:07.000+00:00
+            manifest: manifest
+            digest: digest
+            tag: tag
+            repository_name: repository_name
+      properties:
+        images:
+          description: The list of repository images with tags
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          x-go-name: Images
+        next:
+          description: "The next page string used for pagination, when application"
+          type: string
+          x-go-name: Next
+        num_page:
+          description: "The next page number used for pagination, when applicable"
+          format: uint64
+          type: integer
+          x-go-name: NextPage
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    createNamespace_request:
+      description: CreateNamespaceRequest represents the request body to create a namespace
+      properties:
+        name:
+          description: the name of the namespace to create
+          example: sampleNS
+          type: string
+          x-go-name: Name
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    createRelease_request:
+      properties:
+        build_config:
+          $ref: '#/components/schemas/CreateBuildConfigRequest'
+        git_action_config:
+          $ref: '#/components/schemas/CreateGitActionConfigRequest'
+        image_url:
+          type: string
+          x-go-name: ImageURL
+        name:
+          type: string
+          x-go-name: Name
+        synced_env_groups:
+          items:
+            type: string
+          type: array
+          x-go-name: SyncedEnvGroups
+        tags:
+          items:
+            type: string
+          type: array
+          x-go-name: Tags
+        template_name:
+          type: string
+          x-go-name: TemplateName
+        template_version:
+          type: string
+          x-go-name: TemplateVersion
+        values:
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
+          x-go-name: Values
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    updateRelease_request:
+      properties:
+        values:
+          additionalProperties:
+            properties: {}
+            type: object
+          type: object
+          x-go-name: Values
+        version:
+          type: string
+          x-go-name: ChartVersion
+      required:
+        - values
+      type: object
+      x-go-name: V1UpgradeReleaseRequest
+      x-go-package: github.com/porter-dev/porter/api/types
+    createRegistry_request:
+      properties:
+        acr_name:
+          description: ACR name (**Azure only**)
+          type: string
+          x-go-name: ACRName
+        acr_resource_group_name:
+          description: ACR resource group name (**Azure only**)
+          type: string
+          x-go-name: ACRResourceGroupName
+        aws_integration_id:
+          description: The AWS integration ID to be used for this registry
+          example: 1
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: AWSIntegrationID
+        azure_integration_id:
+          description: The Azure integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: AzureIntegrationID
+        basic_integration_id:
+          description: The Basic integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: BasicIntegrationID
+        do_integration_id:
+          description: The DigitalOcean integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: DOIntegrationID
+        gcp_integration_id:
+          description: The GCP integration ID to be used for this registry
+          example: 0
+          format: uint64
+          minimum: 1
+          type: integer
+          x-go-name: GCPIntegrationID
+        name:
+          description: Name of the container registry
+          example: my-ecr-reg
+          type: string
+          x-go-name: Name
+        url:
+          description: URL of the container registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
+          type: string
+          x-go-name: URL
+      required:
+        - name
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    createRegistryRepository_request:
+      properties:
+        image_repo_uri:
+          type: string
+          x-go-name: ImageRepoURI
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    FormContent_settings:
+      properties:
+        default:
+          properties: {}
+          type: object
+          x-go-name: Default
+        disableAfterLaunch:
+          type: boolean
+          x-go-name: DisableAfterLaunch
+        docs:
+          type: string
+          x-go-name: Docs
+        omitUnitFromValue:
+          type: boolean
+          x-go-name: OmitUnitFromValue
+        options:
+          properties: {}
+          type: object
+          x-go-name: Options
+        placeholder:
+          type: string
+          x-go-name: Placeholder
+        unit:
+          properties: {}
+          type: object
+          x-go-name: Unit
+      type: object
+      x-go-name: Settings
+    FormTab_settings:
+      properties:
+        omitFromLaunch:
+          type: boolean
+          x-go-name: OmitFromLaunch
+      type: object
+      x-go-name: Settings
   securitySchemes:
     Bearer:
       type: http
@@ -1479,6 +2627,21 @@ components:
       bearerFormat: JWT
   links: {}
   callbacks: {}
-security:
-  - Bearer: []
+x-original-swagger-version: "2.0"
+info:
+  description: "# Introduction\n\nWelcome to the documentation for Porter's API. Our public API is still a\nwork-in-progress, although all endpoints prefixed with `/api/v1` will remain\nstable. \n\n\nTo begin using the Porter API, API tokens must be enabled for your Porter\nproject. If API tokens are enabled, you will see the following in the\nproject settings page:\n\n<br />\n\n\nNearly all endpoints will have the following structure:\n\n\n\n```yaml\n/api/v1/projects/{project_id}/[resources]\n```\n\n\n\nFor example, creating a new release (which exists inside a cluster and\nnamespace) has the following endpoint:\n\n\n\n```yaml\nPOST /api/v1/projects/1/clusters/1/namespaces/default/releases\n```\n\nAll resources are by default pluralized (i.e. `releases` instead of\n`release`). The API supports the following HTTP Verbs:\n\n- `GET`\n- `POST`\n- `PUT`\n- `PATCH`\n- `DELETE`\n\nAPI design is based on the following actions:\n\n- List — lists a group of resources\n- Get — retrieves a single resource\n- Create — creates a new resource\n- Update — updates an existing resource\n- Delete — deletes an existing resource\n\n# Authorization\n\nRequests are authenticated via a JWT token that can be obtained from the dashboard in **Project Settings:**\n\n![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/30748e55-35a9-478e-f5a9-fbe126099d00/large)\n\nJWT tokens are signed via an `HMAC-SHA` algorithm. All API tokens are **project-scoped**, other actions that are outside the scope of a project will need to be performed using a personal access token. \n\n<SecurityDefinitions />\n\n**Basic Roles**\n\nFor ease of use, each API token can be granted one of three roles: admin, developer, or viewer. A token with admin permissions can read or write to any resource in the project, a token with developer permissions can read or write to any resource *except* settings (only read for settings), and a token with viewer permissions can view all resources within the project *except* settings.\n\n**Custom Roles** \n\nAPI tokens can be assigned custom roles based on a set of custom **policies**. These policies can be created from the dashboard or the API. From the dashboard, when you create a custom policy, you can select the resources that you would like the role to access:\n\n![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/84af3259-4ef2-4e9d-4319-563d61fb4300/large)\n\nEach policy refers to various **scopes** within a project. These scopes are the following:\n\n```yaml\nProject\n-- Cluster\n-- -- Namespace\n-- -- -- Application\n-- Infra\n-- Settings\n-- Registry\n-- Helm Repository\n-- Git Installation\n```\n\nFor each scope, a set of allowed **actions** can be granted.\n"
+  version: 1.0.0
+  title: API v1
+  termsOfService: "https://docs.porter.run/terms-and-privacy/terms-of-service/"
+  contact:
+    name: Porter Support
+    email: support@porter.run
+tags:
+  - name: Namespaces
+    description: >
+      Namespaces are a Kubernetes concept which divides resources in the cluster into  separate logical groups. Each Kubernetes cluster comes with a `default` namespace,  and typically a `kube-system` namespace which contains services which help Kubernetes run.
 
+  - name: Releases
+    description: Porter Releases
+  - name: Registries
+    description: Porter Registries
