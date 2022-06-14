@@ -938,19 +938,39 @@ paths:
             type: integer
             x-go-name: RegistryID
           x-go-name: RegistryID
-        - description: the image repository name
+        - description: The image repository name
           in: path
           name: repository
           required: true
           schema:
             type: string
+        - description: "The number of images to list.\nFor ECR images, a maximum of 1000 is allowed.\n"
+          in: query
+          name: num
+          schema:
+            minimum: 1
+            type: integer
+        - description: "The next page string used for pagination, from a previous request."
+          in: query
+          name: next
+          schema:
+            type: string
+        - description: "The next page number used for pagination, from a previous request."
+          in: query
+          name: next_page
+          schema:
+            minimum: 2
+            type: integer
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListImagesResponse'
+                $ref: '#/components/schemas/V1ListImageResponse'
           description: Successfully listed images
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
@@ -959,15 +979,15 @@ paths:
         - Registries
       x-codeSamples:
         - lang: Shell
-          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nquerystring = {\"num\":\"SOME_INTEGER_VALUE\",\"next\":\"SOME_STRING_VALUE\",\"next_page\":\"SOME_INTEGER_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
 components:
   schemas:
     BuildConfig:
@@ -3054,6 +3074,39 @@ components:
         - values
       type: object
       x-go-name: V1UpgradeReleaseRequest
+      x-go-package: github.com/porter-dev/porter/api/types
+    V1ListImageResponse:
+      example:
+        next: next
+        num_page: 0
+        images:
+          - pushed_at: 2000-01-23T04:56:07.000+00:00
+            manifest: manifest
+            digest: digest
+            tag: tag
+            repository_name: repository_name
+          - pushed_at: 2000-01-23T04:56:07.000+00:00
+            manifest: manifest
+            digest: digest
+            tag: tag
+            repository_name: repository_name
+      properties:
+        images:
+          description: The list of repository images with tags
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          x-go-name: Images
+        next:
+          description: "The next page string used for pagination, when application"
+          type: string
+          x-go-name: Next
+        num_page:
+          description: "The next page number used for pagination, when applicable"
+          format: uint64
+          type: integer
+          x-go-name: NextPage
+      type: object
       x-go-package: github.com/porter-dev/porter/api/types
     createNamespace_request:
       description: CreateNamespaceRequest represents the request body to create a namespace

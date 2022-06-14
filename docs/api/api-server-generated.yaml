@@ -1027,6 +1027,25 @@ definitions:
     type: object
     x-go-name: V1UpgradeReleaseRequest
     x-go-package: github.com/porter-dev/porter/api/types
+  V1ListImageResponse:
+    properties:
+      images:
+        description: The list of repository images with tags
+        items:
+          $ref: "#/definitions/Image"
+        type: array
+        x-go-name: Images
+      next:
+        description: The next page string used for pagination, when application
+        type: string
+        x-go-name: Next
+      num_page:
+        description: The next page number used for pagination, when applicable
+        format: uint64
+        type: integer
+        x-go-name: NextPage
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
 paths:
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
     get:
@@ -1672,18 +1691,36 @@ paths:
           required: true
           type: integer
           x-go-name: RegistryID
-        - description: the image repository name
+        - description: The image repository name
           in: path
           name: repository
           required: true
           type: string
+        - description: |
+            The number of images to list.
+            For ECR images, a maximum of 1000 is allowed.
+          in: query
+          minimum: 1
+          name: num
+          type: integer
+        - description: The next page string used for pagination, from a previous request.
+          in: query
+          name: next
+          type: string
+        - description: The next page number used for pagination, from a previous request.
+          in: query
+          minimum: 2
+          name: next_page
+          type: integer
       produces:
         - application/json
       responses:
         "200":
           description: Successfully listed images
           schema:
-            $ref: "#/definitions/ListImagesResponse"
+            $ref: "#/definitions/V1ListImageResponse"
+        "400":
+          description: A malformed or bad request
         "403":
           description: Forbidden
       summary: List images
