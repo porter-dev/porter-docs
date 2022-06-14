@@ -992,14 +992,6 @@ components:
   schemas:
     BuildConfig:
       description: BuildConfig
-      example:
-        buildpacks:
-          - buildpacks
-          - buildpacks
-        builder: builder
-        config:
-          - 0
-          - 0
       properties:
         builder:
           type: string
@@ -1021,8 +1013,8 @@ components:
       description: "Chart is a helm package that contains metadata, a default config, zero or more\noptionally parameterizable templates, and zero or more charts (dependencies)."
       example:
         schema:
-          - 1
-          - 1
+          - 6
+          - 6
         metadata:
           maintainers:
             - name: name
@@ -1078,23 +1070,23 @@ components:
           name: name
         templates:
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
         values:
           key: "{}"
         files:
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
         lock:
           generated: 2000-01-23T04:56:07.000+00:00
@@ -1472,8 +1464,8 @@ components:
       description: "By convention, name is a relative path within the scope of the chart's\nbase directory."
       example:
         data:
-          - 6
-          - 6
+          - 0
+          - 0
         name: name
       properties:
         data:
@@ -1492,26 +1484,6 @@ components:
       x-go-package: helm.sh/helm/v3/pkg/chart
     FormContent:
       description: FormContent is a form's atomic unit
-      example:
-        settings:
-          default: "{}"
-          unit: "{}"
-          docs: docs
-          options: "{}"
-          placeholder: placeholder
-          disableAfterLaunch: true
-          omitUnitFromValue: true
-        context:
-          type: type
-          config:
-            key: config
-        name: name
-        variable: variable
-        label: label
-        placeholder: placeholder
-        type: type
-        value: "{}"
-        required: true
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -1543,10 +1515,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormContext:
       description: FormContext is the target context
-      example:
-        type: type
-        config:
-          key: config
       properties:
         config:
           additionalProperties:
@@ -1560,52 +1528,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormSection:
       description: FormSection is a section of a form
-      example:
-        contents:
-          - settings:
-              default: "{}"
-              unit: "{}"
-              docs: docs
-              options: "{}"
-              placeholder: placeholder
-              disableAfterLaunch: true
-              omitUnitFromValue: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            variable: variable
-            label: label
-            placeholder: placeholder
-            type: type
-            value: "{}"
-            required: true
-          - settings:
-              default: "{}"
-              unit: "{}"
-              docs: docs
-              options: "{}"
-              placeholder: placeholder
-              disableAfterLaunch: true
-              omitUnitFromValue: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            variable: variable
-            label: label
-            placeholder: placeholder
-            type: type
-            value: "{}"
-            required: true
-        show_if: "{}"
-        context:
-          type: type
-          config:
-            key: config
-        name: name
       properties:
         contents:
           items:
@@ -1625,106 +1547,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormTab:
       description: FormTab is a tab rendered in a form
-      example:
-        settings:
-          omitFromLaunch: true
-        context:
-          type: type
-          config:
-            key: config
-        name: name
-        label: label
-        sections:
-          - contents:
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-            show_if: "{}"
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-          - contents:
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-            show_if: "{}"
-            context:
-              type: type
-              config:
-                key: config
-            name: name
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -1745,215 +1567,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormYAML:
       description: FormYAML represents a chart's values.yaml form abstraction
-      example:
-        hasSource: hasSource
-        icon: icon
-        isClusterScoped: true
-        name: name
-        tabs:
-          - settings:
-              omitFromLaunch: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            label: label
-            sections:
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-          - settings:
-              omitFromLaunch: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            label: label
-            sections:
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-        description: description
-        includeHiddenFields: includeHiddenFields
-        tags:
-          - tags
-          - tags
       properties:
         description:
           type: string
@@ -1991,14 +1604,6 @@ components:
       $ref: '#/components/schemas/Release'
     GitActionConfig:
       description: GitActionConfig
-      example:
-        image_repo_uri: image_repo_uri
-        git_repo: git_repo
-        git_repo_id: 5
-        git_branch: git_branch
-        dockerfile_path: dockerfile_path
-        gitlab_integration_id: 5
-        folder_path: folder_path
       properties:
         dockerfile_path:
           description: The path to the dockerfile in the git repo
@@ -2038,7 +1643,7 @@ components:
         kind: kind
         manifest: manifest
         name: name
-        weight: 2
+        weight: 1
         last_run:
           phase: phase
           completed_at: 2000-01-23T04:56:07.000+00:00
@@ -2605,248 +2210,15 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     Release:
-      description: Release is a helm release with a form attached
+      description: "Release describes a deployment of a chart, together with the chart\nand the variables used to deploy that chart."
       example:
-        git_action_config:
-          image_repo_uri: image_repo_uri
-          git_repo: git_repo
-          git_repo_id: 5
-          git_branch: git_branch
-          dockerfile_path: dockerfile_path
-          gitlab_integration_id: 5
-          folder_path: folder_path
         manifest: manifest
-        webhook_token: webhook_token
-        version: 9
-        tags:
-          - tags
-          - tags
-        form:
-          hasSource: hasSource
-          icon: icon
-          isClusterScoped: true
-          name: name
-          tabs:
-            - settings:
-                omitFromLaunch: true
-              context:
-                type: type
-                config:
-                  key: config
-              name: name
-              label: label
-              sections:
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-            - settings:
-                omitFromLaunch: true
-              context:
-                type: type
-                config:
-                  key: config
-              name: name
-              label: label
-              sections:
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-          description: description
-          includeHiddenFields: includeHiddenFields
-          tags:
-            - tags
-            - tags
-        image_repo_uri: image_repo_uri
-        latest_version: latest_version
         name: name
         namespace: namespace
-        build_config:
-          buildpacks:
-            - buildpacks
-            - buildpacks
-          builder: builder
-          config:
-            - 0
-            - 0
-        id: 7
         chart:
           schema:
-            - 1
-            - 1
+            - 6
+            - 6
           metadata:
             maintainers:
               - name: name
@@ -2902,23 +2274,23 @@ components:
             name: name
           templates:
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
           values:
             key: "{}"
           files:
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
           lock:
             generated: 2000-01-23T04:56:07.000+00:00
@@ -2955,7 +2327,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 2
+            weight: 1
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -2970,7 +2342,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 2
+            weight: 1
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -2981,6 +2353,7 @@ components:
             delete_policies:
               - null
               - null
+        version: 5
         info:
           last_deployed: 2000-01-23T04:56:07.000+00:00
           deleted: 2000-01-23T04:56:07.000+00:00
@@ -2989,8 +2362,6 @@ components:
           description: description
           status: status
       properties:
-        build_config:
-          $ref: '#/components/schemas/BuildConfig'
         chart:
           $ref: '#/components/schemas/Chart'
         config:
@@ -3002,28 +2373,14 @@ components:
             These values override the default values inside of the chart.
           type: object
           x-go-name: Config
-        form:
-          $ref: '#/components/schemas/FormYAML'
-        git_action_config:
-          $ref: '#/components/schemas/GitActionConfig'
         hooks:
           description: Hooks are all of the hooks declared for this release.
           items:
             $ref: '#/components/schemas/Hook'
           type: array
           x-go-name: Hooks
-        id:
-          format: uint64
-          type: integer
-          x-go-name: ID
-        image_repo_uri:
-          type: string
-          x-go-name: ImageRepoURI
         info:
           $ref: '#/components/schemas/Info'
-        latest_version:
-          type: string
-          x-go-name: LatestVersion
         manifest:
           description: Manifest is the string representation of the rendered template.
           type: string
@@ -3036,21 +2393,13 @@ components:
           description: Namespace is the kubernetes namespace of the release.
           type: string
           x-go-name: Namespace
-        tags:
-          items:
-            type: string
-          type: array
-          x-go-name: Tags
         version:
           description: Version is an int which represents the revision of the release.
           format: int64
           type: integer
           x-go-name: Version
-        webhook_token:
-          type: string
-          x-go-name: WebhookToken
       type: object
-      x-go-package: github.com/porter-dev/porter/api/types
+      x-go-package: helm.sh/helm/v3/pkg/release
     Status:
       description: Status is the status of a release
       type: string
@@ -3237,14 +2586,6 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     FormContent_settings:
-      example:
-        default: "{}"
-        unit: "{}"
-        docs: docs
-        options: "{}"
-        placeholder: placeholder
-        disableAfterLaunch: true
-        omitUnitFromValue: true
       properties:
         default:
           properties: {}
@@ -3273,8 +2614,6 @@ components:
       type: object
       x-go-name: Settings
     FormTab_settings:
-      example:
-        omitFromLaunch: true
       properties:
         omitFromLaunch:
           type: boolean
