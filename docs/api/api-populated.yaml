@@ -388,15 +388,15 @@ paths:
         - Releases
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"repo_url\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"repo_url\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"repo_url\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\npayload = {\n    \"build_config\": {\n        \"builder\": \"string\",\n        \"buildpacks\": [\"string\"],\n        \"config\": {\n            \"property1\": {},\n            \"property2\": {}\n        }\n    },\n    \"git_action_config\": {\n        \"dockerfile_path\": \"string\",\n        \"folder_path\": \"string\",\n        \"git_branch\": \"string\",\n        \"git_repo\": \"string\",\n        \"git_repo_id\": 0,\n        \"gitlab_integration_id\": 0,\n        \"image_repo_uri\": \"string\",\n        \"registry_id\": 0,\n        \"should_create_workflow\": True\n    },\n    \"image_url\": \"string\",\n    \"name\": \"string\",\n    \"synced_env_groups\": [\"string\"],\n    \"tags\": [\"string\"],\n    \"template_name\": \"string\",\n    \"template_version\": \"string\",\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\npayload = {\n    \"build_config\": {\n        \"builder\": \"string\",\n        \"buildpacks\": [\"string\"],\n        \"config\": {\n            \"property1\": {},\n            \"property2\": {}\n        }\n    },\n    \"git_action_config\": {\n        \"dockerfile_path\": \"string\",\n        \"folder_path\": \"string\",\n        \"git_branch\": \"string\",\n        \"git_repo\": \"string\",\n        \"git_repo_id\": 0,\n        \"gitlab_integration_id\": 0,\n        \"image_repo_uri\": \"string\",\n        \"registry_id\": 0,\n        \"should_create_workflow\": True\n    },\n    \"image_url\": \"string\",\n    \"name\": \"string\",\n    \"repo_url\": \"string\",\n    \"synced_env_groups\": [\"string\"],\n    \"tags\": [\"string\"],\n    \"template_name\": \"string\",\n    \"template_version\": \"string\",\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\tpayload := strings.NewReader(\"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\tpayload := strings.NewReader(\"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"repo_url\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateReleaseRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}:
     delete:
@@ -955,11 +955,11 @@ paths:
           name: next
           schema:
             type: string
-        - description: "The next page number used for pagination, from a previous request."
+        - description: "The page number used for pagination, possibly from a previous request.\n(**DigitalOcean only**)\n"
           in: query
-          name: next_page
+          name: page
           schema:
-            minimum: 2
+            minimum: 1
             type: integer
       responses:
         "200":
@@ -979,15 +979,15 @@ paths:
         - Registries
       x-codeSamples:
         - lang: Shell
-          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nquerystring = {\"num\":\"SOME_INTEGER_VALUE\",\"next\":\"SOME_STRING_VALUE\",\"next_page\":\"SOME_INTEGER_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nquerystring = {\"num\":\"SOME_INTEGER_VALUE\",\"next\":\"SOME_STRING_VALUE\",\"page\":\"SOME_INTEGER_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
 components:
   schemas:
     BuildConfig:
@@ -1315,6 +1315,9 @@ components:
         name:
           type: string
           x-go-name: Name
+        repo_url:
+          type: string
+          x-go-name: RepoURL
         template_name:
           type: string
           x-go-name: TemplateName
@@ -1334,6 +1337,7 @@ components:
         synced_env_groups:
           - synced_env_groups
           - synced_env_groups
+        repo_url: repo_url
         git_action_config:
           image_repo_uri: image_repo_uri
           should_create_workflow: true
@@ -1371,6 +1375,9 @@ components:
         name:
           type: string
           x-go-name: Name
+        repo_url:
+          type: string
+          x-go-name: RepoURL
         synced_env_groups:
           items:
             type: string
@@ -2427,7 +2434,7 @@ components:
     V1ListImageResponse:
       example:
         next: next
-        num_page: 0
+        next_page: 0
         images:
           - pushed_at: 2000-01-23T04:56:07.000+00:00
             manifest: manifest
@@ -2447,11 +2454,11 @@ components:
           type: array
           x-go-name: Images
         next:
-          description: "The next page string used for pagination, when application"
+          description: The next page cursor used for pagination
           type: string
           x-go-name: Next
-        num_page:
-          description: "The next page number used for pagination, when applicable"
+        next_page:
+          description: The next page number used for pagination (**DigitalOcean only**)
           format: uint64
           type: integer
           x-go-name: NextPage
@@ -2479,6 +2486,9 @@ components:
         name:
           type: string
           x-go-name: Name
+        repo_url:
+          type: string
+          x-go-name: RepoURL
         synced_env_groups:
           items:
             type: string
