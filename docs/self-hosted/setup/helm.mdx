@@ -44,6 +44,16 @@ server:
       -----END RSA PRIVATE KEY-----
 ```
 
+## Adding Support for Github Preview Environments
+
+To enable preview environments from GitHub (creating stacks of applications from a `porter.yaml` file per PR), generate an arbitrary 32 character `<secret>` and add the following to your Helm values:
+
+```yaml
+server:
+  additionalEnv:
+    GITHUB_INCOMING_WEBHOOK_SECRET: <secret>
+```
+
 ## Securing your Installation
 
 There are several parameters that should be set in order to secure your installation. Note that updating database encryption keys may cause existing credentials to become unreadable - see the [rotating credentials](#rotating-credentials) section below for more information. The following values should be set for secure installations:
