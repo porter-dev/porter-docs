@@ -1102,11 +1102,11 @@ definitions:
         type: array
         x-go-name: Images
       next:
-        description: The next page string used for pagination, when application
+        description: The next page cursor used for pagination
         type: string
         x-go-name: Next
-      num_page:
-        description: The next page number used for pagination, when applicable
+      next_page:
+        description: The next page number used for pagination (**DigitalOcean only**)
         format: uint64
         type: integer
         x-go-name: NextPage
@@ -1795,10 +1795,12 @@ paths:
           in: query
           name: next
           type: string
-        - description: The next page number used for pagination, from a previous request.
+        - description: |
+            The page number used for pagination, possibly from a previous request.
+            (**DigitalOcean only**)
           in: query
-          minimum: 2
-          name: next_page
+          minimum: 1
+          name: page
           type: integer
       produces:
         - application/json
