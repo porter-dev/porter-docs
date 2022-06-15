@@ -236,7 +236,9 @@ paths:
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
     get:
-      description: List releases
+      description: |-
+        List all releases in the namespace denoted by `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` and project denoted by `project_id`.
       operationId: listReleases
       parameters:
         - description: The project id
@@ -326,7 +328,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases?limit=50&skip=10&byDate=false&statusFilter=SOME_ARRAY_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     post:
-      description: Creates a new release
+      description: |-
+        Creates a new release in the namespace denoted by `namespace`. The namespace should belong to the
+        cluster denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
       operationId: createRelease
       parameters:
         - description: The project id
@@ -400,7 +404,10 @@ paths:
       x-codegen-request-body-name: CreateReleaseRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}:
     delete:
-      description: Deletes a release
+      description: |-
+        Deletes the release with the name denoted by `name` and version denoted by `version`. The release should belong
+        to the namespace denoted by `namespace` which itself should belong to the cluster denoted by `cluster_id` and project
+        denoted by `project_id`.
       operationId: deleteRelease
       parameters:
         - description: The project id
@@ -471,7 +478,10 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
-      description: Gets a release
+      description: |-
+        Gets the release denoted by the name `name` and its version `version`. The release should belong to the namespace
+        denoted by `namespace` which itself should belong to the cluster denoted by `cluster_id` and project
+        denoted by `project_id`.
       operationId: getRelease
       parameters:
         - description: The project id
@@ -545,7 +555,10 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     patch:
-      description: Updates a release
+      description: |-
+        Upgrades the release with the name denoted by `name` and version denoted by `version`. The release should belong
+        to the namespace denoted by `namespace` which itself should belong to the cluster denoted by `cluster_id` and project
+        denoted by `project_id`.
       operationId: updateRelease
       parameters:
         - description: The project id
@@ -628,7 +641,6 @@ paths:
       x-codegen-request-body-name: UpdateReleaseRequest
   /api/v1/projects/{project_id}/registries:
     get:
-      description: Lists registries
       operationId: listRegistries
       parameters:
         - description: The project id
@@ -666,7 +678,6 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     post:
-      description: Connects a new image registry
       operationId: createRegistry
       parameters:
         - description: The project id
@@ -719,6 +730,9 @@ paths:
       x-codegen-request-body-name: CreateRegistryRequest
   /api/v1/projects/{project_id}/registries/{registry_id}:
     delete:
+      description: |-
+        Deletes a registry denoted by `registry_id`. The registry should belong to
+        the project denoted by `project_id`.
       operationId: deleteRegistry
       parameters:
         - description: The project id
@@ -763,7 +777,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
-      description: Gets an image registry
+      description: |-
+        Gets an image registry denoted by `registry_id`. The registry should belong to the
+        project denoted by `project_id`.
       operationId: getRegistry
       parameters:
         - description: The project id
@@ -812,7 +828,9 @@ paths:
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
     get:
-      description: Lists image repositories inside the image registry given by `registry_id`
+      description: |-
+        Lists image repositories inside the image registry denoted by `registry_id`. The registry
+        should belong to the project denoted by `project_id`.
       operationId: listRegistryRepositories
       parameters:
         - description: The project id
@@ -916,6 +934,10 @@ paths:
       x-codegen-request-body-name: CreateRepositoryRequest
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
     get:
+      description: |-
+        Lists all images in the image repository denoted by the name `repository`. The repository should belong
+        to the registry denoted by `registry_id` which should itself belong to the project denoted by
+        `project_id`.
       operationId: listRegistryImages
       parameters:
         - description: The project id
@@ -955,11 +977,11 @@ paths:
           name: next
           schema:
             type: string
-        - description: "The page number used for pagination, possibly from a previous request.\n(**DigitalOcean only**)\n"
+        - description: "The next page number used for pagination, from a previous request."
           in: query
-          name: page
+          name: next_page
           schema:
-            minimum: 1
+            minimum: 2
             type: integer
       responses:
         "200":
@@ -979,19 +1001,27 @@ paths:
         - Registries
       x-codeSamples:
         - lang: Shell
-          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nquerystring = {\"num\":\"SOME_INTEGER_VALUE\",\"next\":\"SOME_STRING_VALUE\",\"page\":\"SOME_INTEGER_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nquerystring = {\"num\":\"SOME_INTEGER_VALUE\",\"next\":\"SOME_STRING_VALUE\",\"next_page\":\"SOME_INTEGER_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&next_page=SOME_INTEGER_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
 components:
   schemas:
     BuildConfig:
-      description: BuildConfig
+      description: The build configuration for this release when using buildpacks
+      example:
+        buildpacks:
+          - buildpacks
+          - buildpacks
+        builder: builder
+        config:
+          - 0
+          - 0
       properties:
         builder:
           type: string
@@ -1013,8 +1043,8 @@ components:
       description: "Chart is a helm package that contains metadata, a default config, zero or more\noptionally parameterizable templates, and zero or more charts (dependencies)."
       example:
         schema:
-          - 6
-          - 6
+          - 1
+          - 1
         metadata:
           maintainers:
             - name: name
@@ -1070,23 +1100,23 @@ components:
           name: name
         templates:
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
         values:
           key: "{}"
         files:
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
         lock:
           generated: 2000-01-23T04:56:07.000+00:00
@@ -1150,6 +1180,7 @@ components:
       type: object
       x-go-package: helm.sh/helm/v3/pkg/chart
     CreateBuildConfigRequest:
+      description: The build configuration for this new release
       example:
         buildpacks:
           - buildpacks
@@ -1159,9 +1190,11 @@ components:
           key: "{}"
       properties:
         builder:
+          description: The name of the builder to use with `pack` (Heroku or Paketo)
           type: string
           x-go-name: Builder
         buildpacks:
+          description: The list of buildpacks to use for the release
           items:
             type: string
           type: array
@@ -1170,11 +1203,15 @@ components:
           additionalProperties:
             properties: {}
             type: object
+          description: UNUSED
           type: object
           x-go-name: Config
+      required:
+        - builder
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateGitActionConfigRequest:
+      description: The git configuration for this new release (when deploying from a git repository)
       example:
         image_repo_uri: image_repo_uri
         should_create_workflow: true
@@ -1187,35 +1224,47 @@ components:
         registry_id: 1
       properties:
         dockerfile_path:
+          description: The path to the Dockerfile in the git repository
           type: string
           x-go-name: DockerfilePath
         folder_path:
+          description: The path to use as the base directory in the git repository
           type: string
           x-go-name: FolderPath
         git_branch:
+          description: The branch name of the git repository
           type: string
           x-go-name: GitBranch
         git_repo:
+          description: "The git repo in ${owner}/${repo} form"
           type: string
           x-go-name: GitRepo
         git_repo_id:
+          description: The Github installation ID with access to the repository
           format: uint64
           type: integer
           x-go-name: GitRepoID
         gitlab_integration_id:
+          description: The Gitlab integration ID with access to the repository
           format: uint64
           type: integer
           x-go-name: GitlabIntegrationID
         image_repo_uri:
+          description: The complete image repository URI to pull from
           type: string
           x-go-name: ImageRepoURI
         registry_id:
+          description: The Porter registry ID to link against
           format: uint64
           type: integer
           x-go-name: RegistryID
         should_create_workflow:
+          description: Denotes if the Github workflow files need to be created
           type: boolean
           x-go-name: ShouldCreateWorkflow
+      required:
+        - git_repo
+        - image_repo_uri
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateNamespaceRequest:
@@ -1235,8 +1284,11 @@ components:
         image_repo_uri: image_repo_uri
       properties:
         image_repo_uri:
+          description: The URL to the repository of a registry (**ECR only**)
           type: string
           x-go-name: ImageRepoURI
+      required:
+        - image_repo_uri
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateRegistryRequest:
@@ -1313,23 +1365,32 @@ components:
     CreateReleaseBaseRequest:
       properties:
         name:
+          description: The name of this release
           type: string
           x-go-name: Name
         repo_url:
+          description: The repository URL for this release
           type: string
           x-go-name: RepoURL
         template_name:
+          description: the Porter charts templated name
           type: string
           x-go-name: TemplateName
         template_version:
+          description: The Porter charts template version
           type: string
           x-go-name: TemplateVersion
         values:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values for this release
           type: object
           x-go-name: Values
+      required:
+        - name
+        - template_name
+        - template_version
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateReleaseRequest:
@@ -1370,36 +1431,49 @@ components:
         git_action_config:
           $ref: '#/components/schemas/CreateGitActionConfigRequest'
         image_url:
+          description: The repository image URL for this release
           type: string
           x-go-name: ImageURL
         name:
+          description: The name of this release
           type: string
           x-go-name: Name
         repo_url:
+          description: The repository URL for this release
           type: string
           x-go-name: RepoURL
         synced_env_groups:
+          description: The list of synced environment groups for this release
           items:
             type: string
           type: array
           x-go-name: SyncedEnvGroups
         tags:
+          description: The list of tags for this release
           items:
             type: string
           type: array
           x-go-name: Tags
         template_name:
+          description: the Porter charts templated name
           type: string
           x-go-name: TemplateName
         template_version:
+          description: The Porter charts template version
           type: string
           x-go-name: TemplateVersion
         values:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values for this release
           type: object
           x-go-name: Values
+      required:
+        - image_url
+        - name
+        - template_name
+        - template_version
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     Dependency:
@@ -1471,8 +1545,8 @@ components:
       description: "By convention, name is a relative path within the scope of the chart's\nbase directory."
       example:
         data:
-          - 0
-          - 0
+          - 6
+          - 6
         name: name
       properties:
         data:
@@ -1491,6 +1565,26 @@ components:
       x-go-package: helm.sh/helm/v3/pkg/chart
     FormContent:
       description: FormContent is a form's atomic unit
+      example:
+        settings:
+          default: "{}"
+          unit: "{}"
+          docs: docs
+          options: "{}"
+          placeholder: placeholder
+          disableAfterLaunch: true
+          omitUnitFromValue: true
+        context:
+          type: type
+          config:
+            key: config
+        name: name
+        variable: variable
+        label: label
+        placeholder: placeholder
+        type: type
+        value: "{}"
+        required: true
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -1522,6 +1616,10 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormContext:
       description: FormContext is the target context
+      example:
+        type: type
+        config:
+          key: config
       properties:
         config:
           additionalProperties:
@@ -1535,6 +1633,52 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormSection:
       description: FormSection is a section of a form
+      example:
+        contents:
+          - settings:
+              default: "{}"
+              unit: "{}"
+              docs: docs
+              options: "{}"
+              placeholder: placeholder
+              disableAfterLaunch: true
+              omitUnitFromValue: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            variable: variable
+            label: label
+            placeholder: placeholder
+            type: type
+            value: "{}"
+            required: true
+          - settings:
+              default: "{}"
+              unit: "{}"
+              docs: docs
+              options: "{}"
+              placeholder: placeholder
+              disableAfterLaunch: true
+              omitUnitFromValue: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            variable: variable
+            label: label
+            placeholder: placeholder
+            type: type
+            value: "{}"
+            required: true
+        show_if: "{}"
+        context:
+          type: type
+          config:
+            key: config
+        name: name
       properties:
         contents:
           items:
@@ -1554,6 +1698,106 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormTab:
       description: FormTab is a tab rendered in a form
+      example:
+        settings:
+          omitFromLaunch: true
+        context:
+          type: type
+          config:
+            key: config
+        name: name
+        label: label
+        sections:
+          - contents:
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+            show_if: "{}"
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+          - contents:
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+            show_if: "{}"
+            context:
+              type: type
+              config:
+                key: config
+            name: name
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -1574,6 +1818,215 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormYAML:
       description: FormYAML represents a chart's values.yaml form abstraction
+      example:
+        hasSource: hasSource
+        icon: icon
+        isClusterScoped: true
+        name: name
+        tabs:
+          - settings:
+              omitFromLaunch: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            label: label
+            sections:
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+          - settings:
+              omitFromLaunch: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            label: label
+            sections:
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+        description: description
+        includeHiddenFields: includeHiddenFields
+        tags:
+          - tags
+          - tags
       properties:
         description:
           type: string
@@ -1610,7 +2063,15 @@ components:
     GetReleaseResponse:
       $ref: '#/components/schemas/Release'
     GitActionConfig:
-      description: GitActionConfig
+      description: The git configuration for this release (when deployed from a git repository)
+      example:
+        image_repo_uri: image_repo_uri
+        git_repo: git_repo
+        git_repo_id: 5
+        git_branch: git_branch
+        dockerfile_path: dockerfile_path
+        gitlab_integration_id: 5
+        folder_path: folder_path
       properties:
         dockerfile_path:
           description: The path to the dockerfile in the git repo
@@ -1650,7 +2111,7 @@ components:
         kind: kind
         manifest: manifest
         name: name
-        weight: 1
+        weight: 2
         last_run:
           phase: phase
           completed_at: 2000-01-23T04:56:07.000+00:00
@@ -2080,21 +2541,26 @@ components:
         git_action_config:
           $ref: '#/components/schemas/GitActionConfig'
         id:
+          description: The ID of this Porter release
           format: uint64
           type: integer
           x-go-name: ID
         image_repo_uri:
+          description: The complete image repository URI for this release
           type: string
           x-go-name: ImageRepoURI
         latest_version:
+          description: The latest version of this Porter release
           type: string
           x-go-name: LatestVersion
         tags:
+          description: The list of tags for this release
           items:
             type: string
           type: array
           x-go-name: Tags
         webhook_token:
+          description: The webhook token used to secure Github repository webhooks
           type: string
           x-go-name: WebhookToken
       type: object
@@ -2217,15 +2683,248 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     Release:
-      description: "Release describes a deployment of a chart, together with the chart\nand the variables used to deploy that chart."
+      description: Release is a helm release with a form attached
       example:
+        git_action_config:
+          image_repo_uri: image_repo_uri
+          git_repo: git_repo
+          git_repo_id: 5
+          git_branch: git_branch
+          dockerfile_path: dockerfile_path
+          gitlab_integration_id: 5
+          folder_path: folder_path
         manifest: manifest
+        webhook_token: webhook_token
+        version: 9
+        tags:
+          - tags
+          - tags
+        form:
+          hasSource: hasSource
+          icon: icon
+          isClusterScoped: true
+          name: name
+          tabs:
+            - settings:
+                omitFromLaunch: true
+              context:
+                type: type
+                config:
+                  key: config
+              name: name
+              label: label
+              sections:
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+            - settings:
+                omitFromLaunch: true
+              context:
+                type: type
+                config:
+                  key: config
+              name: name
+              label: label
+              sections:
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+          description: description
+          includeHiddenFields: includeHiddenFields
+          tags:
+            - tags
+            - tags
+        image_repo_uri: image_repo_uri
+        latest_version: latest_version
         name: name
         namespace: namespace
+        build_config:
+          buildpacks:
+            - buildpacks
+            - buildpacks
+          builder: builder
+          config:
+            - 0
+            - 0
+        id: 7
         chart:
           schema:
-            - 6
-            - 6
+            - 1
+            - 1
           metadata:
             maintainers:
               - name: name
@@ -2281,23 +2980,23 @@ components:
             name: name
           templates:
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
           values:
             key: "{}"
           files:
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
           lock:
             generated: 2000-01-23T04:56:07.000+00:00
@@ -2334,7 +3033,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 1
+            weight: 2
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -2349,7 +3048,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 1
+            weight: 2
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -2360,7 +3059,6 @@ components:
             delete_policies:
               - null
               - null
-        version: 5
         info:
           last_deployed: 2000-01-23T04:56:07.000+00:00
           deleted: 2000-01-23T04:56:07.000+00:00
@@ -2369,6 +3067,8 @@ components:
           description: description
           status: status
       properties:
+        build_config:
+          $ref: '#/components/schemas/BuildConfig'
         chart:
           $ref: '#/components/schemas/Chart'
         config:
@@ -2380,14 +3080,31 @@ components:
             These values override the default values inside of the chart.
           type: object
           x-go-name: Config
+        form:
+          $ref: '#/components/schemas/FormYAML'
+        git_action_config:
+          $ref: '#/components/schemas/GitActionConfig'
         hooks:
           description: Hooks are all of the hooks declared for this release.
           items:
             $ref: '#/components/schemas/Hook'
           type: array
           x-go-name: Hooks
+        id:
+          description: The ID of this Porter release
+          format: uint64
+          type: integer
+          x-go-name: ID
+        image_repo_uri:
+          description: The complete image repository URI for this release
+          type: string
+          x-go-name: ImageRepoURI
         info:
           $ref: '#/components/schemas/Info'
+        latest_version:
+          description: The latest version of this Porter release
+          type: string
+          x-go-name: LatestVersion
         manifest:
           description: Manifest is the string representation of the rendered template.
           type: string
@@ -2400,13 +3117,23 @@ components:
           description: Namespace is the kubernetes namespace of the release.
           type: string
           x-go-name: Namespace
+        tags:
+          description: The list of tags for this release
+          items:
+            type: string
+          type: array
+          x-go-name: Tags
         version:
           description: Version is an int which represents the revision of the release.
           format: int64
           type: integer
           x-go-name: Version
+        webhook_token:
+          description: The webhook token used to secure Github repository webhooks
+          type: string
+          x-go-name: WebhookToken
       type: object
-      x-go-package: helm.sh/helm/v3/pkg/release
+      x-go-package: github.com/porter-dev/porter/api/types
     Status:
       description: Status is the status of a release
       type: string
@@ -2421,9 +3148,11 @@ components:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values to upgrade the release with
           type: object
           x-go-name: Values
         version:
+          description: The Porter charts version to upgrade the release with
           type: string
           x-go-name: ChartVersion
       required:
@@ -2434,7 +3163,7 @@ components:
     V1ListImageResponse:
       example:
         next: next
-        next_page: 0
+        num_page: 0
         images:
           - pushed_at: 2000-01-23T04:56:07.000+00:00
             manifest: manifest
@@ -2454,11 +3183,11 @@ components:
           type: array
           x-go-name: Images
         next:
-          description: The next page cursor used for pagination
+          description: "The next page string used for pagination, when application"
           type: string
           x-go-name: Next
-        next_page:
-          description: The next page number used for pagination (**DigitalOcean only**)
+        num_page:
+          description: "The next page number used for pagination, when applicable"
           format: uint64
           type: integer
           x-go-name: NextPage
@@ -2481,36 +3210,49 @@ components:
         git_action_config:
           $ref: '#/components/schemas/CreateGitActionConfigRequest'
         image_url:
+          description: The repository image URL for this release
           type: string
           x-go-name: ImageURL
         name:
+          description: The name of this release
           type: string
           x-go-name: Name
         repo_url:
+          description: The repository URL for this release
           type: string
           x-go-name: RepoURL
         synced_env_groups:
+          description: The list of synced environment groups for this release
           items:
             type: string
           type: array
           x-go-name: SyncedEnvGroups
         tags:
+          description: The list of tags for this release
           items:
             type: string
           type: array
           x-go-name: Tags
         template_name:
+          description: the Porter charts templated name
           type: string
           x-go-name: TemplateName
         template_version:
+          description: The Porter charts template version
           type: string
           x-go-name: TemplateVersion
         values:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values for this release
           type: object
           x-go-name: Values
+      required:
+        - image_url
+        - name
+        - template_name
+        - template_version
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     updateRelease_request:
@@ -2519,9 +3261,11 @@ components:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values to upgrade the release with
           type: object
           x-go-name: Values
         version:
+          description: The Porter charts version to upgrade the release with
           type: string
           x-go-name: ChartVersion
       required:
@@ -2591,11 +3335,22 @@ components:
     createRegistryRepository_request:
       properties:
         image_repo_uri:
+          description: The URL to the repository of a registry (**ECR only**)
           type: string
           x-go-name: ImageRepoURI
+      required:
+        - image_repo_uri
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     FormContent_settings:
+      example:
+        default: "{}"
+        unit: "{}"
+        docs: docs
+        options: "{}"
+        placeholder: placeholder
+        disableAfterLaunch: true
+        omitUnitFromValue: true
       properties:
         default:
           properties: {}
@@ -2624,6 +3379,8 @@ components:
       type: object
       x-go-name: Settings
     FormTab_settings:
+      example:
+        omitFromLaunch: true
       properties:
         omitFromLaunch:
           type: boolean
