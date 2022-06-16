@@ -105,7 +105,14 @@ tags:
   - name: Registries
     description: Porter Registries
   - name: Stacks
-    description: Porter Stacks 
+    description: >
+      Stacks are collections of resources which are deployed as a group - as a result, they are either
+      dependent or logically grouped together. For example, a `web` and several `worker` processes can form a single stack. 
+
+      <br />
+      <br />
+
+      At the moment, stacks only support a **single application source** (the stack's `source_config`).
 components:
   securitySchemes:
     Bearer:

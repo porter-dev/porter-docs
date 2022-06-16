@@ -6,7 +6,9 @@ security:
 paths:
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces:
     get:
-      description: Lists namespaces
+      description: |-
+        Lists all namespaces in the cluster denoted by `cluster_id`. The cluster should belong to
+        the project denoted by `project_id`.
       operationId: listNamespaces
       parameters:
         - description: The project id
@@ -54,7 +56,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     post:
-      description: Creates a new namespace
+      description: |-
+        Creates a new namespace in the cluster denoted by `cluster_id`. The cluster should belong to the project
+        denoted by `project_id`.
       operationId: createNamespace
       parameters:
         - description: The project id
@@ -89,29 +93,35 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateNamespaceResponse'
+                $ref: '#/components/schemas/NamespaceResponse'
           description: Successfully created a new namespace
         "403":
           content: {}
           description: Forbidden
+        "412":
+          content: {}
+          description: Namespace already exists
       summary: Create a new namespace
       tags:
         - Namespaces
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"string\"}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"sampleNS\"}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"sampleNS\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"sampleNS\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\npayload = {\"name\": \"string\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\npayload = {\"name\": \"sampleNS\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"sampleNS\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateNamespaceRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
     delete:
-      description: Deletes a namespace
+      description: |-
+        Deletes a namespace with the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
+        Note that this endpoint does not indicate if the namespace does not exist.
       operationId: deleteNamespace
       parameters:
         - description: The project id
@@ -164,7 +174,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
-      description: Gets a namespace
+      description: |-
+        Gets a namespace denoted by the name `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
       operationId: getNamespace
       parameters:
         - description: The project id
@@ -200,7 +212,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetNamespaceResponse'
+                $ref: '#/components/schemas/NamespaceResponse'
           description: Successfully got the namespace
         "403":
           content: {}
@@ -224,7 +236,9 @@ paths:
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
     get:
-      description: List releases
+      description: |-
+        List all releases in the namespace denoted by `namespace`. The namespace should belong to the cluster
+        denoted by `cluster_id` and project denoted by `project_id`.
       operationId: listReleases
       parameters:
         - description: The project id
@@ -314,7 +328,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases?limit=50&skip=10&byDate=false&statusFilter=SOME_ARRAY_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     post:
-      description: Creates a new release
+      description: |-
+        Creates a new release in the namespace denoted by `namespace`. The namespace should belong to the
+        cluster denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
       operationId: createRelease
       parameters:
         - description: The project id
@@ -356,27 +372,42 @@ paths:
         "201":
           content: {}
           description: Successfully created the release
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
+        "404":
+          content: {}
+          description: A subresource was not found
+        "409":
+          content: {}
+          description: A conflict occurred with another external service
+        "412":
+          content: {}
+          description: A precondition failed for the request
       summary: Create a new release
       tags:
         - Releases
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"github_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"repo_url\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"github_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"build_config\":{\"builder\":\"string\",\"buildpacks\":[\"string\"],\"config\":{\"property1\":{},\"property2\":{}}},\"git_action_config\":{\"dockerfile_path\":\"string\",\"folder_path\":\"string\",\"git_branch\":\"string\",\"git_repo\":\"string\",\"git_repo_id\":0,\"gitlab_integration_id\":0,\"image_repo_uri\":\"string\",\"registry_id\":0,\"should_create_workflow\":true},\"image_url\":\"string\",\"name\":\"string\",\"repo_url\":\"string\",\"synced_env_groups\":[\"string\"],\"tags\":[\"string\"],\"template_name\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"github_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"repo_url\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\npayload = {\n    \"build_config\": {\n        \"builder\": \"string\",\n        \"buildpacks\": [\"string\"],\n        \"config\": {\n            \"property1\": {},\n            \"property2\": {}\n        }\n    },\n    \"github_action_config\": {\n        \"dockerfile_path\": \"string\",\n        \"folder_path\": \"string\",\n        \"git_branch\": \"string\",\n        \"git_repo\": \"string\",\n        \"git_repo_id\": 0,\n        \"image_repo_uri\": \"string\",\n        \"registry_id\": 0,\n        \"should_create_workflow\": True\n    },\n    \"image_url\": \"string\",\n    \"name\": \"string\",\n    \"synced_env_groups\": [\"string\"],\n    \"tags\": [\"string\"],\n    \"template_name\": \"string\",\n    \"template_version\": \"string\",\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\npayload = {\n    \"build_config\": {\n        \"builder\": \"string\",\n        \"buildpacks\": [\"string\"],\n        \"config\": {\n            \"property1\": {},\n            \"property2\": {}\n        }\n    },\n    \"git_action_config\": {\n        \"dockerfile_path\": \"string\",\n        \"folder_path\": \"string\",\n        \"git_branch\": \"string\",\n        \"git_repo\": \"string\",\n        \"git_repo_id\": 0,\n        \"gitlab_integration_id\": 0,\n        \"image_repo_uri\": \"string\",\n        \"registry_id\": 0,\n        \"should_create_workflow\": True\n    },\n    \"image_url\": \"string\",\n    \"name\": \"string\",\n    \"repo_url\": \"string\",\n    \"synced_env_groups\": [\"string\"],\n    \"tags\": [\"string\"],\n    \"template_name\": \"string\",\n    \"template_version\": \"string\",\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\tpayload := strings.NewReader(\"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"github_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases\"\n\n\tpayload := strings.NewReader(\"{\\\"build_config\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"],\\\"config\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}},\\\"git_action_config\\\":{\\\"dockerfile_path\\\":\\\"string\\\",\\\"folder_path\\\":\\\"string\\\",\\\"git_branch\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\",\\\"git_repo_id\\\":0,\\\"gitlab_integration_id\\\":0,\\\"image_repo_uri\\\":\\\"string\\\",\\\"registry_id\\\":0,\\\"should_create_workflow\\\":true},\\\"image_url\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\",\\\"repo_url\\\":\\\"string\\\",\\\"synced_env_groups\\\":[\\\"string\\\"],\\\"tags\\\":[\\\"string\\\"],\\\"template_name\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateReleaseRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}:
     delete:
-      description: Deletes a release
+      description: |-
+        Deletes the release with the name denoted by `name` and version denoted by `version`. The release should belong
+        to the namespace denoted by `namespace` which itself should belong to the cluster denoted by `cluster_id` and project
+        denoted by `project_id`.
       operationId: deleteRelease
       parameters:
         - description: The project id
@@ -447,7 +478,10 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
-      description: Gets a release
+      description: |-
+        Gets the release denoted by the name `name` and its version `version`. The release should belong to the namespace
+        denoted by `namespace` which itself should belong to the cluster denoted by `cluster_id` and project
+        denoted by `project_id`.
       operationId: getRelease
       parameters:
         - description: The project id
@@ -497,7 +531,7 @@ paths:
             x-go-name: Version
           x-go-name: Version
       responses:
-        "201":
+        "200":
           content:
             application/json:
               schema:
@@ -521,7 +555,10 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     patch:
-      description: Updates a release
+      description: |-
+        Upgrades the release with the name denoted by `name` and version denoted by `version`. The release should belong
+        to the namespace denoted by `namespace` which itself should belong to the cluster denoted by `cluster_id` and project
+        denoted by `project_id`.
       operationId: updateRelease
       parameters:
         - description: The project id
@@ -581,6 +618,9 @@ paths:
         "200":
           content: {}
           description: Successfully updated the release
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
@@ -589,15 +629,15 @@ paths:
         - Releases
       x-codeSamples:
         - lang: Shell
-          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"values\":\"string\",\"version\":\"string\"}'"
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"values\":\"string\",\"version\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"values\\\":\\\"string\\\",\\\"version\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\npayload = {\n    \"values\": \"string\",\n    \"version\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\npayload = {\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    },\n    \"version\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\tpayload := strings.NewReader(\"{\\\"values\\\":\\\"string\\\",\\\"version\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\tpayload := strings.NewReader(\"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: UpdateReleaseRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks:
     get:
@@ -657,7 +697,6 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     post:
-      description: Creates a stack
       operationId: createStack
       parameters:
         - description: The project id
@@ -1068,7 +1107,6 @@ paths:
       x-codegen-request-body-name: PutStackSourceConfigRequest
   /api/v1/projects/{project_id}/registries:
     get:
-      description: Lists registries
       operationId: listRegistries
       parameters:
         - description: The project id
@@ -1106,7 +1144,6 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     post:
-      description: Connects a new image registry
       operationId: createRegistry
       parameters:
         - description: The project id
@@ -1133,26 +1170,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateRegistryResponse'
           description: Successfully connected the registry
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
+        "404":
+          content: {}
+          description: A subresource was not found
       summary: Connect an image registry
       tags:
         - Registries
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":0,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"string\",\"url\":\"string\"}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":1,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"my-ecr-reg\",\"url\":\"123456789.dkr.ecr.us-west-2.amazonaws.com\"}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":0,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"string\",\"url\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"acr_name\":\"string\",\"acr_resource_group_name\":\"string\",\"aws_integration_id\":1,\"azure_integration_id\":0,\"basic_integration_id\":0,\"do_integration_id\":0,\"gcp_integration_id\":0,\"name\":\"my-ecr-reg\",\"url\":\"123456789.dkr.ecr.us-west-2.amazonaws.com\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":0,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"string\\\",\\\"url\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":1,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"my-ecr-reg\\\",\\\"url\\\":\\\"123456789.dkr.ecr.us-west-2.amazonaws.com\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\npayload = {\n    \"acr_name\": \"string\",\n    \"acr_resource_group_name\": \"string\",\n    \"aws_integration_id\": 0,\n    \"azure_integration_id\": 0,\n    \"basic_integration_id\": 0,\n    \"do_integration_id\": 0,\n    \"gcp_integration_id\": 0,\n    \"name\": \"string\",\n    \"url\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\npayload = {\n    \"acr_name\": \"string\",\n    \"acr_resource_group_name\": \"string\",\n    \"aws_integration_id\": 1,\n    \"azure_integration_id\": 0,\n    \"basic_integration_id\": 0,\n    \"do_integration_id\": 0,\n    \"gcp_integration_id\": 0,\n    \"name\": \"my-ecr-reg\",\n    \"url\": \"123456789.dkr.ecr.us-west-2.amazonaws.com\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\tpayload := strings.NewReader(\"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":0,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"string\\\",\\\"url\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries\"\n\n\tpayload := strings.NewReader(\"{\\\"acr_name\\\":\\\"string\\\",\\\"acr_resource_group_name\\\":\\\"string\\\",\\\"aws_integration_id\\\":1,\\\"azure_integration_id\\\":0,\\\"basic_integration_id\\\":0,\\\"do_integration_id\\\":0,\\\"gcp_integration_id\\\":0,\\\"name\\\":\\\"my-ecr-reg\\\",\\\"url\\\":\\\"123456789.dkr.ecr.us-west-2.amazonaws.com\\\"}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateRegistryRequest
   /api/v1/projects/{project_id}/registries/{registry_id}:
     delete:
+      description: |-
+        Deletes a registry denoted by `registry_id`. The registry should belong to
+        the project denoted by `project_id`.
       operationId: deleteRegistry
       parameters:
         - description: The project id
@@ -1197,7 +1243,9 @@ paths:
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
     get:
-      description: Gets an image registry
+      description: |-
+        Gets an image registry denoted by `registry_id`. The registry should belong to the
+        project denoted by `project_id`.
       operationId: getRegistry
       parameters:
         - description: The project id
@@ -1221,7 +1269,7 @@ paths:
             x-go-name: RegistryID
           x-go-name: RegistryID
       responses:
-        "201":
+        "200":
           content:
             application/json:
               schema:
@@ -1246,7 +1294,9 @@ paths:
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
     get:
-      description: Lists image repositories inside the image registry given by `registry_id`
+      description: |-
+        Lists image repositories inside the image registry denoted by `registry_id`. The registry
+        should belong to the project denoted by `project_id`.
       operationId: listRegistryRepositories
       parameters:
         - description: The project id
@@ -1350,6 +1400,10 @@ paths:
       x-codegen-request-body-name: CreateRepositoryRequest
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
     get:
+      description: |-
+        Lists all images in the image repository denoted by the name `repository`. The repository should belong
+        to the registry denoted by `registry_id` which should itself belong to the project denoted by
+        `project_id`.
       operationId: listRegistryImages
       parameters:
         - description: The project id
@@ -1372,19 +1426,39 @@ paths:
             type: integer
             x-go-name: RegistryID
           x-go-name: RegistryID
-        - description: the image repository name
+        - description: The image repository name
           in: path
           name: repository
           required: true
           schema:
             type: string
+        - description: "The number of images to list.\nFor ECR images, a maximum of 1000 is allowed.\n"
+          in: query
+          name: num
+          schema:
+            minimum: 1
+            type: integer
+        - description: "The next page string used for pagination, from a previous request."
+          in: query
+          name: next
+          schema:
+            type: string
+        - description: "The page number used for pagination, possibly from a previous request.\n(**DigitalOcean only**)\n"
+          in: query
+          name: page
+          schema:
+            minimum: 1
+            type: integer
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListImagesResponse'
+                $ref: '#/components/schemas/V1ListImageResponse'
           description: Successfully listed images
+        "400":
+          content: {}
+          description: A malformed or bad request
         "403":
           content: {}
           description: Forbidden
@@ -1393,19 +1467,19 @@ paths:
         - Registries
       x-codeSamples:
         - lang: Shell
-          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+          source: "curl --request GET \\\n  --url 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE' \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\nquerystring = {\"num\":\"SOME_INTEGER_VALUE\",\"next\":\"SOME_STRING_VALUE\",\"page\":\"SOME_INTEGER_VALUE\"}\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers, params=querystring)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}?num=SOME_INTEGER_VALUE&next=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
 components:
   schemas:
     BuildConfig:
-      description: BuildConfig
+      description: The build configuration for this release when using buildpacks
       example:
         buildpacks:
           - buildpacks
@@ -1571,10 +1645,8 @@ components:
           x-go-name: Values
       type: object
       x-go-package: helm.sh/helm/v3/pkg/chart
-    ConditionStatus:
-      type: string
-      x-go-package: k8s.io/api/core/v1
     CreateBuildConfigRequest:
+      description: The build configuration for this new release
       example:
         buildpacks:
           - buildpacks
@@ -1584,9 +1656,11 @@ components:
           key: "{}"
       properties:
         builder:
+          description: The name of the builder to use with `pack` (Heroku or Paketo)
           type: string
           x-go-name: Builder
         buildpacks:
+          description: The list of buildpacks to use for the release
           items:
             type: string
           type: array
@@ -1595,11 +1669,15 @@ components:
           additionalProperties:
             properties: {}
             type: object
+          description: UNUSED
           type: object
           x-go-name: Config
+      required:
+        - builder
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateGitActionConfigRequest:
+      description: The git configuration for this new release (when deploying from a git repository)
       example:
         image_repo_uri: image_repo_uri
         should_create_workflow: true
@@ -1607,60 +1685,62 @@ components:
         git_repo_id: 0
         git_branch: git_branch
         dockerfile_path: dockerfile_path
+        gitlab_integration_id: 6
         folder_path: folder_path
-        registry_id: 6
+        registry_id: 1
       properties:
         dockerfile_path:
+          description: The path to the Dockerfile in the git repository
           type: string
           x-go-name: DockerfilePath
         folder_path:
+          description: The path to use as the base directory in the git repository
           type: string
           x-go-name: FolderPath
         git_branch:
+          description: The branch name of the git repository
           type: string
           x-go-name: GitBranch
         git_repo:
+          description: "The git repo in ${owner}/${repo} form"
           type: string
           x-go-name: GitRepo
         git_repo_id:
+          description: The Github installation ID with access to the repository
           format: uint64
           type: integer
           x-go-name: GitRepoID
+        gitlab_integration_id:
+          description: The Gitlab integration ID with access to the repository
+          format: uint64
+          type: integer
+          x-go-name: GitlabIntegrationID
         image_repo_uri:
+          description: The complete image repository URI to pull from
           type: string
           x-go-name: ImageRepoURI
         registry_id:
+          description: The Porter registry ID to link against
           format: uint64
           type: integer
           x-go-name: RegistryID
         should_create_workflow:
+          description: Denotes if the Github workflow files need to be created
           type: boolean
           x-go-name: ShouldCreateWorkflow
+      required:
+        - git_repo
+        - image_repo_uri
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateNamespaceRequest:
+      description: CreateNamespaceRequest represents the request body to create a namespace
       example:
-        name: name
+        name: sampleNS
       properties:
         name:
-          type: string
-          x-go-name: Name
-      type: object
-      x-go-package: github.com/porter-dev/porter/api/types
-    CreateNamespaceResponse:
-      example:
-        metadata:
-          name: name
-      properties:
-        metadata:
-          $ref: '#/components/schemas/CreateNamespaceResponseMeta'
-      type: object
-      x-go-package: github.com/porter-dev/porter/api/types
-    CreateNamespaceResponseMeta:
-      example:
-        name: name
-      properties:
-        name:
+          description: the name of the namespace to create
+          example: sampleNS
           type: string
           x-go-name: Name
       type: object
@@ -1670,55 +1750,80 @@ components:
         image_repo_uri: image_repo_uri
       properties:
         image_repo_uri:
+          description: The URL to the repository of a registry (**ECR only**)
           type: string
           x-go-name: ImageRepoURI
+      required:
+        - image_repo_uri
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateRegistryRequest:
       example:
-        do_integration_id: 5
-        azure_integration_id: 6
-        gcp_integration_id: 5
-        basic_integration_id: 1
-        name: name
+        do_integration_id: 0
+        azure_integration_id: 0
+        gcp_integration_id: 0
+        basic_integration_id: 0
+        name: my-ecr-reg
         acr_name: acr_name
-        aws_integration_id: 0
+        aws_integration_id: 1
         acr_resource_group_name: acr_resource_group_name
-        url: url
+        url: 123456789.dkr.ecr.us-west-2.amazonaws.com
       properties:
         acr_name:
+          description: ACR name (**Azure only**)
           type: string
           x-go-name: ACRName
         acr_resource_group_name:
-          description: Additional Azure-specific fields
+          description: ACR resource group name (**Azure only**)
           type: string
           x-go-name: ACRResourceGroupName
         aws_integration_id:
+          description: The AWS integration ID to be used for this registry
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AWSIntegrationID
         azure_integration_id:
+          description: The Azure integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AzureIntegrationID
         basic_integration_id:
+          description: The Basic integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: BasicIntegrationID
         do_integration_id:
+          description: The DigitalOcean integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: DOIntegrationID
         gcp_integration_id:
+          description: The GCP integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: GCPIntegrationID
         name:
+          description: Name of the container registry
+          example: my-ecr-reg
           type: string
           x-go-name: Name
         url:
+          description: URL of the container registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
           type: string
           x-go-name: URL
+      required:
+        - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateRegistryResponse:
@@ -1726,20 +1831,32 @@ components:
     CreateReleaseBaseRequest:
       properties:
         name:
+          description: The name of this release
           type: string
           x-go-name: Name
+        repo_url:
+          description: The repository URL for this release
+          type: string
+          x-go-name: RepoURL
         template_name:
+          description: the Porter charts templated name
           type: string
           x-go-name: TemplateName
         template_version:
+          description: The Porter charts template version
           type: string
           x-go-name: TemplateVersion
         values:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values for this release
           type: object
           x-go-name: Values
+      required:
+        - name
+        - template_name
+        - template_version
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateReleaseRequest:
@@ -1747,18 +1864,20 @@ components:
         synced_env_groups:
           - synced_env_groups
           - synced_env_groups
-        template_name: template_name
-        template_version: template_version
-        image_url: image_url
-        github_action_config:
+        repo_url: repo_url
+        git_action_config:
           image_repo_uri: image_repo_uri
           should_create_workflow: true
           git_repo: git_repo
           git_repo_id: 0
           git_branch: git_branch
           dockerfile_path: dockerfile_path
+          gitlab_integration_id: 6
           folder_path: folder_path
-          registry_id: 6
+          registry_id: 1
+        template_name: template_name
+        template_version: template_version
+        image_url: image_url
         values:
           key: "{}"
         name: name
@@ -1775,36 +1894,52 @@ components:
       properties:
         build_config:
           $ref: '#/components/schemas/CreateBuildConfigRequest'
-        github_action_config:
+        git_action_config:
           $ref: '#/components/schemas/CreateGitActionConfigRequest'
         image_url:
+          description: The repository image URL for this release
           type: string
           x-go-name: ImageURL
         name:
+          description: The name of this release
           type: string
           x-go-name: Name
+        repo_url:
+          description: The repository URL for this release
+          type: string
+          x-go-name: RepoURL
         synced_env_groups:
+          description: The list of synced environment groups for this release
           items:
             type: string
           type: array
           x-go-name: SyncedEnvGroups
         tags:
+          description: The list of tags for this release
           items:
             type: string
           type: array
           x-go-name: Tags
         template_name:
+          description: the Porter charts templated name
           type: string
           x-go-name: TemplateName
         template_version:
+          description: The Porter charts template version
           type: string
           x-go-name: TemplateVersion
         values:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values for this release
           type: object
           x-go-name: Values
+      required:
+        - image_url
+        - name
+        - template_name
+        - template_version
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateStackAppResourceRequest:
@@ -1970,13 +2105,6 @@ components:
         - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
-    DeleteNamespaceRequest:
-      properties:
-        name:
-          type: string
-          x-go-name: Name
-      type: object
-      x-go-package: github.com/porter-dev/porter/api/types
     Dependency:
       description: "Dependencies can be used to express developer intent, or to capture the state\nof a chart."
       example:
@@ -2042,11 +2170,6 @@ components:
       title: Dependency describes a chart upon which another chart depends.
       type: object
       x-go-package: helm.sh/helm/v3/pkg/chart
-    FieldsV1:
-      description: "Each key is either a '.' representing the field itself, and will always map to an empty set,\nor a string representing a sub-field or item. The string will follow one of these four formats:\n'f:<name>', where <name> is the name of a field in a struct, or key in a map\n'v:<value>', where <value> is the exact json formatted value of a list item\n'i:<index>', where <index> is position of a item in a list\n'k:<keys>', where <keys> is a map of  a list item's key fields to their unique values\nIf a key maps to an empty Fields value, the field that key represents is part of the set.\n\nThe exact format is defined in sigs.k8s.io/structured-merge-diff\n+protobuf.options.(gogoproto.goproto_stringer)=false"
-      title: "FieldsV1 stores a set of fields in a data structure like a Trie, in JSON format."
-      type: object
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
     File:
       description: "By convention, name is a relative path within the scope of the chart's\nbase directory."
       example:
@@ -2069,10 +2192,6 @@ components:
       title: File represents a file as a name/value pair.
       type: object
       x-go-package: helm.sh/helm/v3/pkg/chart
-    FinalizerName:
-      title: FinalizerName is the name identifying a finalizer during namespace lifecycle.
-      type: string
-      x-go-package: k8s.io/api/core/v1
     FormContent:
       description: FormContent is a form's atomic unit
       example:
@@ -2568,27 +2687,19 @@ components:
           x-go-name: Tags
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
-    GetNamespaceResponse:
-      example:
-        metadata:
-          name: name
-      properties:
-        metadata:
-          $ref: '#/components/schemas/GetNamespaceResponse_metadata'
-      type: object
-      x-go-package: github.com/porter-dev/porter/api/types
     GetRegistryResponse:
       $ref: '#/components/schemas/Registry'
     GetReleaseResponse:
       $ref: '#/components/schemas/Release'
     GitActionConfig:
-      description: GitActionConfig
+      description: The git configuration for this release (when deployed from a git repository)
       example:
         image_repo_uri: image_repo_uri
         git_repo: git_repo
         git_repo_id: 5
         git_branch: git_branch
         dockerfile_path: dockerfile_path
+        gitlab_integration_id: 5
         folder_path: folder_path
       properties:
         dockerfile_path:
@@ -2608,10 +2719,15 @@ components:
           type: string
           x-go-name: GitRepo
         git_repo_id:
-          description: The git integration id
+          description: The github integration ID
           format: uint64
           type: integer
           x-go-name: GitRepoID
+        gitlab_integration_id:
+          description: The gitlab integration ID
+          format: uint64
+          type: integer
+          x-go-name: GitlabIntegrationID
         image_repo_uri:
           description: The complete image repository uri to pull from
           type: string
@@ -2624,7 +2740,7 @@ components:
         kind: kind
         manifest: manifest
         name: name
-        weight: 5
+        weight: 2
         last_run:
           phase: phase
           completed_at: 2000-01-23T04:56:07.000+00:00
@@ -2785,216 +2901,11 @@ components:
       type: array
       x-go-name: ListImageResponse
       x-go-package: github.com/porter-dev/porter/api/types
-    ListMeta:
-      description: "ListMeta describes metadata that synthetic resources must have, including lists and\nvarious status objects. A resource may have only one of {ObjectMeta, ListMeta}."
-      properties:
-        continue:
-          description: "continue may be set if the user set a limit on the number of items returned, and indicates that\nthe server has more data available. The value is opaque and may be used to issue another request\nto the endpoint that served this list to retrieve the next set of available objects. Continuing a\nconsistent list may not be possible if the server configuration has changed or more than a few\nminutes have passed. The resourceVersion field returned when using this continue value will be\nidentical to the value in the first response, unless you have received this token from an error\nmessage."
-          type: string
-          x-go-name: Continue
-        remainingItemCount:
-          description: "remainingItemCount is the number of subsequent items in the list which are not included in this\nlist response. If the list request contained label or field selectors, then the number of\nremaining items is unknown and the field will be left unset and omitted during serialization.\nIf the list is complete (either because it is not chunking or because this is the last chunk),\nthen there are no more remaining items and this field will be left unset and omitted during\nserialization.\nServers older than v1.15 do not set this field.\nThe intended use of the remainingItemCount is *estimating* the size of a collection. Clients\nshould not rely on the remainingItemCount to be set or to be exact.\n+optional"
-          format: int64
-          type: integer
-          x-go-name: RemainingItemCount
-        resourceVersion:
-          description: "String that identifies the server's internal version of this object that\ncan be used by clients to determine when objects have changed.\nValue must be treated as opaque by clients and passed unmodified back to the server.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional"
-          type: string
-          x-go-name: ResourceVersion
-        selfLink:
-          description: |-
-            selfLink is a URL representing this object.
-            Populated by the system.
-            Read-only.
-
-            DEPRECATED
-            Kubernetes will stop propagating this field in 1.20 release and the field is planned
-            to be removed in 1.21 release.
-            +optional
-          type: string
-          x-go-name: SelfLink
-      type: object
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
     ListNamespacesResponse:
-      example:
-        apiVersion: apiVersion
-        remainingItemCount: 1
-        continue: continue
-        kind: kind
-        resourceVersion: resourceVersion
-        items:
-          - generation: 6
-            finalizers:
-              - finalizers
-              - finalizers
-            kind: kind
-            resourceVersion: resourceVersion
-            annotations:
-              key: annotations
-            generateName: generateName
-            spec:
-              finalizers:
-                - null
-                - null
-            deletionTimestamp: 2000-01-23T04:56:07.000+00:00
-            labels:
-              key: labels
-            ownerReferences:
-              - uid: uid
-                controller: true
-                apiVersion: apiVersion
-                kind: kind
-                name: name
-                blockOwnerDeletion: true
-              - uid: uid
-                controller: true
-                apiVersion: apiVersion
-                kind: kind
-                name: name
-                blockOwnerDeletion: true
-            selfLink: selfLink
-            deletionGracePeriodSeconds: 0
-            uid: uid
-            apiVersion: apiVersion
-            managedFields:
-              - apiVersion: apiVersion
-                fieldsV1: "{}"
-                manager: manager
-                subresource: subresource
-                time: 2000-01-23T04:56:07.000+00:00
-                operation: operation
-                fieldsType: fieldsType
-              - apiVersion: apiVersion
-                fieldsV1: "{}"
-                manager: manager
-                subresource: subresource
-                time: 2000-01-23T04:56:07.000+00:00
-                operation: operation
-                fieldsType: fieldsType
-            clusterName: clusterName
-            creationTimestamp: 2000-01-23T04:56:07.000+00:00
-            name: name
-            namespace: namespace
-            status:
-              phase: phase
-              conditions:
-                - reason: reason
-                  lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-                  message: message
-                  type: type
-                  status: status
-                - reason: reason
-                  lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-                  message: message
-                  type: type
-                  status: status
-          - generation: 6
-            finalizers:
-              - finalizers
-              - finalizers
-            kind: kind
-            resourceVersion: resourceVersion
-            annotations:
-              key: annotations
-            generateName: generateName
-            spec:
-              finalizers:
-                - null
-                - null
-            deletionTimestamp: 2000-01-23T04:56:07.000+00:00
-            labels:
-              key: labels
-            ownerReferences:
-              - uid: uid
-                controller: true
-                apiVersion: apiVersion
-                kind: kind
-                name: name
-                blockOwnerDeletion: true
-              - uid: uid
-                controller: true
-                apiVersion: apiVersion
-                kind: kind
-                name: name
-                blockOwnerDeletion: true
-            selfLink: selfLink
-            deletionGracePeriodSeconds: 0
-            uid: uid
-            apiVersion: apiVersion
-            managedFields:
-              - apiVersion: apiVersion
-                fieldsV1: "{}"
-                manager: manager
-                subresource: subresource
-                time: 2000-01-23T04:56:07.000+00:00
-                operation: operation
-                fieldsType: fieldsType
-              - apiVersion: apiVersion
-                fieldsV1: "{}"
-                manager: manager
-                subresource: subresource
-                time: 2000-01-23T04:56:07.000+00:00
-                operation: operation
-                fieldsType: fieldsType
-            clusterName: clusterName
-            creationTimestamp: 2000-01-23T04:56:07.000+00:00
-            name: name
-            namespace: namespace
-            status:
-              phase: phase
-              conditions:
-                - reason: reason
-                  lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-                  message: message
-                  type: type
-                  status: status
-                - reason: reason
-                  lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-                  message: message
-                  type: type
-                  status: status
-        selfLink: selfLink
-      properties:
-        apiVersion:
-          description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources\n+optional"
-          type: string
-          x-go-name: APIVersion
-        continue:
-          description: "continue may be set if the user set a limit on the number of items returned, and indicates that\nthe server has more data available. The value is opaque and may be used to issue another request\nto the endpoint that served this list to retrieve the next set of available objects. Continuing a\nconsistent list may not be possible if the server configuration has changed or more than a few\nminutes have passed. The resourceVersion field returned when using this continue value will be\nidentical to the value in the first response, unless you have received this token from an error\nmessage."
-          type: string
-          x-go-name: Continue
-        items:
-          description: "Items is the list of Namespace objects in the list.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/"
-          items:
-            $ref: '#/components/schemas/Namespace'
-          type: array
-          x-go-name: Items
-        kind:
-          description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional"
-          type: string
-          x-go-name: Kind
-        remainingItemCount:
-          description: "remainingItemCount is the number of subsequent items in the list which are not included in this\nlist response. If the list request contained label or field selectors, then the number of\nremaining items is unknown and the field will be left unset and omitted during serialization.\nIf the list is complete (either because it is not chunking or because this is the last chunk),\nthen there are no more remaining items and this field will be left unset and omitted during\nserialization.\nServers older than v1.15 do not set this field.\nThe intended use of the remainingItemCount is *estimating* the size of a collection. Clients\nshould not rely on the remainingItemCount to be set or to be exact.\n+optional"
-          format: int64
-          type: integer
-          x-go-name: RemainingItemCount
-        resourceVersion:
-          description: "String that identifies the server's internal version of this object that\ncan be used by clients to determine when objects have changed.\nValue must be treated as opaque by clients and passed unmodified back to the server.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional"
-          type: string
-          x-go-name: ResourceVersion
-        selfLink:
-          description: |-
-            selfLink is a URL representing this object.
-            Populated by the system.
-            Read-only.
-
-            DEPRECATED
-            Kubernetes will stop propagating this field in 1.20 release and the field is planned
-            to be removed in 1.21 release.
-            +optional
-          type: string
-          x-go-name: SelfLink
-      type: object
+      description: ListNamespacesResponse represents the list of all namespaces
+      items:
+        $ref: '#/components/schemas/NamespaceResponse'
+      type: array
       x-go-package: github.com/porter-dev/porter/api/types
     ListRegistriesResponse:
       items:
@@ -3083,58 +2994,6 @@ components:
       title: Maintainer describes a Chart maintainer.
       type: object
       x-go-package: helm.sh/helm/v3/pkg/chart
-    ManagedFieldsEntry:
-      description: "ManagedFieldsEntry is a workflow-id, a FieldSet and the group version of the resource\nthat the fieldset applies to."
-      example:
-        apiVersion: apiVersion
-        fieldsV1: "{}"
-        manager: manager
-        subresource: subresource
-        time: 2000-01-23T04:56:07.000+00:00
-        operation: operation
-        fieldsType: fieldsType
-      properties:
-        apiVersion:
-          description: |-
-            APIVersion defines the version of this resource that this field set
-            applies to. The format is "group/version" just like the top-level
-            APIVersion field. It is necessary to track the version of a field
-            set because it cannot be automatically converted.
-          type: string
-          x-go-name: APIVersion
-        fieldsType:
-          description: "FieldsType is the discriminator for the different fields format and version.\nThere is currently only one possible value: \"FieldsV1\""
-          type: string
-          x-go-name: FieldsType
-        fieldsV1:
-          description: "Each key is either a '.' representing the field itself, and will always map to an empty set,\nor a string representing a sub-field or item. The string will follow one of these four formats:\n'f:<name>', where <name> is the name of a field in a struct, or key in a map\n'v:<value>', where <value> is the exact json formatted value of a list item\n'i:<index>', where <index> is position of a item in a list\n'k:<keys>', where <keys> is a map of  a list item's key fields to their unique values\nIf a key maps to an empty Fields value, the field that key represents is part of the set.\n\nThe exact format is defined in sigs.k8s.io/structured-merge-diff\n+protobuf.options.(gogoproto.goproto_stringer)=false"
-          title: "FieldsV1 stores a set of fields in a data structure like a Trie, in JSON format."
-          type: object
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-        manager:
-          description: Manager is an identifier of the workflow managing these fields.
-          type: string
-          x-go-name: Manager
-        operation:
-          title: ManagedFieldsOperationType is the type of operation which lead to a ManagedFieldsEntry being created.
-          type: string
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-        subresource:
-          description: "Subresource is the name of the subresource used to update that object, or\nempty string if the object was updated through the main resource. The\nvalue of this field is used to distinguish between managers, even if they\nshare the same name. For example, a status update will be distinct from a\nregular update using the same manager name.\nNote that the APIVersion field is not related to the Subresource field and\nit always corresponds to the version of the main resource."
-          type: string
-          x-go-name: Subresource
-        time:
-          description: "Programs using times should typically store and pass them as values,\nnot pointers. That is, time variables and struct fields should be of\ntype time.Time, not *time.Time.\n\nA Time value can be used by multiple goroutines simultaneously except\nthat the methods GobDecode, UnmarshalBinary, UnmarshalJSON and\nUnmarshalText are not concurrency-safe.\n\nTime instants can be compared using the Before, After, and Equal methods.\nThe Sub method subtracts two instants, producing a Duration.\nThe Add method adds a Time and a Duration, producing a Time.\n\nThe zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.\nAs this time is unlikely to come up in practice, the IsZero method gives\na simple way of detecting a time that has not been initialized explicitly.\n\nEach Time has associated with it a Location, consulted when computing the\npresentation form of the time, such as in the Format, Hour, and Year methods.\nThe methods Local, UTC, and In return a Time with a specific location.\nChanging the location in this way changes only the presentation; it does not\nchange the instant in time being denoted and therefore does not affect the\ncomputations described in earlier paragraphs.\n\nRepresentations of a Time value saved by the GobEncode, MarshalBinary,\nMarshalJSON, and MarshalText methods store the Time.Location's offset, but not\nthe location name. They therefore lose information about Daylight Saving Time.\n\nIn addition to the required “wall clock” reading, a Time may contain an optional\nreading of the current process's monotonic clock, to provide additional precision\nfor comparison or subtraction.\nSee the “Monotonic Clocks” section in the package documentation for details.\n\nNote that the Go == operator compares not just the time instant but also the\nLocation and the monotonic clock reading. Therefore, Time values should not\nbe used as map or database keys without first guaranteeing that the\nidentical Location has been set for all values, which can be achieved\nthrough use of the UTC or Local method, and that the monotonic clock reading\nhas been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)\nto t == u, since t.Equal uses the most accurate comparison available and\ncorrectly handles the case when only one of its arguments has a monotonic\nclock reading."
-          format: date-time
-          title: A Time represents an instant in time with nanosecond precision.
-          type: string
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-      type: object
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-    ManagedFieldsOperationType:
-      title: ManagedFieldsOperationType is the type of operation which lead to a ManagedFieldsEntry being created.
-      type: string
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
     Metadata:
       example:
         maintainers:
@@ -3271,462 +3130,39 @@ components:
       title: Metadata for a Chart file. This models the structure of a Chart.yaml file.
       type: object
       x-go-package: helm.sh/helm/v3/pkg/chart
-    Namespace:
-      description: Use of multiple namespaces is optional.
+    NamespaceResponse:
+      description: NamespaceResponse represents the response type of requests to the namespace resource
       example:
-        generation: 6
-        finalizers:
-          - finalizers
-          - finalizers
-        kind: kind
-        resourceVersion: resourceVersion
-        annotations:
-          key: annotations
-        generateName: generateName
-        spec:
-          finalizers:
-            - null
-            - null
-        deletionTimestamp: 2000-01-23T04:56:07.000+00:00
-        labels:
-          key: labels
-        ownerReferences:
-          - uid: uid
-            controller: true
-            apiVersion: apiVersion
-            kind: kind
-            name: name
-            blockOwnerDeletion: true
-          - uid: uid
-            controller: true
-            apiVersion: apiVersion
-            kind: kind
-            name: name
-            blockOwnerDeletion: true
-        selfLink: selfLink
-        deletionGracePeriodSeconds: 0
-        uid: uid
-        apiVersion: apiVersion
-        managedFields:
-          - apiVersion: apiVersion
-            fieldsV1: "{}"
-            manager: manager
-            subresource: subresource
-            time: 2000-01-23T04:56:07.000+00:00
-            operation: operation
-            fieldsType: fieldsType
-          - apiVersion: apiVersion
-            fieldsV1: "{}"
-            manager: manager
-            subresource: subresource
-            time: 2000-01-23T04:56:07.000+00:00
-            operation: operation
-            fieldsType: fieldsType
-        clusterName: clusterName
-        creationTimestamp: 2000-01-23T04:56:07.000+00:00
-        name: name
-        namespace: namespace
-        status:
-          phase: phase
-          conditions:
-            - reason: reason
-              lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-              message: message
-              type: type
-              status: status
-            - reason: reason
-              lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-              message: message
-              type: type
-              status: status
+        creationTimestamp: "Mon, 13 Jun 2022 17:49:12 GMT"
+        name: default
+        deletionTimestamp: "Mon, 13 Jun 2022 17:49:12 GMT"
+        status: active
       properties:
-        annotations:
-          additionalProperties:
-            type: string
-          description: "Annotations is an unstructured key value map stored with a resource that may be\nset by external tools to store and retrieve arbitrary metadata. They are not\nqueryable and should be preserved when modifying objects.\nMore info: http://kubernetes.io/docs/user-guide/annotations\n+optional"
-          type: object
-          x-go-name: Annotations
-        apiVersion:
-          description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources\n+optional"
-          type: string
-          x-go-name: APIVersion
-        clusterName:
-          description: |-
-            The name of the cluster which the object belongs to.
-            This is used to distinguish resources with same name and namespace in different clusters.
-            This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.
-            +optional
-          type: string
-          x-go-name: ClusterName
         creationTimestamp:
-          description: "Programs using times should typically store and pass them as values,\nnot pointers. That is, time variables and struct fields should be of\ntype time.Time, not *time.Time.\n\nA Time value can be used by multiple goroutines simultaneously except\nthat the methods GobDecode, UnmarshalBinary, UnmarshalJSON and\nUnmarshalText are not concurrency-safe.\n\nTime instants can be compared using the Before, After, and Equal methods.\nThe Sub method subtracts two instants, producing a Duration.\nThe Add method adds a Time and a Duration, producing a Time.\n\nThe zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.\nAs this time is unlikely to come up in practice, the IsZero method gives\na simple way of detecting a time that has not been initialized explicitly.\n\nEach Time has associated with it a Location, consulted when computing the\npresentation form of the time, such as in the Format, Hour, and Year methods.\nThe methods Local, UTC, and In return a Time with a specific location.\nChanging the location in this way changes only the presentation; it does not\nchange the instant in time being denoted and therefore does not affect the\ncomputations described in earlier paragraphs.\n\nRepresentations of a Time value saved by the GobEncode, MarshalBinary,\nMarshalJSON, and MarshalText methods store the Time.Location's offset, but not\nthe location name. They therefore lose information about Daylight Saving Time.\n\nIn addition to the required “wall clock” reading, a Time may contain an optional\nreading of the current process's monotonic clock, to provide additional precision\nfor comparison or subtraction.\nSee the “Monotonic Clocks” section in the package documentation for details.\n\nNote that the Go == operator compares not just the time instant but also the\nLocation and the monotonic clock reading. Therefore, Time values should not\nbe used as map or database keys without first guaranteeing that the\nidentical Location has been set for all values, which can be achieved\nthrough use of the UTC or Local method, and that the monotonic clock reading\nhas been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)\nto t == u, since t.Equal uses the most accurate comparison available and\ncorrectly handles the case when only one of its arguments has a monotonic\nclock reading."
-          format: date-time
-          title: A Time represents an instant in time with nanosecond precision.
+          description: the creation timestamp in UTC of the namespace in RFC 1123 format
+          example: "Mon, 13 Jun 2022 17:49:12 GMT"
           type: string
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-        deletionGracePeriodSeconds:
-          description: |-
-            Number of seconds allowed for this object to gracefully terminate before
-            it will be removed from the system. Only set when deletionTimestamp is also set.
-            May only be shortened.
-            Read-only.
-            +optional
-          format: int64
-          type: integer
-          x-go-name: DeletionGracePeriodSeconds
+          x-go-name: CreationTimestamp
         deletionTimestamp:
-          description: "Programs using times should typically store and pass them as values,\nnot pointers. That is, time variables and struct fields should be of\ntype time.Time, not *time.Time.\n\nA Time value can be used by multiple goroutines simultaneously except\nthat the methods GobDecode, UnmarshalBinary, UnmarshalJSON and\nUnmarshalText are not concurrency-safe.\n\nTime instants can be compared using the Before, After, and Equal methods.\nThe Sub method subtracts two instants, producing a Duration.\nThe Add method adds a Time and a Duration, producing a Time.\n\nThe zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.\nAs this time is unlikely to come up in practice, the IsZero method gives\na simple way of detecting a time that has not been initialized explicitly.\n\nEach Time has associated with it a Location, consulted when computing the\npresentation form of the time, such as in the Format, Hour, and Year methods.\nThe methods Local, UTC, and In return a Time with a specific location.\nChanging the location in this way changes only the presentation; it does not\nchange the instant in time being denoted and therefore does not affect the\ncomputations described in earlier paragraphs.\n\nRepresentations of a Time value saved by the GobEncode, MarshalBinary,\nMarshalJSON, and MarshalText methods store the Time.Location's offset, but not\nthe location name. They therefore lose information about Daylight Saving Time.\n\nIn addition to the required “wall clock” reading, a Time may contain an optional\nreading of the current process's monotonic clock, to provide additional precision\nfor comparison or subtraction.\nSee the “Monotonic Clocks” section in the package documentation for details.\n\nNote that the Go == operator compares not just the time instant but also the\nLocation and the monotonic clock reading. Therefore, Time values should not\nbe used as map or database keys without first guaranteeing that the\nidentical Location has been set for all values, which can be achieved\nthrough use of the UTC or Local method, and that the monotonic clock reading\nhas been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)\nto t == u, since t.Equal uses the most accurate comparison available and\ncorrectly handles the case when only one of its arguments has a monotonic\nclock reading."
-          format: date-time
-          title: A Time represents an instant in time with nanosecond precision.
+          description: "the deletion timestamp in UTC of the namespace in RFC 1123 format, if the namespace is deleted"
+          example: "Mon, 13 Jun 2022 17:49:12 GMT"
           type: string
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-        finalizers:
-          description: "Must be empty before the object is deleted from the registry. Each entry\nis an identifier for the responsible component that will remove the entry\nfrom the list. If the deletionTimestamp of the object is non-nil, entries\nin this list can only be removed.\nFinalizers may be processed and removed in any order.  Order is NOT enforced\nbecause it introduces significant risk of stuck finalizers.\nfinalizers is a shared field, any actor with permission can reorder it.\nIf the finalizer list is processed in order, then this can lead to a situation\nin which the component responsible for the first finalizer in the list is\nwaiting for a signal (field value, external system, or other) produced by a\ncomponent responsible for a finalizer later in the list, resulting in a deadlock.\nWithout enforced ordering finalizers are free to order amongst themselves and\nare not vulnerable to ordering changes in the list.\n+optional\n+patchStrategy=merge"
-          items:
-            type: string
-          type: array
-          x-go-name: Finalizers
-        generateName:
-          description: "GenerateName is an optional prefix, used by the server, to generate a unique\nname ONLY IF the Name field has not been provided.\nIf this field is used, the name returned to the client will be different\nthan the name passed. This value will also be combined with a unique suffix.\nThe provided value has the same validation rules as the Name field,\nand may be truncated by the length of the suffix required to make the value\nunique on the server.\n\nIf this field is specified and the generated name exists, the server will\nNOT return a 409 - instead, it will either return 201 Created or 500 with Reason\nServerTimeout indicating a unique name could not be found in the time allotted, and the client\nshould retry (optionally after the time indicated in the Retry-After header).\n\nApplied only if Name is not specified.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#idempotency\n+optional"
-          type: string
-          x-go-name: GenerateName
-        generation:
-          description: |-
-            A sequence number representing a specific generation of the desired state.
-            Populated by the system. Read-only.
-            +optional
-          format: int64
-          type: integer
-          x-go-name: Generation
-        kind:
-          description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional"
-          type: string
-          x-go-name: Kind
-        labels:
-          additionalProperties:
-            type: string
-          description: "Map of string keys and values that can be used to organize and categorize\n(scope and select) objects. May match selectors of replication controllers\nand services.\nMore info: http://kubernetes.io/docs/user-guide/labels\n+optional"
-          type: object
-          x-go-name: Labels
-        managedFields:
-          description: "ManagedFields maps workflow-id and version to the set of fields\nthat are managed by that workflow. This is mostly for internal\nhousekeeping, and users typically shouldn't need to set or\nunderstand this field. A workflow can be the user's name, a\ncontroller's name, or the name of a specific apply path like\n\"ci-cd\". The set of fields is always in the version that the\nworkflow used when modifying the object.\n\n+optional"
-          items:
-            $ref: '#/components/schemas/ManagedFieldsEntry'
-          type: array
-          x-go-name: ManagedFields
+          x-go-name: DeletionTimestamp
         name:
-          description: "Name must be unique within a namespace. Is required when creating resources, although\nsome resources may allow a client to request the generation of an appropriate name\nautomatically. Name is primarily intended for creation idempotence and configuration\ndefinition.\nCannot be updated.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#names\n+optional"
+          description: the name of the namespace
+          example: default
           type: string
           x-go-name: Name
-        namespace:
-          description: "Namespace defines the space within which each name must be unique. An empty namespace is\nequivalent to the \"default\" namespace, but \"default\" is the canonical representation.\nNot all objects are required to be scoped to a namespace - the value of this field for\nthose objects will be empty.\n\nMust be a DNS_LABEL.\nCannot be updated.\nMore info: http://kubernetes.io/docs/user-guide/namespaces\n+optional"
-          type: string
-          x-go-name: Namespace
-        ownerReferences:
-          description: "List of objects depended by this object. If ALL objects in the list have\nbeen deleted, this object will be garbage collected. If this object is managed by a controller,\nthen an entry in this list will point to this controller, with the controller field set to true.\nThere cannot be more than one managing controller.\n+optional\n+patchMergeKey=uid\n+patchStrategy=merge"
-          items:
-            $ref: '#/components/schemas/OwnerReference'
-          type: array
-          x-go-name: OwnerReferences
-        resourceVersion:
-          description: "An opaque value that represents the internal version of this object that can\nbe used by clients to determine when objects have changed. May be used for optimistic\nconcurrency, change detection, and the watch operation on a resource or set of resources.\nClients must treat these values as opaque and passed unmodified back to the server.\nThey may only be valid for a particular resource or set of resources.\n\nPopulated by the system.\nRead-only.\nValue must be treated as opaque by clients and .\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional"
-          type: string
-          x-go-name: ResourceVersion
-        selfLink:
-          description: |-
-            SelfLink is a URL representing this object.
-            Populated by the system.
-            Read-only.
-
-            DEPRECATED
-            Kubernetes will stop propagating this field in 1.20 release and the field is planned
-            to be removed in 1.21 release.
-            +optional
-          type: string
-          x-go-name: SelfLink
-        spec:
-          $ref: '#/components/schemas/NamespaceSpec'
         status:
-          $ref: '#/components/schemas/NamespaceStatus'
-        uid:
-          description: "UID is a type that holds unique ID values, including UUIDs.  Because we\ndon't ONLY use UUIDs, this is an alias to string.  Being a type captures\nintent and helps make sure that UIDs and names do not get conflated."
+          description: the status of the namespace
+          enum:
+            - active
+            - terminating
+          example: active
           type: string
-          x-go-package: k8s.io/apimachinery/pkg/types
-      title: Namespace provides a scope for Names.
+          x-go-name: Status
       type: object
-      x-go-package: k8s.io/api/core/v1
-    NamespaceCondition:
-      example:
-        reason: reason
-        lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-        message: message
-        type: type
-        status: status
-      properties:
-        lastTransitionTime:
-          description: "Programs using times should typically store and pass them as values,\nnot pointers. That is, time variables and struct fields should be of\ntype time.Time, not *time.Time.\n\nA Time value can be used by multiple goroutines simultaneously except\nthat the methods GobDecode, UnmarshalBinary, UnmarshalJSON and\nUnmarshalText are not concurrency-safe.\n\nTime instants can be compared using the Before, After, and Equal methods.\nThe Sub method subtracts two instants, producing a Duration.\nThe Add method adds a Time and a Duration, producing a Time.\n\nThe zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.\nAs this time is unlikely to come up in practice, the IsZero method gives\na simple way of detecting a time that has not been initialized explicitly.\n\nEach Time has associated with it a Location, consulted when computing the\npresentation form of the time, such as in the Format, Hour, and Year methods.\nThe methods Local, UTC, and In return a Time with a specific location.\nChanging the location in this way changes only the presentation; it does not\nchange the instant in time being denoted and therefore does not affect the\ncomputations described in earlier paragraphs.\n\nRepresentations of a Time value saved by the GobEncode, MarshalBinary,\nMarshalJSON, and MarshalText methods store the Time.Location's offset, but not\nthe location name. They therefore lose information about Daylight Saving Time.\n\nIn addition to the required “wall clock” reading, a Time may contain an optional\nreading of the current process's monotonic clock, to provide additional precision\nfor comparison or subtraction.\nSee the “Monotonic Clocks” section in the package documentation for details.\n\nNote that the Go == operator compares not just the time instant but also the\nLocation and the monotonic clock reading. Therefore, Time values should not\nbe used as map or database keys without first guaranteeing that the\nidentical Location has been set for all values, which can be achieved\nthrough use of the UTC or Local method, and that the monotonic clock reading\nhas been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)\nto t == u, since t.Equal uses the most accurate comparison available and\ncorrectly handles the case when only one of its arguments has a monotonic\nclock reading."
-          format: date-time
-          title: A Time represents an instant in time with nanosecond precision.
-          type: string
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-        message:
-          description: +optional
-          type: string
-          x-go-name: Message
-        reason:
-          description: +optional
-          type: string
-          x-go-name: Reason
-        status:
-          type: string
-          x-go-package: k8s.io/api/core/v1
-        type:
-          description: +enum
-          type: string
-          x-go-package: k8s.io/api/core/v1
-      title: NamespaceCondition contains details about state of namespace.
-      type: object
-      x-go-package: k8s.io/api/core/v1
-    NamespaceConditionType:
-      description: +enum
-      type: string
-      x-go-package: k8s.io/api/core/v1
-    NamespaceList:
-      properties:
-        apiVersion:
-          description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources\n+optional"
-          type: string
-          x-go-name: APIVersion
-        continue:
-          description: "continue may be set if the user set a limit on the number of items returned, and indicates that\nthe server has more data available. The value is opaque and may be used to issue another request\nto the endpoint that served this list to retrieve the next set of available objects. Continuing a\nconsistent list may not be possible if the server configuration has changed or more than a few\nminutes have passed. The resourceVersion field returned when using this continue value will be\nidentical to the value in the first response, unless you have received this token from an error\nmessage."
-          type: string
-          x-go-name: Continue
-        items:
-          description: "Items is the list of Namespace objects in the list.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/"
-          items:
-            $ref: '#/components/schemas/Namespace'
-          type: array
-          x-go-name: Items
-        kind:
-          description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional"
-          type: string
-          x-go-name: Kind
-        remainingItemCount:
-          description: "remainingItemCount is the number of subsequent items in the list which are not included in this\nlist response. If the list request contained label or field selectors, then the number of\nremaining items is unknown and the field will be left unset and omitted during serialization.\nIf the list is complete (either because it is not chunking or because this is the last chunk),\nthen there are no more remaining items and this field will be left unset and omitted during\nserialization.\nServers older than v1.15 do not set this field.\nThe intended use of the remainingItemCount is *estimating* the size of a collection. Clients\nshould not rely on the remainingItemCount to be set or to be exact.\n+optional"
-          format: int64
-          type: integer
-          x-go-name: RemainingItemCount
-        resourceVersion:
-          description: "String that identifies the server's internal version of this object that\ncan be used by clients to determine when objects have changed.\nValue must be treated as opaque by clients and passed unmodified back to the server.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional"
-          type: string
-          x-go-name: ResourceVersion
-        selfLink:
-          description: |-
-            selfLink is a URL representing this object.
-            Populated by the system.
-            Read-only.
-
-            DEPRECATED
-            Kubernetes will stop propagating this field in 1.20 release and the field is planned
-            to be removed in 1.21 release.
-            +optional
-          type: string
-          x-go-name: SelfLink
-      title: NamespaceList is a list of Namespaces.
-      type: object
-      x-go-package: k8s.io/api/core/v1
-    NamespacePhase:
-      description: +enum
-      type: string
-      x-go-package: k8s.io/api/core/v1
-    NamespaceSpec:
-      example:
-        finalizers:
-          - null
-          - null
-      properties:
-        finalizers:
-          description: "Finalizers is an opaque list of values that must be empty to permanently remove object from storage.\nMore info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/\n+optional"
-          items:
-            $ref: '#/components/schemas/FinalizerName'
-          type: array
-          x-go-name: Finalizers
-      title: NamespaceSpec describes the attributes on a Namespace.
-      type: object
-      x-go-package: k8s.io/api/core/v1
-    NamespaceStatus:
-      example:
-        phase: phase
-        conditions:
-          - reason: reason
-            lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-            message: message
-            type: type
-            status: status
-          - reason: reason
-            lastTransitionTime: 2000-01-23T04:56:07.000+00:00
-            message: message
-            type: type
-            status: status
-      properties:
-        conditions:
-          description: |-
-            Represents the latest available observations of a namespace's current state.
-            +optional
-            +patchMergeKey=type
-            +patchStrategy=merge
-          items:
-            $ref: '#/components/schemas/NamespaceCondition'
-          type: array
-          x-go-name: Conditions
-        phase:
-          description: +enum
-          type: string
-          x-go-package: k8s.io/api/core/v1
-      title: NamespaceStatus is information about the current status of a Namespace.
-      type: object
-      x-go-package: k8s.io/api/core/v1
-    ObjectMeta:
-      description: "ObjectMeta is metadata that all persisted resources must have, which includes all objects\nusers must create."
-      properties:
-        annotations:
-          additionalProperties:
-            type: string
-          description: "Annotations is an unstructured key value map stored with a resource that may be\nset by external tools to store and retrieve arbitrary metadata. They are not\nqueryable and should be preserved when modifying objects.\nMore info: http://kubernetes.io/docs/user-guide/annotations\n+optional"
-          type: object
-          x-go-name: Annotations
-        clusterName:
-          description: |-
-            The name of the cluster which the object belongs to.
-            This is used to distinguish resources with same name and namespace in different clusters.
-            This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.
-            +optional
-          type: string
-          x-go-name: ClusterName
-        creationTimestamp:
-          description: "Programs using times should typically store and pass them as values,\nnot pointers. That is, time variables and struct fields should be of\ntype time.Time, not *time.Time.\n\nA Time value can be used by multiple goroutines simultaneously except\nthat the methods GobDecode, UnmarshalBinary, UnmarshalJSON and\nUnmarshalText are not concurrency-safe.\n\nTime instants can be compared using the Before, After, and Equal methods.\nThe Sub method subtracts two instants, producing a Duration.\nThe Add method adds a Time and a Duration, producing a Time.\n\nThe zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.\nAs this time is unlikely to come up in practice, the IsZero method gives\na simple way of detecting a time that has not been initialized explicitly.\n\nEach Time has associated with it a Location, consulted when computing the\npresentation form of the time, such as in the Format, Hour, and Year methods.\nThe methods Local, UTC, and In return a Time with a specific location.\nChanging the location in this way changes only the presentation; it does not\nchange the instant in time being denoted and therefore does not affect the\ncomputations described in earlier paragraphs.\n\nRepresentations of a Time value saved by the GobEncode, MarshalBinary,\nMarshalJSON, and MarshalText methods store the Time.Location's offset, but not\nthe location name. They therefore lose information about Daylight Saving Time.\n\nIn addition to the required “wall clock” reading, a Time may contain an optional\nreading of the current process's monotonic clock, to provide additional precision\nfor comparison or subtraction.\nSee the “Monotonic Clocks” section in the package documentation for details.\n\nNote that the Go == operator compares not just the time instant but also the\nLocation and the monotonic clock reading. Therefore, Time values should not\nbe used as map or database keys without first guaranteeing that the\nidentical Location has been set for all values, which can be achieved\nthrough use of the UTC or Local method, and that the monotonic clock reading\nhas been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)\nto t == u, since t.Equal uses the most accurate comparison available and\ncorrectly handles the case when only one of its arguments has a monotonic\nclock reading."
-          format: date-time
-          title: A Time represents an instant in time with nanosecond precision.
-          type: string
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-        deletionGracePeriodSeconds:
-          description: |-
-            Number of seconds allowed for this object to gracefully terminate before
-            it will be removed from the system. Only set when deletionTimestamp is also set.
-            May only be shortened.
-            Read-only.
-            +optional
-          format: int64
-          type: integer
-          x-go-name: DeletionGracePeriodSeconds
-        deletionTimestamp:
-          description: "Programs using times should typically store and pass them as values,\nnot pointers. That is, time variables and struct fields should be of\ntype time.Time, not *time.Time.\n\nA Time value can be used by multiple goroutines simultaneously except\nthat the methods GobDecode, UnmarshalBinary, UnmarshalJSON and\nUnmarshalText are not concurrency-safe.\n\nTime instants can be compared using the Before, After, and Equal methods.\nThe Sub method subtracts two instants, producing a Duration.\nThe Add method adds a Time and a Duration, producing a Time.\n\nThe zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.\nAs this time is unlikely to come up in practice, the IsZero method gives\na simple way of detecting a time that has not been initialized explicitly.\n\nEach Time has associated with it a Location, consulted when computing the\npresentation form of the time, such as in the Format, Hour, and Year methods.\nThe methods Local, UTC, and In return a Time with a specific location.\nChanging the location in this way changes only the presentation; it does not\nchange the instant in time being denoted and therefore does not affect the\ncomputations described in earlier paragraphs.\n\nRepresentations of a Time value saved by the GobEncode, MarshalBinary,\nMarshalJSON, and MarshalText methods store the Time.Location's offset, but not\nthe location name. They therefore lose information about Daylight Saving Time.\n\nIn addition to the required “wall clock” reading, a Time may contain an optional\nreading of the current process's monotonic clock, to provide additional precision\nfor comparison or subtraction.\nSee the “Monotonic Clocks” section in the package documentation for details.\n\nNote that the Go == operator compares not just the time instant but also the\nLocation and the monotonic clock reading. Therefore, Time values should not\nbe used as map or database keys without first guaranteeing that the\nidentical Location has been set for all values, which can be achieved\nthrough use of the UTC or Local method, and that the monotonic clock reading\nhas been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)\nto t == u, since t.Equal uses the most accurate comparison available and\ncorrectly handles the case when only one of its arguments has a monotonic\nclock reading."
-          format: date-time
-          title: A Time represents an instant in time with nanosecond precision.
-          type: string
-          x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-        finalizers:
-          description: "Must be empty before the object is deleted from the registry. Each entry\nis an identifier for the responsible component that will remove the entry\nfrom the list. If the deletionTimestamp of the object is non-nil, entries\nin this list can only be removed.\nFinalizers may be processed and removed in any order.  Order is NOT enforced\nbecause it introduces significant risk of stuck finalizers.\nfinalizers is a shared field, any actor with permission can reorder it.\nIf the finalizer list is processed in order, then this can lead to a situation\nin which the component responsible for the first finalizer in the list is\nwaiting for a signal (field value, external system, or other) produced by a\ncomponent responsible for a finalizer later in the list, resulting in a deadlock.\nWithout enforced ordering finalizers are free to order amongst themselves and\nare not vulnerable to ordering changes in the list.\n+optional\n+patchStrategy=merge"
-          items:
-            type: string
-          type: array
-          x-go-name: Finalizers
-        generateName:
-          description: "GenerateName is an optional prefix, used by the server, to generate a unique\nname ONLY IF the Name field has not been provided.\nIf this field is used, the name returned to the client will be different\nthan the name passed. This value will also be combined with a unique suffix.\nThe provided value has the same validation rules as the Name field,\nand may be truncated by the length of the suffix required to make the value\nunique on the server.\n\nIf this field is specified and the generated name exists, the server will\nNOT return a 409 - instead, it will either return 201 Created or 500 with Reason\nServerTimeout indicating a unique name could not be found in the time allotted, and the client\nshould retry (optionally after the time indicated in the Retry-After header).\n\nApplied only if Name is not specified.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#idempotency\n+optional"
-          type: string
-          x-go-name: GenerateName
-        generation:
-          description: |-
-            A sequence number representing a specific generation of the desired state.
-            Populated by the system. Read-only.
-            +optional
-          format: int64
-          type: integer
-          x-go-name: Generation
-        labels:
-          additionalProperties:
-            type: string
-          description: "Map of string keys and values that can be used to organize and categorize\n(scope and select) objects. May match selectors of replication controllers\nand services.\nMore info: http://kubernetes.io/docs/user-guide/labels\n+optional"
-          type: object
-          x-go-name: Labels
-        managedFields:
-          description: "ManagedFields maps workflow-id and version to the set of fields\nthat are managed by that workflow. This is mostly for internal\nhousekeeping, and users typically shouldn't need to set or\nunderstand this field. A workflow can be the user's name, a\ncontroller's name, or the name of a specific apply path like\n\"ci-cd\". The set of fields is always in the version that the\nworkflow used when modifying the object.\n\n+optional"
-          items:
-            $ref: '#/components/schemas/ManagedFieldsEntry'
-          type: array
-          x-go-name: ManagedFields
-        name:
-          description: "Name must be unique within a namespace. Is required when creating resources, although\nsome resources may allow a client to request the generation of an appropriate name\nautomatically. Name is primarily intended for creation idempotence and configuration\ndefinition.\nCannot be updated.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#names\n+optional"
-          type: string
-          x-go-name: Name
-        namespace:
-          description: "Namespace defines the space within which each name must be unique. An empty namespace is\nequivalent to the \"default\" namespace, but \"default\" is the canonical representation.\nNot all objects are required to be scoped to a namespace - the value of this field for\nthose objects will be empty.\n\nMust be a DNS_LABEL.\nCannot be updated.\nMore info: http://kubernetes.io/docs/user-guide/namespaces\n+optional"
-          type: string
-          x-go-name: Namespace
-        ownerReferences:
-          description: "List of objects depended by this object. If ALL objects in the list have\nbeen deleted, this object will be garbage collected. If this object is managed by a controller,\nthen an entry in this list will point to this controller, with the controller field set to true.\nThere cannot be more than one managing controller.\n+optional\n+patchMergeKey=uid\n+patchStrategy=merge"
-          items:
-            $ref: '#/components/schemas/OwnerReference'
-          type: array
-          x-go-name: OwnerReferences
-        resourceVersion:
-          description: "An opaque value that represents the internal version of this object that can\nbe used by clients to determine when objects have changed. May be used for optimistic\nconcurrency, change detection, and the watch operation on a resource or set of resources.\nClients must treat these values as opaque and passed unmodified back to the server.\nThey may only be valid for a particular resource or set of resources.\n\nPopulated by the system.\nRead-only.\nValue must be treated as opaque by clients and .\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional"
-          type: string
-          x-go-name: ResourceVersion
-        selfLink:
-          description: |-
-            SelfLink is a URL representing this object.
-            Populated by the system.
-            Read-only.
-
-            DEPRECATED
-            Kubernetes will stop propagating this field in 1.20 release and the field is planned
-            to be removed in 1.21 release.
-            +optional
-          type: string
-          x-go-name: SelfLink
-        uid:
-          description: "UID is a type that holds unique ID values, including UUIDs.  Because we\ndon't ONLY use UUIDs, this is an alias to string.  Being a type captures\nintent and helps make sure that UIDs and names do not get conflated."
-          type: string
-          x-go-package: k8s.io/apimachinery/pkg/types
-      type: object
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-    OwnerReference:
-      description: "OwnerReference contains enough information to let you identify an owning\nobject. An owning object must be in the same namespace as the dependent, or\nbe cluster-scoped, so there is no namespace field.\n+structType=atomic"
-      example:
-        uid: uid
-        controller: true
-        apiVersion: apiVersion
-        kind: kind
-        name: name
-        blockOwnerDeletion: true
-      properties:
-        apiVersion:
-          description: API version of the referent.
-          type: string
-          x-go-name: APIVersion
-        blockOwnerDeletion:
-          description: "If true, AND if the owner has the \"foregroundDeletion\" finalizer, then\nthe owner cannot be deleted from the key-value store until this\nreference is removed.\nDefaults to false.\nTo set this field, a user needs \"delete\" permission of the owner,\notherwise 422 (Unprocessable Entity) will be returned.\n+optional"
-          type: boolean
-          x-go-name: BlockOwnerDeletion
-        controller:
-          description: "If true, this reference points to the managing controller.\n+optional"
-          type: boolean
-          x-go-name: Controller
-        kind:
-          description: "Kind of the referent.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
-          type: string
-          x-go-name: Kind
-        name:
-          description: "Name of the referent.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#names"
-          type: string
-          x-go-name: Name
-        uid:
-          description: "UID is a type that holds unique ID values, including UUIDs.  Because we\ndon't ONLY use UUIDs, this is an alias to string.  Being a type captures\nintent and helps make sure that UIDs and names do not get conflated."
-          type: string
-          x-go-package: k8s.io/apimachinery/pkg/types
-      type: object
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
+      x-go-package: github.com/porter-dev/porter/api/types
     PatchStackSourceConfigRequest:
       properties:
         source_config:
@@ -3740,24 +3176,30 @@ components:
         git_action_config:
           $ref: '#/components/schemas/GitActionConfig'
         id:
+          description: The ID of this Porter release
           format: uint64
           type: integer
           x-go-name: ID
         image_repo_uri:
+          description: The complete image repository URI for this release
           type: string
           x-go-name: ImageRepoURI
         is_stack:
+          description: Whether this release is tied to a stack or not
           type: boolean
           x-go-name: IsStack
         latest_version:
+          description: The latest version of this Porter release
           type: string
           x-go-name: LatestVersion
         tags:
+          description: The list of tags for this release
           items:
             type: string
           type: array
           x-go-name: Tags
         webhook_token:
+          description: The webhook token used to secure Github repository webhooks
           type: string
           x-go-name: WebhookToken
       type: object
@@ -3773,68 +3215,95 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     Registry:
       example:
-        do_integration_id: 5
-        infra_id: 7
-        azure_integration_id: 6
-        gcp_integration_id: 5
-        basic_integration_id: 1
-        project_id: 9
-        service: service
-        name: name
+        do_integration_id: 0
+        infra_id: 2
+        azure_integration_id: 0
+        gcp_integration_id: 0
+        basic_integration_id: 0
+        project_id: 1
+        service: ecr
+        name: my-ecr-reg
         id: 2
-        aws_integration_id: 0
-        url: url
+        aws_integration_id: 1
+        url: 123456789.dkr.ecr.us-west-2.amazonaws.com
       properties:
         aws_integration_id:
           description: The AWS integration that was used to create or connect the registry
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AWSIntegrationID
         azure_integration_id:
           description: The Azure integration that was used to create or connect the registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AzureIntegrationID
         basic_integration_id:
-          description: 'The basic integration that was used to connect the registry:'
+          description: The basic integration that was used to connect the registry.
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: BasicIntegrationID
         do_integration_id:
           description: |-
             The DO integration that was used to create or connect the registry:
             this points to an OAuthIntegrationID
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: DOIntegrationID
         gcp_integration_id:
           description: The GCP integration that was used to create or connect the registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: GCPIntegrationID
         id:
+          description: The ID of the registry
+          example: 2
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: ID
         infra_id:
           description: "The infra id, if registry was provisioned with Porter"
+          example: 2
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: InfraID
         name:
           description: Name of the registry
+          example: my-ecr-reg
           type: string
           x-go-name: Name
         project_id:
           description: The project that this integration belongs to
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: ProjectID
         service:
+          description: The integration service for this registry
+          enum:
+            - gcr
+            - ecr
+            - acr
+            - docr
+            - dockerhub
+          example: ecr
           type: string
-          x-go-package: github.com/porter-dev/porter/api/types
+          x-go-name: Service
         url:
           description: URL of the registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
           type: string
           x-go-name: URL
       type: object
@@ -3861,9 +3330,6 @@ components:
           x-go-name: URI
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
-    RegistryService:
-      type: string
-      x-go-package: github.com/porter-dev/porter/api/types
     Release:
       description: Release is a helm release with a form attached
       example:
@@ -3873,10 +3339,11 @@ components:
           git_repo_id: 5
           git_branch: git_branch
           dockerfile_path: dockerfile_path
+          gitlab_integration_id: 5
           folder_path: folder_path
         manifest: manifest
         webhook_token: webhook_token
-        version: 7
+        version: 9
         tags:
           - tags
           - tags
@@ -4101,7 +3568,7 @@ components:
           config:
             - 0
             - 0
-        id: 2
+        id: 7
         is_stack: true
         chart:
           schema:
@@ -4215,7 +3682,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 5
+            weight: 2
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -4230,7 +3697,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 5
+            weight: 2
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -4273,18 +3740,22 @@ components:
           type: array
           x-go-name: Hooks
         id:
+          description: The ID of this Porter release
           format: uint64
           type: integer
           x-go-name: ID
         image_repo_uri:
+          description: The complete image repository URI for this release
           type: string
           x-go-name: ImageRepoURI
         info:
           $ref: '#/components/schemas/Info'
         is_stack:
+          description: Whether this release is tied to a stack or not
           type: boolean
           x-go-name: IsStack
         latest_version:
+          description: The latest version of this Porter release
           type: string
           x-go-name: LatestVersion
         manifest:
@@ -4300,6 +3771,7 @@ components:
           type: string
           x-go-name: Namespace
         tags:
+          description: The list of tags for this release
           items:
             type: string
           type: array
@@ -4310,6 +3782,7 @@ components:
           type: integer
           x-go-name: Version
         webhook_token:
+          description: The webhook token used to secure Github repository webhooks
           type: string
           x-go-name: WebhookToken
       type: object
@@ -4938,46 +4411,27 @@ components:
       description: Status is the status of a release
       type: string
       x-go-package: helm.sh/helm/v3/pkg/release
-    Time:
-      description: "Programs using times should typically store and pass them as values,\nnot pointers. That is, time variables and struct fields should be of\ntype time.Time, not *time.Time.\n\nA Time value can be used by multiple goroutines simultaneously except\nthat the methods GobDecode, UnmarshalBinary, UnmarshalJSON and\nUnmarshalText are not concurrency-safe.\n\nTime instants can be compared using the Before, After, and Equal methods.\nThe Sub method subtracts two instants, producing a Duration.\nThe Add method adds a Time and a Duration, producing a Time.\n\nThe zero value of type Time is January 1, year 1, 00:00:00.000000000 UTC.\nAs this time is unlikely to come up in practice, the IsZero method gives\na simple way of detecting a time that has not been initialized explicitly.\n\nEach Time has associated with it a Location, consulted when computing the\npresentation form of the time, such as in the Format, Hour, and Year methods.\nThe methods Local, UTC, and In return a Time with a specific location.\nChanging the location in this way changes only the presentation; it does not\nchange the instant in time being denoted and therefore does not affect the\ncomputations described in earlier paragraphs.\n\nRepresentations of a Time value saved by the GobEncode, MarshalBinary,\nMarshalJSON, and MarshalText methods store the Time.Location's offset, but not\nthe location name. They therefore lose information about Daylight Saving Time.\n\nIn addition to the required “wall clock” reading, a Time may contain an optional\nreading of the current process's monotonic clock, to provide additional precision\nfor comparison or subtraction.\nSee the “Monotonic Clocks” section in the package documentation for details.\n\nNote that the Go == operator compares not just the time instant but also the\nLocation and the monotonic clock reading. Therefore, Time values should not\nbe used as map or database keys without first guaranteeing that the\nidentical Location has been set for all values, which can be achieved\nthrough use of the UTC or Local method, and that the monotonic clock reading\nhas been stripped by setting t = t.Round(0). In general, prefer t.Equal(u)\nto t == u, since t.Equal uses the most accurate comparison available and\ncorrectly handles the case when only one of its arguments has a monotonic\nclock reading."
-      format: date-time
-      title: A Time represents an instant in time with nanosecond precision.
-      type: string
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-    TypeMeta:
-      description: +k8s:deepcopy-gen=false
-      properties:
-        apiVersion:
-          description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources\n+optional"
-          type: string
-          x-go-name: APIVersion
-        kind:
-          description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional"
-          type: string
-          x-go-name: Kind
-      title: |-
-        TypeMeta describes an individual object in an API response or request
-        with strings representing the type of the object and its API schema version.
-        Structures that are versioned or persisted should inline TypeMeta.
-      type: object
-      x-go-package: k8s.io/apimachinery/pkg/apis/meta/v1
-    UID:
-      description: "UID is a type that holds unique ID values, including UUIDs.  Because we\ndon't ONLY use UUIDs, this is an alias to string.  Being a type captures\nintent and helps make sure that UIDs and names do not get conflated."
-      type: string
-      x-go-package: k8s.io/apimachinery/pkg/types
     UpdateReleaseRequest:
       example:
-        values: values
+        values:
+          key: "{}"
         version: version
       properties:
         values:
-          type: string
+          additionalProperties:
+            properties: {}
+            type: object
+          description: The Helm values to upgrade the release with
+          type: object
           x-go-name: Values
         version:
+          description: The Porter charts version to upgrade the release with
           type: string
           x-go-name: ChartVersion
+      required:
+        - values
       type: object
-      x-go-name: UpgradeReleaseRequest
+      x-go-name: V1UpgradeReleaseRequest
       x-go-package: github.com/porter-dev/porter/api/types
     UpdateStackSourceConfigRequest:
       properties:
@@ -4996,9 +4450,45 @@ components:
         - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
+    V1ListImageResponse:
+      example:
+        next: next
+        next_page: 0
+        images:
+          - pushed_at: 2000-01-23T04:56:07.000+00:00
+            manifest: manifest
+            digest: digest
+            tag: tag
+            repository_name: repository_name
+          - pushed_at: 2000-01-23T04:56:07.000+00:00
+            manifest: manifest
+            digest: digest
+            tag: tag
+            repository_name: repository_name
+      properties:
+        images:
+          description: The list of repository images with tags
+          items:
+            $ref: '#/components/schemas/Image'
+          type: array
+          x-go-name: Images
+        next:
+          description: The next page cursor used for pagination
+          type: string
+          x-go-name: Next
+        next_page:
+          description: The next page number used for pagination (**DigitalOcean only**)
+          format: uint64
+          type: integer
+          x-go-name: NextPage
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
     createNamespace_request:
+      description: CreateNamespaceRequest represents the request body to create a namespace
       properties:
         name:
+          description: the name of the namespace to create
+          example: sampleNS
           type: string
           x-go-name: Name
       type: object
@@ -5007,48 +4497,71 @@ components:
       properties:
         build_config:
           $ref: '#/components/schemas/CreateBuildConfigRequest'
-        github_action_config:
+        git_action_config:
           $ref: '#/components/schemas/CreateGitActionConfigRequest'
         image_url:
+          description: The repository image URL for this release
           type: string
           x-go-name: ImageURL
         name:
+          description: The name of this release
           type: string
           x-go-name: Name
+        repo_url:
+          description: The repository URL for this release
+          type: string
+          x-go-name: RepoURL
         synced_env_groups:
+          description: The list of synced environment groups for this release
           items:
             type: string
           type: array
           x-go-name: SyncedEnvGroups
         tags:
+          description: The list of tags for this release
           items:
             type: string
           type: array
           x-go-name: Tags
         template_name:
+          description: the Porter charts templated name
           type: string
           x-go-name: TemplateName
         template_version:
+          description: The Porter charts template version
           type: string
           x-go-name: TemplateVersion
         values:
           additionalProperties:
             properties: {}
             type: object
+          description: The Helm values for this release
           type: object
           x-go-name: Values
+      required:
+        - image_url
+        - name
+        - template_name
+        - template_version
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     updateRelease_request:
       properties:
         values:
-          type: string
+          additionalProperties:
+            properties: {}
+            type: object
+          description: The Helm values to upgrade the release with
+          type: object
           x-go-name: Values
         version:
+          description: The Porter charts version to upgrade the release with
           type: string
           x-go-name: ChartVersion
+      required:
+        - values
       type: object
-      x-go-name: UpgradeReleaseRequest
+      x-go-name: V1UpgradeReleaseRequest
       x-go-package: github.com/porter-dev/porter/api/types
     createStack_request:
       properties:
@@ -5097,45 +4610,70 @@ components:
     createRegistry_request:
       properties:
         acr_name:
+          description: ACR name (**Azure only**)
           type: string
           x-go-name: ACRName
         acr_resource_group_name:
-          description: Additional Azure-specific fields
+          description: ACR resource group name (**Azure only**)
           type: string
           x-go-name: ACRResourceGroupName
         aws_integration_id:
+          description: The AWS integration ID to be used for this registry
+          example: 1
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AWSIntegrationID
         azure_integration_id:
+          description: The Azure integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: AzureIntegrationID
         basic_integration_id:
+          description: The Basic integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: BasicIntegrationID
         do_integration_id:
+          description: The DigitalOcean integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: DOIntegrationID
         gcp_integration_id:
+          description: The GCP integration ID to be used for this registry
+          example: 0
           format: uint64
+          minimum: 1
           type: integer
           x-go-name: GCPIntegrationID
         name:
+          description: Name of the container registry
+          example: my-ecr-reg
           type: string
           x-go-name: Name
         url:
+          description: URL of the container registry
+          example: 123456789.dkr.ecr.us-west-2.amazonaws.com
           type: string
           x-go-name: URL
+      required:
+        - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     createRegistryRepository_request:
       properties:
         image_repo_uri:
+          description: The URL to the repository of a registry (**ECR only**)
           type: string
           x-go-name: ImageRepoURI
+      required:
+        - image_repo_uri
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     FormContent_settings:
@@ -5183,15 +4721,6 @@ components:
           x-go-name: OmitFromLaunch
       type: object
       x-go-name: Settings
-    GetNamespaceResponse_metadata:
-      example:
-        name: name
-      properties:
-        name:
-          type: string
-          x-go-name: Name
-      type: object
-      x-go-name: Metadata
   securitySchemes:
     Bearer:
       type: http
@@ -5218,4 +4747,4 @@ tags:
   - name: Registries
     description: Porter Registries
   - name: Stacks
-    description: Porter Stacks
+    description: "Stacks are collections of resources which are deployed as a group - as a result, they are either dependent or logically grouped together. For example, a `web` and several `worker` processes can form a single stack. \n<br /> <br />\nAt the moment, stacks only support a **single application source** (the stack's `source_config`).\n"
