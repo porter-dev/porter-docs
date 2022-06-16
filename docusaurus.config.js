@@ -13,6 +13,7 @@ docusaurusConfig = {
       appId: "UHHK7LBTTD",
       apiKey: "fee1e27616e7d25f6fca5361af665f02",
       indexName: "porter-docs",
+      contextualSearch: false,
     },
     colorMode: {
       defaultMode: "dark",
