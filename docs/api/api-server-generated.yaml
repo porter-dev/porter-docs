@@ -28,13 +28,13 @@ definitions:
           Files are miscellaneous files in a chart archive,
           e.g. README, LICENSE, etc.
         items:
-          $ref: "#/definitions/File"
+          $ref: '#/definitions/File'
         type: array
         x-go-name: Files
       lock:
-        $ref: "#/definitions/Lock"
+        $ref: '#/definitions/Lock'
       metadata:
-        $ref: "#/definitions/Metadata"
+        $ref: '#/definitions/Metadata'
       schema:
         description: Schema is an optional JSON schema for imposing structure on Values
         items:
@@ -45,7 +45,7 @@ definitions:
       templates:
         description: Templates for this chart.
         items:
-          $ref: "#/definitions/File"
+          $ref: '#/definitions/File'
         type: array
         x-go-name: Templates
       values:
@@ -76,12 +76,11 @@ definitions:
         type: object
         x-go-name: Config
     required:
-      - builder
+    - builder
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   CreateGitActionConfigRequest:
-    description:
-      The git configuration for this new release (when deploying from a
+    description: The git configuration for this new release (when deploying from a
       git repository)
     properties:
       dockerfile_path:
@@ -124,8 +123,8 @@ definitions:
         type: boolean
         x-go-name: ShouldCreateWorkflow
     required:
-      - git_repo
-      - image_repo_uri
+    - git_repo
+    - image_repo_uri
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   CreateNamespaceRequest:
@@ -145,7 +144,7 @@ definitions:
         type: string
         x-go-name: ImageRepoURI
     required:
-      - image_repo_uri
+    - image_repo_uri
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   CreateRegistryRequest:
@@ -204,11 +203,11 @@ definitions:
         type: string
         x-go-name: URL
     required:
-      - name
+    - name
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   CreateRegistryResponse:
-    $ref: "#/definitions/Registry"
+    $ref: '#/definitions/Registry'
   CreateReleaseBaseRequest:
     properties:
       name:
@@ -234,17 +233,17 @@ definitions:
         type: object
         x-go-name: Values
     required:
-      - template_name
-      - template_version
-      - name
+    - template_name
+    - template_version
+    - name
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   CreateReleaseRequest:
     properties:
       build_config:
-        $ref: "#/definitions/CreateBuildConfigRequest"
+        $ref: '#/definitions/CreateBuildConfigRequest'
       git_action_config:
-        $ref: "#/definitions/CreateGitActionConfigRequest"
+        $ref: '#/definitions/CreateGitActionConfigRequest'
       image_url:
         description: The repository image URL for this release
         type: string
@@ -284,10 +283,93 @@ definitions:
         type: object
         x-go-name: Values
     required:
-      - template_name
-      - template_version
-      - name
-      - image_url
+    - template_name
+    - template_version
+    - name
+    - image_url
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackAppResourceRequest:
+    properties:
+      name:
+        description: The name of the resource.
+        type: string
+        x-go-name: Name
+      source_config_name:
+        description: The name of the source config (must exist inside `source_configs`).
+        type: string
+        x-go-name: SourceConfigName
+      template_name:
+        description: The name of the template in the Helm registry, such as `web`
+        type: string
+        x-go-name: TemplateName
+      template_repo_url:
+        description: The URL of the Helm registry to pull the template from. If not
+          set, this defaults to `https://charts.getporter.dev`.
+        type: string
+        x-go-name: TemplateRepoURL
+      template_version:
+        description: The version of the template in the Helm registry, such as `v0.50.0`
+        type: string
+        x-go-name: TemplateVersion
+      values:
+        additionalProperties:
+          type: object
+        description: The values to pass in to the template.
+        type: object
+        x-go-name: Values
+    required:
+    - template_name
+    - template_version
+    - name
+    - source_config_name
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackRequest:
+    properties:
+      app_resources:
+        description: A list of app resources to create. An app resource is an application
+          helm chart, such as a `web` or `worker` template.
+        items:
+          $ref: '#/definitions/CreateStackAppResourceRequest'
+        type: array
+        x-go-name: AppResources
+      name:
+        description: The display name of the stack
+        type: string
+        x-go-name: Name
+      source_configs:
+        description: |-
+          A list of configurations which can build an application. Each application resource must use at least one
+          source config in order to build application from source. The source config can be specified as a Docker image
+          registry or linked to a remote Git repository.
+        items:
+          $ref: '#/definitions/CreateStackSourceConfigRequest'
+        type: array
+        x-go-name: SourceConfigs
+    required:
+    - name
+    - app_resources
+    - source_configs
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackSourceConfigRequest:
+    properties:
+      build:
+        $ref: '#/definitions/StackSourceConfigBuild'
+      image_repo_uri:
+        type: string
+        x-go-name: ImageRepoURI
+      image_tag:
+        type: string
+        x-go-name: ImageTag
+      name:
+        type: string
+        x-go-name: Name
+    required:
+    - name
+    - image_repo_uri
+    - image_tag
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   Dependency:
@@ -300,8 +382,7 @@ definitions:
         type: string
         x-go-name: Alias
       condition:
-        description:
-          A yaml path that resolves to a boolean, used for enabling/disabling
+        description: A yaml path that resolves to a boolean, used for enabling/disabling
           charts (e.g. subchart1.enabled )
         type: string
         x-go-name: Condition
@@ -372,7 +453,7 @@ definitions:
     description: FormContent is a form's atomic unit
     properties:
       context:
-        $ref: "#/definitions/FormContext"
+        $ref: '#/definitions/FormContext'
       label:
         type: string
         x-go-name: Label
@@ -439,11 +520,11 @@ definitions:
     properties:
       contents:
         items:
-          $ref: "#/definitions/FormContent"
+          $ref: '#/definitions/FormContent'
         type: array
         x-go-name: Contents
       context:
-        $ref: "#/definitions/FormContext"
+        $ref: '#/definitions/FormContext'
       name:
         type: string
         x-go-name: Name
@@ -456,7 +537,7 @@ definitions:
     description: FormTab is a tab rendered in a form
     properties:
       context:
-        $ref: "#/definitions/FormContext"
+        $ref: '#/definitions/FormContext'
       label:
         type: string
         x-go-name: Label
@@ -465,7 +546,7 @@ definitions:
         x-go-name: Name
       sections:
         items:
-          $ref: "#/definitions/FormSection"
+          $ref: '#/definitions/FormSection'
         type: array
         x-go-name: Sections
       settings:
@@ -500,7 +581,7 @@ definitions:
         x-go-name: Name
       tabs:
         items:
-          $ref: "#/definitions/FormTab"
+          $ref: '#/definitions/FormTab'
         type: array
         x-go-name: Tabs
       tags:
@@ -511,12 +592,11 @@ definitions:
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
   GetRegistryResponse:
-    $ref: "#/definitions/Registry"
+    $ref: '#/definitions/Registry'
   GetReleaseResponse:
-    $ref: "#/definitions/Release"
+    $ref: '#/definitions/Release'
   GitActionConfig:
-    description:
-      The git configuration for this release (when deployed from a git
+    description: The git configuration for this release (when deployed from a git
       repository)
     properties:
       dockerfile_path:
@@ -554,17 +634,16 @@ definitions:
   Hook:
     properties:
       delete_policies:
-        description:
-          DeletePolicies are the policies that indicate when to delete
+        description: DeletePolicies are the policies that indicate when to delete
           the hook
         items:
-          $ref: "#/definitions/HookDeletePolicy"
+          $ref: '#/definitions/HookDeletePolicy'
         type: array
         x-go-name: DeletePolicies
       events:
         description: Events are the events that this hook fires on.
         items:
-          $ref: "#/definitions/HookEvent"
+          $ref: '#/definitions/HookEvent'
         type: array
         x-go-name: Events
       kind:
@@ -572,7 +651,7 @@ definitions:
         type: string
         x-go-name: Kind
       last_run:
-        $ref: "#/definitions/HookExecution"
+        $ref: '#/definitions/HookExecution'
       manifest:
         description: Manifest is the manifest contents.
         type: string
@@ -585,8 +664,7 @@ definitions:
         type: string
         x-go-name: Path
       weight:
-        description:
-          Weight indicates the sort order for execution among similar Hook
+        description: Weight indicates the sort order for execution among similar Hook
           type
         format: int64
         type: integer
@@ -610,14 +688,13 @@ definitions:
         type: string
         x-go-name: CompletedAt
       phase:
-        $ref: "#/definitions/HookPhase"
+        $ref: '#/definitions/HookPhase'
       started_at:
         description: StartedAt indicates the date/time this hook was started
         format: date-time
         type: string
         x-go-name: StartedAt
-    title:
-      A HookExecution records the result for the last execution of a hook for
+    title: A HookExecution records the result for the last execution of a hook for
       a given release.
     type: object
     x-go-package: helm.sh/helm/v3/pkg/release
@@ -677,48 +754,47 @@ definitions:
         type: string
         x-go-name: Notes
       status:
-        $ref: "#/definitions/Status"
+        $ref: '#/definitions/Status'
     title: Info describes release information.
     type: object
     x-go-package: helm.sh/helm/v3/pkg/release
   ListImagesResponse:
     items:
-      $ref: "#/definitions/Image"
+      $ref: '#/definitions/Image'
     type: array
     x-go-name: ListImageResponse
     x-go-package: github.com/porter-dev/porter/api/types
   ListNamespacesResponse:
     description: ListNamespacesResponse represents the list of all namespaces
     items:
-      $ref: "#/definitions/NamespaceResponse"
+      $ref: '#/definitions/NamespaceResponse'
     type: array
     x-go-package: github.com/porter-dev/porter/api/types
   ListRegistriesResponse:
     items:
-      $ref: "#/definitions/Registry"
+      $ref: '#/definitions/Registry'
     type: array
     x-go-name: RegistryListResponse
     x-go-package: github.com/porter-dev/porter/api/types
   ListRegistryRepositoriesResponse:
     items:
-      $ref: "#/definitions/RegistryRepository"
+      $ref: '#/definitions/RegistryRepository'
     type: array
     x-go-name: ListRegistryRepositoryResponse
     x-go-package: github.com/porter-dev/porter/api/types
   ListReleasesResponse:
     items:
-      $ref: "#/definitions/Release"
+      $ref: '#/definitions/Release'
     type: array
     x-go-package: github.com/porter-dev/porter/api/types
   Lock:
     description: It represents the state that the dependencies should be in.
     properties:
       dependencies:
-        description:
-          Dependencies is the list of dependencies that this lock file
+        description: Dependencies is the list of dependencies that this lock file
           has locked.
         items:
-          $ref: "#/definitions/Dependency"
+          $ref: '#/definitions/Dependency'
         type: array
         x-go-name: Dependencies
       digest:
@@ -775,7 +851,7 @@ definitions:
       dependencies:
         description: Dependencies are a list of dependencies for a chart.
         items:
-          $ref: "#/definitions/Dependency"
+          $ref: '#/definitions/Dependency'
         type: array
         x-go-name: Dependencies
       deprecated:
@@ -801,15 +877,14 @@ definitions:
         type: array
         x-go-name: Keywords
       kubeVersion:
-        description:
-          KubeVersion is a SemVer constraint specifying the version of
+        description: KubeVersion is a SemVer constraint specifying the version of
           Kubernetes required.
         type: string
         x-go-name: KubeVersion
       maintainers:
         description: A list of name and URL/email address combinations for the maintainer(s)
         items:
-          $ref: "#/definitions/Maintainer"
+          $ref: '#/definitions/Maintainer'
         type: array
         x-go-name: Maintainers
       name:
@@ -827,7 +902,7 @@ definitions:
         type: string
         x-go-name: Tags
       type:
-        description: "Specifies the chart type: application or library"
+        description: 'Specifies the chart type: application or library'
         type: string
         x-go-name: Type
       version:
@@ -838,8 +913,7 @@ definitions:
     type: object
     x-go-package: helm.sh/helm/v3/pkg/chart
   NamespaceResponse:
-    description:
-      NamespaceResponse represents the response type of requests to the
+    description: NamespaceResponse represents the response type of requests to the
       namespace resource
     properties:
       creationTimestamp:
@@ -848,8 +922,7 @@ definitions:
         type: string
         x-go-name: CreationTimestamp
       deletionTimestamp:
-        description:
-          the deletion timestamp in UTC of the namespace in RFC 1123 format,
+        description: the deletion timestamp in UTC of the namespace in RFC 1123 format,
           if the namespace is deleted
         example: Mon, 13 Jun 2022 17:49:12 GMT
         type: string
@@ -862,19 +935,25 @@ definitions:
       status:
         description: the status of the namespace
         enum:
-          - active
-          - terminating
+        - active
+        - terminating
         example: active
         type: string
         x-go-name: Status
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  PatchStackSourceConfigRequest:
+    properties:
+      source_config:
+        $ref: '#/definitions/UpdateStackSourceConfigRequest'
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   PorterRelease:
     properties:
       build_config:
-        $ref: "#/definitions/BuildConfig"
+        $ref: '#/definitions/BuildConfig'
       git_action_config:
-        $ref: "#/definitions/GitActionConfig"
+        $ref: '#/definitions/GitActionConfig'
       id:
         description: The ID of this Porter release
         format: uint64
@@ -884,6 +963,10 @@ definitions:
         description: The complete image repository URI for this release
         type: string
         x-go-name: ImageRepoURI
+      is_stack:
+        description: Whether this release is tied to a stack or not
+        type: boolean
+        x-go-name: IsStack
       latest_version:
         description: The latest version of this Porter release
         type: string
@@ -900,6 +983,15 @@ definitions:
         x-go-name: WebhookToken
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  PutStackSourceConfigRequest:
+    properties:
+      source_configs:
+        items:
+          $ref: '#/definitions/CreateStackSourceConfigRequest'
+        type: array
+        x-go-name: SourceConfigs
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   Registry:
     properties:
       aws_integration_id:
@@ -910,8 +1002,7 @@ definitions:
         type: integer
         x-go-name: AWSIntegrationID
       azure_integration_id:
-        description:
-          The Azure integration that was used to create or connect the
+        description: The Azure integration that was used to create or connect the
           registry
         example: 0
         format: uint64
@@ -970,11 +1061,11 @@ definitions:
       service:
         description: The integration service for this registry
         enum:
-          - gcr
-          - ecr
-          - acr
-          - docr
-          - dockerhub
+        - gcr
+        - ecr
+        - acr
+        - docr
+        - dockerhub
         example: ecr
         type: string
         x-go-name: Service
@@ -1007,9 +1098,9 @@ definitions:
     description: Release is a helm release with a form attached
     properties:
       build_config:
-        $ref: "#/definitions/BuildConfig"
+        $ref: '#/definitions/BuildConfig'
       chart:
-        $ref: "#/definitions/Chart"
+        $ref: '#/definitions/Chart'
       config:
         additionalProperties:
           type: object
@@ -1019,13 +1110,13 @@ definitions:
         type: object
         x-go-name: Config
       form:
-        $ref: "#/definitions/FormYAML"
+        $ref: '#/definitions/FormYAML'
       git_action_config:
-        $ref: "#/definitions/GitActionConfig"
+        $ref: '#/definitions/GitActionConfig'
       hooks:
         description: Hooks are all of the hooks declared for this release.
         items:
-          $ref: "#/definitions/Hook"
+          $ref: '#/definitions/Hook'
         type: array
         x-go-name: Hooks
       id:
@@ -1038,7 +1129,11 @@ definitions:
         type: string
         x-go-name: ImageRepoURI
       info:
-        $ref: "#/definitions/Info"
+        $ref: '#/definitions/Info'
+      is_stack:
+        description: Whether this release is tied to a stack or not
+        type: boolean
+        x-go-name: IsStack
       latest_version:
         description: The latest version of this Porter release
         type: string
@@ -1072,6 +1167,272 @@ definitions:
         x-go-name: WebhookToken
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  Stack:
+    properties:
+      created_at:
+        description: The time that the stack was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: A unique id for the stack
+        type: string
+        x-go-name: ID
+      latest_revision:
+        $ref: '#/definitions/StackRevision'
+      name:
+        description: The display name of the stack
+        type: string
+        x-go-name: Name
+      revisions:
+        description: The list of revisions deployed for this stack
+        items:
+          $ref: '#/definitions/StackRevisionMeta'
+        type: array
+        x-go-name: Revisions
+      updated_at:
+        description: The time that the stack was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackListResponse:
+    items:
+      $ref: '#/definitions/Stack'
+    type: array
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackResource:
+    properties:
+      created_at:
+        description: The time that this resource was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: The id for this resource
+        type: string
+        x-go-name: ID
+      name:
+        description: The name of the resource
+        type: string
+        x-go-name: Name
+      stack_app_data:
+        $ref: '#/definitions/StackResourceAppData'
+      stack_id:
+        description: The stack ID that this resource belongs to
+        type: string
+        x-go-name: StackID
+      stack_revision_id:
+        description: The numerical revision id that this resource belongs to
+        format: uint64
+        type: integer
+        x-go-name: StackRevisionID
+      stack_source_config:
+        $ref: '#/definitions/StackSourceConfig'
+      updated_at:
+        description: The time that this resource was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackResourceAppData:
+    properties:
+      template_name:
+        description: The name of the template in the Helm registry, such as `web`
+        type: string
+        x-go-name: TemplateName
+      template_repo_url:
+        description: The URL of the Helm registry to pull the template from
+        type: string
+        x-go-name: TemplateRepoURL
+      template_version:
+        description: The version of the template in the Helm registry, such as `v0.50.0`
+        type: string
+        x-go-name: TemplateVersion
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackRevision:
+    properties:
+      created_at:
+        description: The time that this revision was created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: The id of the revision
+        format: uint64
+        type: integer
+        x-go-name: ID
+      message:
+        description: The message associated with an error or status change
+        type: string
+        x-go-name: Message
+      reason:
+        description: The reason for any error or status change
+        type: string
+        x-go-name: Reason
+      resources:
+        description: The list of resources deployed in this revision
+        items:
+          $ref: '#/definitions/StackResource'
+        type: array
+        x-go-name: Resources
+      source_configs:
+        items:
+          $ref: '#/definitions/StackSourceConfig'
+        type: array
+        x-go-name: SourceConfigs
+      stack_id:
+        description: The stack ID that this source config belongs to
+        type: string
+        x-go-name: StackID
+      status:
+        $ref: '#/definitions/StackRevisionStatus'
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackRevisionMeta:
+    properties:
+      created_at:
+        description: The time that this revision was created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: The id of the revision
+        format: uint64
+        type: integer
+        x-go-name: ID
+      stack_id:
+        description: The stack ID that this source config belongs to
+        type: string
+        x-go-name: StackID
+      status:
+        $ref: '#/definitions/StackRevisionStatus'
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackRevisionStatus:
+    type: string
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackRollbackRequest:
+    properties:
+      target_revision:
+        format: uint64
+        type: integer
+        x-go-name: TargetRevision
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfig:
+    properties:
+      build:
+        $ref: '#/definitions/StackSourceConfigBuild'
+      created_at:
+        description: The time that the source configuration was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      id:
+        description: The unique id of the stack source config
+        type: string
+        x-go-name: ID
+      image_repo_uri:
+        description: The complete image repo uri used by the source
+        type: string
+        x-go-name: ImageRepoURI
+      image_tag:
+        description: The current image tag used by the application
+        type: string
+        x-go-name: ImageTag
+      name:
+        description: The display name of the stack source
+        type: string
+        x-go-name: Name
+      stack_id:
+        description: The stack ID that this source config belongs to
+        type: string
+        x-go-name: StackID
+      stack_revision_id:
+        description: The numerical revision id that this source config belongs to
+        format: uint64
+        type: integer
+        x-go-name: StackRevisionID
+      updated_at:
+        description: The time that the source configuration was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuild:
+    properties:
+      buildpack:
+        $ref: '#/definitions/StackSourceConfigBuildPack'
+      dockerfile:
+        $ref: '#/definitions/StackSourceConfigBuildDockerfile'
+      folder_path:
+        description: The path to the build context (the root folder of the application).
+          For example, `.` or `./app`
+        type: string
+        x-go-name: FolderPath
+      git:
+        $ref: '#/definitions/StackSourceConfigBuildGit'
+      method:
+        description: 'The build method to use: can be `docker` (for dockerfiles),
+          or `pack` (for buildpacks)'
+        type: string
+        x-go-name: Method
+    required:
+    - method
+    - folder_path
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuildDockerfile:
+    properties:
+      dockerfile_path:
+        description: The path to the dockerfile from the root directory. Defaults
+          to `./Dockerfile`.
+        type: string
+        x-go-name: DockerfilePath
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuildGit:
+    properties:
+      git_branch:
+        description: The git branch to use
+        type: string
+        x-go-name: GitBranch
+      git_integration_id:
+        description: The integration id of the github or gitlab integration
+        format: uint64
+        type: integer
+        x-go-name: GitIntegrationID
+      git_integration_kind:
+        description: 'The git integration kind: can be `github` or `gitlab`'
+        type: string
+        x-go-name: GitIntegrationKind
+      git_repo:
+        description: The git repo in ${owner}/${repo} form
+        type: string
+        x-go-name: GitRepo
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackSourceConfigBuildPack:
+    properties:
+      builder:
+        description: The buildpack builder to use
+        type: string
+        x-go-name: Builder
+      buildpacks:
+        description: A list of buildpacks to use
+        items:
+          type: string
+        type: array
+        x-go-name: Buildpacks
+    required:
+    - builder
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   Status:
     description: Status is the status of a release
     type: string
@@ -1089,16 +1450,33 @@ definitions:
         type: string
         x-go-name: ChartVersion
     required:
-      - values
+    - values
     type: object
     x-go-name: V1UpgradeReleaseRequest
+    x-go-package: github.com/porter-dev/porter/api/types
+  UpdateStackSourceConfigRequest:
+    properties:
+      image_repo_uri:
+        type: string
+        x-go-name: ImageRepoURI
+      image_tag:
+        type: string
+        x-go-name: ImageTag
+      name:
+        type: string
+        x-go-name: Name
+    required:
+    - name
+    - image_repo_uri
+    - image_tag
+    type: object
     x-go-package: github.com/porter-dev/porter/api/types
   V1ListImageResponse:
     properties:
       images:
         description: The list of repository images with tags
         items:
-          $ref: "#/definitions/Image"
+          $ref: '#/definitions/Image'
         type: array
         x-go-name: Images
       next:
@@ -1120,75 +1498,75 @@ paths:
         the project denoted by `project_id`.
       operationId: listNamespaces
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The cluster id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: ClusterID
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully listed namespaces
           schema:
-            $ref: "#/definitions/ListNamespacesResponse"
+            $ref: '#/definitions/ListNamespacesResponse'
         "403":
           description: Forbidden
       summary: List all namespaces
       tags:
-        - Namespaces
+      - Namespaces
     post:
       description: |-
         Creates a new namespace in the cluster denoted by `cluster_id`. The cluster should belong to the project
         denoted by `project_id`.
       operationId: createNamespace
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The cluster id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: ClusterID
-        - description: The namespace to create
-          in: body
-          name: CreateNamespaceRequest
-          schema:
-            $ref: "#/definitions/CreateNamespaceRequest"
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace to create
+        in: body
+        name: CreateNamespaceRequest
+        schema:
+          $ref: '#/definitions/CreateNamespaceRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "201":
           description: Successfully created a new namespace
           schema:
-            $ref: "#/definitions/NamespaceResponse"
+            $ref: '#/definitions/NamespaceResponse'
         "403":
           description: Forbidden
         "412":
           description: Namespace already exists
       summary: Create a new namespace
       tags:
-        - Namespaces
+      - Namespaces
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}:
     delete:
       description: |-
@@ -1197,30 +1575,30 @@ paths:
         Note that this endpoint does not indicate if the namespace does not exist.
       operationId: deleteNamespace
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The cluster id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: ClusterID
-        - description: The namespace name
-          in: path
-          name: namespace
-          required: true
-          type: string
-          x-go-name: Namespace
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully deleted namespace
@@ -1228,49 +1606,49 @@ paths:
           description: Forbidden
       summary: Delete a namespace
       tags:
-        - Namespaces
+      - Namespaces
     get:
       description: |-
         Gets a namespace denoted by the name `namespace`. The namespace should belong to the cluster
         denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
       operationId: getNamespace
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The cluster id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: ClusterID
-        - description: The namespace name
-          in: path
-          name: namespace
-          required: true
-          type: string
-          x-go-name: Namespace
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully got the namespace
           schema:
-            $ref: "#/definitions/NamespaceResponse"
+            $ref: '#/definitions/NamespaceResponse'
         "403":
           description: Forbidden
         "404":
           description: Not Found
       summary: Get a namespace
       tags:
-        - Namespaces
+      - Namespaces
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
     get:
       description: |-
@@ -1278,102 +1656,102 @@ paths:
         denoted by `cluster_id` and project denoted by `project_id`.
       operationId: listReleases
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The cluster id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: ClusterID
-        - description: The namespace name
-          in: path
-          name: namespace
-          required: true
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: the pagination limit
+        example: 50
+        format: int64
+        in: query
+        name: limit
+        type: integer
+        x-go-name: Limit
+      - description: how many items to skip
+        example: 10
+        format: int64
+        in: query
+        name: skip
+        type: integer
+        x-go-name: Skip
+      - description: whether to sort by date
+        example: false
+        in: query
+        name: byDate
+        type: boolean
+        x-go-name: ByDate
+      - description: which helm statuses to filter by
+        in: query
+        items:
           type: string
-          x-go-name: Namespace
-        - description: the pagination limit
-          example: 50
-          format: int64
-          in: query
-          name: limit
-          type: integer
-          x-go-name: Limit
-        - description: how many items to skip
-          example: 10
-          format: int64
-          in: query
-          name: skip
-          type: integer
-          x-go-name: Skip
-        - description: whether to sort by date
-          example: false
-          in: query
-          name: byDate
-          type: boolean
-          x-go-name: ByDate
-        - description: which helm statuses to filter by
-          in: query
-          items:
-            type: string
-          name: statusFilter
-          type: array
-          x-go-name: StatusFilter
+        name: statusFilter
+        type: array
+        x-go-name: StatusFilter
       produces:
-        - application/json
+      - application/json
       responses:
         "201":
           description: Successfully listed releases
           schema:
-            $ref: "#/definitions/ListReleasesResponse"
+            $ref: '#/definitions/ListReleasesResponse'
         "403":
           description: Forbidden
       summary: List releases
       tags:
-        - Releases
+      - Releases
     post:
       description: |-
         Creates a new release in the namespace denoted by `namespace`. The namespace should belong to the
         cluster denoted by `cluster_id` which itself should belong to the project denoted by `project_id`.
       operationId: createRelease
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The cluster id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: ClusterID
-        - description: The namespace name
-          in: path
-          name: namespace
-          required: true
-          type: string
-          x-go-name: Namespace
-        - description: The release to create
-          in: body
-          name: CreateReleaseRequest
-          schema:
-            $ref: "#/definitions/CreateReleaseRequest"
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release to create
+        in: body
+        name: CreateReleaseRequest
+        schema:
+          $ref: '#/definitions/CreateReleaseRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "201":
           description: Successfully created the release
@@ -1389,7 +1767,7 @@ paths:
           description: A precondition failed for the request
       summary: Create a new release
       tags:
-        - Releases
+      - Releases
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}:
     delete:
       description: |-
@@ -1398,44 +1776,44 @@ paths:
         denoted by `project_id`.
       operationId: deleteRelease
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
-        - description: The namespace name
-          in: path
-          name: namespace
-          required: true
-          type: string
-          x-go-name: Namespace
-        - description: The release name
-          in: path
-          name: name
-          required: true
-          type: string
-          x-go-name: Name
-        - description: The release version (`0` for latest version)
-          format: uint64
-          in: path
-          minimum: 0
-          name: version
-          required: true
-          type: integer
-          x-go-name: Version
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release name
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      - description: The release version (`0` for latest version)
+        format: uint64
+        in: path
+        minimum: 0
+        name: version
+        required: true
+        type: integer
+        x-go-name: Version
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully deleted the release
@@ -1443,7 +1821,7 @@ paths:
           description: Forbidden
       summary: Delete a release
       tags:
-        - Releases
+      - Releases
     get:
       description: |-
         Gets the release denoted by the name `name` and its version `version`. The release should belong to the namespace
@@ -1451,54 +1829,54 @@ paths:
         denoted by `project_id`.
       operationId: getRelease
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
-        - description: The namespace name
-          in: path
-          name: namespace
-          required: true
-          type: string
-          x-go-name: Namespace
-        - description: The release name
-          in: path
-          name: name
-          required: true
-          type: string
-          x-go-name: Name
-        - description: The release version (`0` for latest version)
-          format: uint64
-          in: path
-          minimum: 0
-          name: version
-          required: true
-          type: integer
-          x-go-name: Version
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release name
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      - description: The release version (`0` for latest version)
+        format: uint64
+        in: path
+        minimum: 0
+        name: version
+        required: true
+        type: integer
+        x-go-name: Version
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully got the release
           schema:
-            $ref: "#/definitions/GetReleaseResponse"
+            $ref: '#/definitions/GetReleaseResponse'
         "403":
           description: Forbidden
       summary: Get a release
       tags:
-        - Releases
+      - Releases
     patch:
       description: |-
         Upgrades the release with the name denoted by `name` and version denoted by `version`. The release should belong
@@ -1506,49 +1884,49 @@ paths:
         denoted by `project_id`.
       operationId: updateRelease
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: cluster_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
-        - description: The namespace name
-          in: path
-          name: namespace
-          required: true
-          type: string
-          x-go-name: Namespace
-        - description: The release name
-          in: path
-          name: name
-          required: true
-          type: string
-          x-go-name: Name
-        - description: The release version (`0` for latest version)
-          format: uint64
-          in: path
-          minimum: 0
-          name: version
-          required: true
-          type: integer
-          x-go-name: Version
-        - description: The release to update
-          in: body
-          name: UpdateReleaseRequest
-          schema:
-            $ref: "#/definitions/UpdateReleaseRequest"
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The release name
+        in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      - description: The release version (`0` for latest version)
+        format: uint64
+        in: path
+        minimum: 0
+        name: version
+        required: true
+        type: integer
+        x-go-name: Version
+      - description: The release to update
+        in: body
+        name: UpdateReleaseRequest
+        schema:
+          $ref: '#/definitions/UpdateReleaseRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully updated the release
@@ -1558,55 +1936,375 @@ paths:
           description: Forbidden
       summary: Update a release
       tags:
-        - Releases
+      - Releases
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks:
+    get:
+      description: Lists stacks in a namespace
+      operationId: listStacks
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully listed stacks
+          schema:
+            $ref: '#/definitions/StackListResponse'
+        "403":
+          description: Forbidden
+      summary: List stacks
+      tags:
+      - Stacks
+    post:
+      operationId: createStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace name
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack to create
+        in: body
+        name: CreateStackRequest
+        schema:
+          $ref: '#/definitions/CreateStackRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created the stack
+          schema:
+            $ref: '#/definitions/Stack'
+        "403":
+          description: Forbidden
+      summary: Create a stack
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}:
+    delete:
+      description: Deletes a stack
+      operationId: deleteStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted the stack
+        "403":
+          description: Forbidden
+      summary: Delete a stack
+      tags:
+      - Stacks
+    get:
+      description: Gets a stack
+      operationId: getStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully got the stack
+          schema:
+            $ref: '#/definitions/Stack'
+        "403":
+          description: Forbidden
+      summary: Get a stack
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{stack_revision_number}:
+    get:
+      description: Gets a stack revision
+      operationId: getStackRevision
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      - description: The stack revision number
+        in: path
+        minimum: 1
+        name: stack_revision_number
+        required: true
+        type: string
+        x-go-name: StackRevisionNumber
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully got the stack revision
+          schema:
+            $ref: '#/definitions/StackRevision'
+        "403":
+          description: Forbidden
+      summary: Get a stack revision
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/rollback:
+    post:
+      description: Performs a rollback for a stack
+      operationId: rollbackStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      - description: The target revision to roll back to
+        in: body
+        name: StackRollbackRequest
+        schema:
+          $ref: '#/definitions/StackRollbackRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully rolled the stack back
+          schema:
+            $ref: '#/definitions/Stack'
+        "403":
+          description: Forbidden
+      summary: Rollback stack
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source:
+    put:
+      description: Updates a stack's source configuration
+      operationId: putStackSource
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      - description: The source configurations to update
+        in: body
+        name: PutStackSourceConfigRequest
+        schema:
+          $ref: '#/definitions/PutStackSourceConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated the source configuration
+          schema:
+            $ref: '#/definitions/Stack'
+        "403":
+          description: Forbidden
+      summary: Update source configuration
+      tags:
+      - Stacks
   /api/v1/projects/{project_id}/registries:
     get:
       operationId: listRegistries
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - name: registry_id
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - name: registry_id
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully listed registries
           schema:
-            $ref: "#/definitions/ListRegistriesResponse"
+            $ref: '#/definitions/ListRegistriesResponse'
         "403":
           description: Forbidden
       summary: List image registries
       tags:
-        - Registries
+      - Registries
     post:
       operationId: createRegistry
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry to connect
-          in: body
-          name: CreateRegistryRequest
-          schema:
-            $ref: "#/definitions/CreateRegistryRequest"
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry to connect
+        in: body
+        name: CreateRegistryRequest
+        schema:
+          $ref: '#/definitions/CreateRegistryRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "201":
           description: Successfully connected the registry
           schema:
-            $ref: "#/definitions/CreateRegistryResponse"
+            $ref: '#/definitions/CreateRegistryResponse'
         "400":
           description: A malformed or bad request
         "403":
@@ -1615,7 +2313,7 @@ paths:
           description: A subresource was not found
       summary: Connect an image registry
       tags:
-        - Registries
+      - Registries
   /api/v1/projects/{project_id}/registries/{registry_id}:
     delete:
       description: |-
@@ -1623,24 +2321,24 @@ paths:
         the project denoted by `project_id`.
       operationId: deleteRegistry
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: registry_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully disconnected image registry
@@ -1648,41 +2346,41 @@ paths:
           description: Forbidden
       summary: Disconnect image registry
       tags:
-        - Registries
+      - Registries
     get:
       description: |-
         Gets an image registry denoted by `registry_id`. The registry should belong to the
         project denoted by `project_id`.
       operationId: getRegistry
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: registry_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully got the registry
           schema:
-            $ref: "#/definitions/GetRegistryResponse"
+            $ref: '#/definitions/GetRegistryResponse'
         "403":
           description: Forbidden
       summary: Get an image registry
       tags:
-        - Registries
+      - Registries
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories:
     get:
       description: |-
@@ -1690,63 +2388,63 @@ paths:
         should belong to the project denoted by `project_id`.
       operationId: listRegistryRepositories
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: registry_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully listed image repositories
           schema:
-            $ref: "#/definitions/ListRegistryRepositoriesResponse"
+            $ref: '#/definitions/ListRegistryRepositoriesResponse'
         "403":
           description: Forbidden
       summary: List image repositories
       tags:
-        - Registries
+      - Registries
     post:
       description: |-
         Creates an image repository inside the registry specified by `registry_id`. This method **only** creates repositories for ECR-integrated
         repositories.
       operationId: createRegistryRepository
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: registry_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
-        - description: The repository to create
-          in: body
-          name: CreateRepositoryRequest
-          schema:
-            $ref: "#/definitions/CreateRegistryRepositoryRequest"
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The repository to create
+        in: body
+        name: CreateRepositoryRequest
+        schema:
+          $ref: '#/definitions/CreateRegistryRepositoryRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "201":
           description: Successfully created the image repository
@@ -1754,7 +2452,7 @@ paths:
           description: Forbidden
       summary: Create image repository
       tags:
-        - Registries
+      - Registries
   /api/v1/projects/{project_id}/registries/{registry_id}/repositories/{repository}:
     get:
       description: |-
@@ -1763,57 +2461,57 @@ paths:
         `project_id`.
       operationId: listRegistryImages
       parameters:
-        - description: The project id
-          format: uint64
-          in: path
-          minimum: 1
-          name: project_id
-          required: true
-          type: integer
-          x-go-name: ProjectID
-        - description: The registry id
-          format: uint64
-          in: path
-          minimum: 1
-          name: registry_id
-          required: true
-          type: integer
-          x-go-name: RegistryID
-        - description: The image repository name
-          in: path
-          name: repository
-          required: true
-          type: string
-        - description: |
-            The number of images to list.
-            For ECR images, a maximum of 1000 is allowed.
-          in: query
-          minimum: 1
-          name: num
-          type: integer
-        - description: The next page string used for pagination, from a previous request.
-          in: query
-          name: next
-          type: string
-        - description: |
-            The page number used for pagination, possibly from a previous request.
-            (**DigitalOcean only**)
-          in: query
-          minimum: 1
-          name: page
-          type: integer
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The registry id
+        format: uint64
+        in: path
+        minimum: 1
+        name: registry_id
+        required: true
+        type: integer
+        x-go-name: RegistryID
+      - description: The image repository name
+        in: path
+        name: repository
+        required: true
+        type: string
+      - description: |
+          The number of images to list.
+          For ECR images, a maximum of 1000 is allowed.
+        in: query
+        minimum: 1
+        name: num
+        type: integer
+      - description: The next page string used for pagination, from a previous request.
+        in: query
+        name: next
+        type: string
+      - description: |
+          The page number used for pagination, possibly from a previous request.
+          (**DigitalOcean only**)
+        in: query
+        minimum: 1
+        name: page
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Successfully listed images
           schema:
-            $ref: "#/definitions/V1ListImageResponse"
+            $ref: '#/definitions/V1ListImageResponse'
         "400":
           description: A malformed or bad request
         "403":
           description: Forbidden
       summary: List images
       tags:
-        - Registries
+      - Registries
 swagger: "2.0"
