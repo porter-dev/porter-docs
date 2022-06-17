@@ -118,6 +118,8 @@ When using `--method docker`, you can specify the path to the Dockerfile using t
 porter update build --app example-app --method docker --dockerfile ./prod.Dockerfile
 ```
 
+Build caching can be enabled with the `--use-cache` flag. Note that `--use-cache` is not supported with the Heroku 18 builder and will automatically push to the image repository linked to the application.
+
 ### `porter update push`
 
 Pushes a new image for an application specified by the --app flag. This command uses the image repository saved in the application config by default. For example, if an application "nginx" was created from the image repo "gcr.io/snowflake-123456/nginx", the following command would push the image "gcr.io/snowflake-123456/nginx:new-tag":
