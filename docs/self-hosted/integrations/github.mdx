@@ -88,4 +88,14 @@ GITHUB_APP_SECRET_PATH=<path-to-secret>
 
 ### Troubleshooting
 
-If your Github app is connected properly and is showing the correct accounts on the Porter dashboard, but the repos aren't displaying on the Porter dashboard, you can check that the webhooks have been delivered properly from the **Advanced** tab of the Github app's settings. From there, you can view recent webhook deliveries and ensure that they were delivered successfully. If they were not delivered successfully, you can redeliver them or debug the request from this tab. 
+#### Checking Github App Credentials
+
+Make sure that all of the credentials and config values you're passing in to the Porter instance match those in the Github app's settings.
+
+#### Webhook Failures
+
+If your Github app is connected properly and is showing the correct accounts on the Porter dashboard, but the repos aren't displaying on the Porter dashboard, you can check that the webhooks have been delivered properly from the **Advanced** tab of the Github app's settings. From there, you can view recent webhook deliveries and ensure that they were delivered successfully. If they were not delivered successfully, you can redeliver them or debug the request from this tab.
+
+#### Deleting and Reinstalling
+
+If you've migrated the Porter instance to use a new database, or the Github app is otherwise not working, you can try to delete the Github app from your repositories and reinstall it. You must do this by navigating to the installation in each account that the Github app is installed. For organizations, you will be able to uninstall the Github app from **Settings** > **Github App** in your organization view on Github. For personal accounts, you can uninstall the Github app from **Settings** > **Applications** in your personal settings view.
