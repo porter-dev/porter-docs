@@ -1184,6 +1184,10 @@ definitions:
         description: The display name of the stack
         type: string
         x-go-name: Name
+      namespace:
+        description: The namespace that the stack was deployed to
+        type: string
+        x-go-name: Namespace
       revisions:
         description: The list of revisions deployed for this stack
         items:
