@@ -749,15 +749,15 @@ paths:
         - Stacks
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\npayload = {\n    \"app_resources\": [\n        {\n            \"name\": \"string\",\n            \"source_config_name\": \"string\",\n            \"template_name\": \"string\",\n            \"template_repo_url\": \"string\",\n            \"template_version\": \"string\",\n            \"values\": {\n                \"property1\": {},\n                \"property2\": {}\n            }\n        }\n    ],\n    \"env_groups\": [\n        {\n            \"name\": \"string\",\n            \"secret_variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            },\n            \"variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            }\n        }\n    ],\n    \"name\": \"string\",\n    \"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"image_repo_uri\": \"string\",\n            \"image_tag\": \"string\",\n            \"name\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\npayload = {\n    \"app_resources\": [\n        {\n            \"name\": \"string\",\n            \"source_config_name\": \"string\",\n            \"template_name\": \"string\",\n            \"template_repo_url\": \"string\",\n            \"template_version\": \"string\",\n            \"values\": {\n                \"property1\": {},\n                \"property2\": {}\n            }\n        }\n    ],\n    \"env_groups\": [\n        {\n            \"linked_applications\": [\"string\"],\n            \"name\": \"string\",\n            \"secret_variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            },\n            \"variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            }\n        }\n    ],\n    \"name\": \"string\",\n    \"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"image_repo_uri\": \"string\",\n            \"image_tag\": \"string\",\n            \"name\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\n\tpayload := strings.NewReader(\"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\n\tpayload := strings.NewReader(\"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateStackRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}:
     delete:
@@ -1703,29 +1703,6 @@ components:
         - builder
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
-    CreateEnvGroupRequest:
-      example:
-        variables:
-          key: variables
-        name: name
-        secret_variables:
-          key: secret_variables
-      properties:
-        name:
-          type: string
-          x-go-name: Name
-        secret_variables:
-          additionalProperties:
-            type: string
-          type: object
-          x-go-name: SecretVariables
-        variables:
-          additionalProperties:
-            type: string
-          type: object
-          x-go-name: Variables
-      type: object
-      x-go-package: github.com/porter-dev/porter/api/types
     CreateGitActionConfigRequest:
       description: The git configuration for this new release (when deploying from a git repository)
       example:
@@ -2037,6 +2014,15 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateStackEnvGroupRequest:
+      example:
+        linked_applications:
+          - linked_applications
+          - linked_applications
+        variables:
+          key: variables
+        name: name
+        secret_variables:
+          key: secret_variables
       properties:
         linked_applications:
           description: "The list of applications that this env group should be synced to. These applications **must** be present\nin the stack - if an env group is created from a stack, syncing to applications which are not in the stack\nis not supported"
@@ -2122,12 +2108,18 @@ components:
             name: name
             source_config_name: source_config_name
         env_groups:
-          - variables:
+          - linked_applications:
+              - linked_applications
+              - linked_applications
+            variables:
               key: variables
             name: name
             secret_variables:
               key: secret_variables
-          - variables:
+          - linked_applications:
+              - linked_applications
+              - linked_applications
+            variables:
               key: variables
             name: name
             secret_variables:
@@ -2142,7 +2134,7 @@ components:
         env_groups:
           description: A list of env groups which can be synced to an application
           items:
-            $ref: '#/components/schemas/CreateEnvGroupRequest'
+            $ref: '#/components/schemas/CreateStackEnvGroupRequest'
           type: array
           x-go-name: EnvGroups
         name:
@@ -4762,7 +4754,7 @@ components:
         env_groups:
           description: A list of env groups which can be synced to an application
           items:
-            $ref: '#/components/schemas/CreateEnvGroupRequest'
+            $ref: '#/components/schemas/CreateStackEnvGroupRequest'
           type: array
           x-go-name: EnvGroups
         name:

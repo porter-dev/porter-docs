@@ -79,23 +79,6 @@ definitions:
     - builder
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
-  CreateEnvGroupRequest:
-    properties:
-      name:
-        type: string
-        x-go-name: Name
-      secret_variables:
-        additionalProperties:
-          type: string
-        type: object
-        x-go-name: SecretVariables
-      variables:
-        additionalProperties:
-          type: string
-        type: object
-        x-go-name: Variables
-    type: object
-    x-go-package: github.com/porter-dev/porter/api/types
   CreateGitActionConfigRequest:
     description: The git configuration for this new release (when deploying from a
       git repository)
@@ -387,7 +370,7 @@ definitions:
       env_groups:
         description: A list of env groups which can be synced to an application
         items:
-          $ref: '#/definitions/CreateEnvGroupRequest'
+          $ref: '#/definitions/CreateStackEnvGroupRequest'
         type: array
         x-go-name: EnvGroups
       name:
