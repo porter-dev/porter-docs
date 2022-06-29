@@ -843,6 +843,11 @@ definitions:
       $ref: '#/definitions/Release'
     type: array
     x-go-package: github.com/porter-dev/porter/api/types
+  ListStackRevisionsResponse:
+    items:
+      $ref: '#/definitions/StackRevision'
+    type: array
+    x-go-package: github.com/porter-dev/porter/api/types
   Lock:
     description: It represents the state that the dependencies should be in.
     properties:
@@ -2208,7 +2213,7 @@ paths:
       summary: Get a stack
       tags:
       - Stacks
-  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{stack_revision_number}:
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{revision_id}:
     get:
       description: Gets a stack revision
       operationId: getStackRevision
@@ -2241,13 +2246,13 @@ paths:
         required: true
         type: string
         x-go-name: StackID
-      - description: The stack revision number
+      - description: The stack revision id
         in: path
         minimum: 1
-        name: stack_revision_number
+        name: revision_id
         required: true
         type: string
-        x-go-name: StackRevisionNumber
+        x-go-name: RevisionID
       produces:
       - application/json
       responses:
@@ -2258,6 +2263,26 @@ paths:
         "403":
           description: Forbidden
       summary: Get a stack revision
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/revisions:
+    get:
+      operationId: listStackRevisions
+      parameters:
+      - name: project_id
+      - name: cluster_id
+      - name: namespace
+      - name: stack_id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully listed stack revisions
+          schema:
+            $ref: '#/definitions/ListStackRevisionsResponse'
+        "403":
+          description: Forbidden
+      summary: List stack revisions
       tags:
       - Stacks
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/rollback:
