@@ -79,6 +79,23 @@ definitions:
     - builder
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  CreateEnvGroupRequest:
+    properties:
+      name:
+        type: string
+        x-go-name: Name
+      secret_variables:
+        additionalProperties:
+          type: string
+        type: object
+        x-go-name: SecretVariables
+      variables:
+        additionalProperties:
+          type: string
+        type: object
+        x-go-name: Variables
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   CreateGitActionConfigRequest:
     description: The git configuration for this new release (when deploying from a
       git repository)
@@ -325,6 +342,39 @@ definitions:
     - source_config_name
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackEnvGroupRequest:
+    properties:
+      linked_applications:
+        description: |-
+          The list of applications that this env group should be synced to. These applications **must** be present
+          in the stack - if an env group is created from a stack, syncing to applications which are not in the stack
+          is not supported
+        items:
+          type: string
+        type: array
+        x-go-name: LinkedApplications
+      name:
+        description: The name of the env group
+        type: string
+        x-go-name: Name
+      secret_variables:
+        additionalProperties:
+          type: string
+        description: The secret variables to set in the env group
+        type: object
+        x-go-name: SecretVariables
+      variables:
+        additionalProperties:
+          type: string
+        description: The non-secret variables to set in the env group
+        type: object
+        x-go-name: Variables
+    required:
+    - name
+    - variables
+    - secret_variables
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   CreateStackRequest:
     properties:
       app_resources:
@@ -334,6 +384,12 @@ definitions:
           $ref: '#/definitions/CreateStackAppResourceRequest'
         type: array
         x-go-name: AppResources
+      env_groups:
+        description: A list of env groups which can be synced to an application
+        items:
+          $ref: '#/definitions/CreateEnvGroupRequest'
+        type: array
+        x-go-name: EnvGroups
       name:
         description: The display name of the stack
         type: string
@@ -1201,6 +1257,42 @@ definitions:
         x-go-name: UpdatedAt
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  StackEnvGroup:
+    properties:
+      created_at:
+        description: The time that this resource was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      env_group_version:
+        description: The version of the env group which is being used
+        format: uint64
+        type: integer
+        x-go-name: EnvGroupVersion
+      id:
+        description: The id for this resource
+        type: string
+        x-go-name: ID
+      name:
+        description: The name of the resource
+        type: string
+        x-go-name: Name
+      stack_id:
+        description: The stack ID that this resource belongs to
+        type: string
+        x-go-name: StackID
+      stack_revision_id:
+        description: The numerical revision id that this resource belongs to
+        format: uint64
+        type: integer
+        x-go-name: StackRevisionID
+      updated_at:
+        description: The time that this resource was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   StackListResponse:
     items:
       $ref: '#/definitions/Stack'
@@ -1264,6 +1356,12 @@ definitions:
         format: date-time
         type: string
         x-go-name: CreatedAt
+      env_groups:
+        description: The list of env groups scoped to this stack
+        items:
+          $ref: '#/definitions/StackEnvGroup'
+        type: array
+        x-go-name: EnvGroups
       id:
         description: The id of the revision
         format: uint64
@@ -1284,6 +1382,7 @@ definitions:
         type: array
         x-go-name: Resources
       source_configs:
+        description: The list of source configs deployed in this revision
         items:
           $ref: '#/definitions/StackSourceConfig'
         type: array
