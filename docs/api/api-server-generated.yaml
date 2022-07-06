@@ -325,6 +325,39 @@ definitions:
     - source_config_name
     type: object
     x-go-package: github.com/porter-dev/porter/api/types
+  CreateStackEnvGroupRequest:
+    properties:
+      linked_applications:
+        description: |-
+          The list of applications that this env group should be synced to. These applications **must** be present
+          in the stack - if an env group is created from a stack, syncing to applications which are not in the stack
+          is not supported
+        items:
+          type: string
+        type: array
+        x-go-name: LinkedApplications
+      name:
+        description: The name of the env group
+        type: string
+        x-go-name: Name
+      secret_variables:
+        additionalProperties:
+          type: string
+        description: The secret variables to set in the env group
+        type: object
+        x-go-name: SecretVariables
+      variables:
+        additionalProperties:
+          type: string
+        description: The non-secret variables to set in the env group
+        type: object
+        x-go-name: Variables
+    required:
+    - name
+    - variables
+    - secret_variables
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
   CreateStackRequest:
     properties:
       app_resources:
@@ -334,6 +367,12 @@ definitions:
           $ref: '#/definitions/CreateStackAppResourceRequest'
         type: array
         x-go-name: AppResources
+      env_groups:
+        description: A list of env groups which can be synced to an application
+        items:
+          $ref: '#/definitions/CreateStackEnvGroupRequest'
+        type: array
+        x-go-name: EnvGroups
       name:
         description: The display name of the stack
         type: string
@@ -787,6 +826,11 @@ definitions:
       $ref: '#/definitions/Release'
     type: array
     x-go-package: github.com/porter-dev/porter/api/types
+  ListStackRevisionsResponse:
+    items:
+      $ref: '#/definitions/StackRevision'
+    type: array
+    x-go-package: github.com/porter-dev/porter/api/types
   Lock:
     description: It represents the state that the dependencies should be in.
     properties:
@@ -963,14 +1007,14 @@ definitions:
         description: The complete image repository URI for this release
         type: string
         x-go-name: ImageRepoURI
-      is_stack:
-        description: Whether this release is tied to a stack or not
-        type: boolean
-        x-go-name: IsStack
       latest_version:
         description: The latest version of this Porter release
         type: string
         x-go-name: LatestVersion
+      stack_id:
+        description: Whether this release is tied to a stack or not
+        type: string
+        x-go-name: StackID
       tags:
         description: The list of tags for this release
         items:
@@ -1130,10 +1174,6 @@ definitions:
         x-go-name: ImageRepoURI
       info:
         $ref: '#/definitions/Info'
-      is_stack:
-        description: Whether this release is tied to a stack or not
-        type: boolean
-        x-go-name: IsStack
       latest_version:
         description: The latest version of this Porter release
         type: string
@@ -1150,6 +1190,10 @@ definitions:
         description: Namespace is the kubernetes namespace of the release.
         type: string
         x-go-name: Namespace
+      stack_id:
+        description: Whether this release is tied to a stack or not
+        type: string
+        x-go-name: StackID
       tags:
         description: The list of tags for this release
         items:
@@ -1196,6 +1240,42 @@ definitions:
         x-go-name: Revisions
       updated_at:
         description: The time that the stack was last updated
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: github.com/porter-dev/porter/api/types
+  StackEnvGroup:
+    properties:
+      created_at:
+        description: The time that this resource was initially created
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      env_group_version:
+        description: The version of the env group which is being used
+        format: uint64
+        type: integer
+        x-go-name: EnvGroupVersion
+      id:
+        description: The id for this resource
+        type: string
+        x-go-name: ID
+      name:
+        description: The name of the resource
+        type: string
+        x-go-name: Name
+      stack_id:
+        description: The stack ID that this resource belongs to
+        type: string
+        x-go-name: StackID
+      stack_revision_id:
+        description: The numerical revision id that this resource belongs to
+        format: uint64
+        type: integer
+        x-go-name: StackRevisionID
+      updated_at:
+        description: The time that this resource was last updated
         format: date-time
         type: string
         x-go-name: UpdatedAt
@@ -1264,6 +1344,12 @@ definitions:
         format: date-time
         type: string
         x-go-name: CreatedAt
+      env_groups:
+        description: The list of env groups scoped to this stack
+        items:
+          $ref: '#/definitions/StackEnvGroup'
+        type: array
+        x-go-name: EnvGroups
       id:
         description: The id of the revision
         format: uint64
@@ -1284,6 +1370,7 @@ definitions:
         type: array
         x-go-name: Resources
       source_configs:
+        description: The list of source configs deployed in this revision
         items:
           $ref: '#/definitions/StackSourceConfig'
         type: array
@@ -2109,7 +2196,7 @@ paths:
       summary: Get a stack
       tags:
       - Stacks
-  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{stack_revision_number}:
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{revision_id}:
     get:
       description: Gets a stack revision
       operationId: getStackRevision
@@ -2142,13 +2229,13 @@ paths:
         required: true
         type: string
         x-go-name: StackID
-      - description: The stack revision number
+      - description: The stack revision id
         in: path
         minimum: 1
-        name: stack_revision_number
+        name: revision_id
         required: true
         type: string
-        x-go-name: StackRevisionNumber
+        x-go-name: RevisionID
       produces:
       - application/json
       responses:
@@ -2159,6 +2246,50 @@ paths:
         "403":
           description: Forbidden
       summary: Get a stack revision
+      tags:
+      - Stacks
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/revisions:
+    get:
+      operationId: listStackRevisions
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully listed stack revisions
+          schema:
+            $ref: '#/definitions/ListStackRevisionsResponse'
+        "403":
+          description: Forbidden
+      summary: List stack revisions
       tags:
       - Stacks
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/rollback:
