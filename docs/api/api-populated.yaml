@@ -962,6 +962,43 @@ paths:
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/revisions:
     get:
       operationId: listStackRevisions
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The stack id
+          in: path
+          name: stack_id
+          required: true
+          schema:
+            type: string
+            x-go-name: StackID
+          x-go-name: StackID
       responses:
         "200":
           content:
@@ -3278,14 +3315,14 @@ components:
           description: The complete image repository URI for this release
           type: string
           x-go-name: ImageRepoURI
-        is_stack:
-          description: Whether this release is tied to a stack or not
-          type: boolean
-          x-go-name: IsStack
         latest_version:
           description: The latest version of this Porter release
           type: string
           x-go-name: LatestVersion
+        stack_id:
+          description: Whether this release is tied to a stack or not
+          type: string
+          x-go-name: StackID
         tags:
           description: The list of tags for this release
           items:
@@ -3652,6 +3689,7 @@ components:
             - tags
         image_repo_uri: image_repo_uri
         latest_version: latest_version
+        stack_id: stack_id
         name: name
         namespace: namespace
         build_config:
@@ -3663,7 +3701,6 @@ components:
             - 0
             - 0
         id: 7
-        is_stack: true
         chart:
           schema:
             - 1
@@ -3844,10 +3881,6 @@ components:
           x-go-name: ImageRepoURI
         info:
           $ref: '#/components/schemas/Info'
-        is_stack:
-          description: Whether this release is tied to a stack or not
-          type: boolean
-          x-go-name: IsStack
         latest_version:
           description: The latest version of this Porter release
           type: string
@@ -3864,6 +3897,10 @@ components:
           description: Namespace is the kubernetes namespace of the release.
           type: string
           x-go-name: Namespace
+        stack_id:
+          description: Whether this release is tied to a stack or not
+          type: string
+          x-go-name: StackID
         tags:
           description: The list of tags for this release
           items:

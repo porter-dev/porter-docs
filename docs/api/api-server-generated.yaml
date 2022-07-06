@@ -1007,14 +1007,14 @@ definitions:
         description: The complete image repository URI for this release
         type: string
         x-go-name: ImageRepoURI
-      is_stack:
-        description: Whether this release is tied to a stack or not
-        type: boolean
-        x-go-name: IsStack
       latest_version:
         description: The latest version of this Porter release
         type: string
         x-go-name: LatestVersion
+      stack_id:
+        description: Whether this release is tied to a stack or not
+        type: string
+        x-go-name: StackID
       tags:
         description: The list of tags for this release
         items:
@@ -1174,10 +1174,6 @@ definitions:
         x-go-name: ImageRepoURI
       info:
         $ref: '#/definitions/Info'
-      is_stack:
-        description: Whether this release is tied to a stack or not
-        type: boolean
-        x-go-name: IsStack
       latest_version:
         description: The latest version of this Porter release
         type: string
@@ -1194,6 +1190,10 @@ definitions:
         description: Namespace is the kubernetes namespace of the release.
         type: string
         x-go-name: Namespace
+      stack_id:
+        description: Whether this release is tied to a stack or not
+        type: string
+        x-go-name: StackID
       tags:
         description: The list of tags for this release
         items:
@@ -2252,10 +2252,34 @@ paths:
     get:
       operationId: listStackRevisions
       parameters:
-      - name: project_id
-      - name: cluster_id
-      - name: namespace
-      - name: stack_id
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
       produces:
       - application/json
       responses:
