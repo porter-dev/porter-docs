@@ -1,0 +1,95 @@
+---
+id: aws-rds-postgresql
+slug: /deploying-addons/aws-rds/aws-rds-postgresql
+title: AWS RDS PostgreSQL
+---
+
+## Overview
+
+Porter Databases allow you to spin up managed cloud databaser services, hosted by the same cloud provider running your Porter cluster. These databases are placed within the same VPC as the Porter cluster, allowing for a robust database setup accessible only to your application workloads. Currently, Porter Databases has support for AWS RDS PostgreSQL, with support for MySQL coming soon.
+
+:::warning General Availability
+Please note that this feature has not been rolled out for all users; please reach out to us on Slack/Discord or on [support@porter.run](mailto:support@porter.run) if you'd like to enable it for your projects.
+:::
+
+## Features
+
+With Porter Databases, you can spin up a AWS RDS PostgreSQL instance within your AWS account, that is placed within your Porter cluster's VPC, along with associated networking and security configurations to allow easy database access from your applications. As of now, we support orchestrating a single replica placed within a private subnet on any one availability zone, along with the ability to specify the master credentials, an instance type as well as the exact Postgres version and family you'd like to use. These instances also come with some default backup policies, where database snapshots are taken daily, and are persisted for seven days. For each instance created through Porter, environment groups containing database access credentials are automatically created on Porter, for easy injection into your applications' configuration.
+
+## Caveats
+
+Since this is a new feature and is still under development, the following features are currently not supported:
+
+1. Multiple replicas on separate availability zones.
+2. Support for modifying the RDS instance type or metadata.
+3. Resetting the master credentials.
+
+We do recommend _not_ modifying the instance's name or metadata on the AWS console; this tends to also change the database endpoint, rendering the previous one invalid. If you do see the need to change that - or the master credentials - please note that you'd then have to inject these into your applications through environment variables; the predefined environment group will not be updated with upstream changes to the instance.
+
+
+## Deploying an AWS RDS PostgreSQL instance
+
+If Porter Databases is enabled for your project, navigate to `Databases` inside the cluster you'd like to deploy the database instance for. This will open a list of existing(if any) RDS instances created through Porter.
+
+![rds-list](https://user-images.githubusercontent.com/288007/151189519-c3ac593a-e78b-440a-ade5-6ef69e81694b.png)
+
+Now click on `Create database` - this will open up a form, asking you to choose a database name, instance type as well as Postgres version. You can also specify master credentials for accessing your database here:
+
+![create-db](https://user-images.githubusercontent.com/288007/151189786-96d2966c-c914-41ae-8f60-43174c2ca13a.png)
+
+After entering these details and clicking on `Create database`, you'll see the Porter provisioner start the database orchestration process - this typically takes between 10-15 minutes.
+
+![db-provisioner](https://user-images.githubusercontent.com/288007/151189868-ef152a8b-aac1-4018-acff-b94651196b21.png)
+
+## Environment Groups
+
+Every successful orchestration of a RDS instance also leads to the automatic creation of an environment group in the same namespace as the one selected whilst creating the cluster. 
+
+![db-env-group](https://user-images.githubusercontent.com/288007/151192980-9d7bb5f8-61c1-4463-a789-7a5a443bb7b7.png)
+
+This environment group contains the following environment variables:
+
+1. `PGHOST` - this is the DNS endpoint for the RDS instance, accessible only from within your Porter cluster.
+2. `PGUSER` - the master user defined during the RDS instance creation process.
+3. `PGPASSWORD` - the master password defined during the RDS instance creation process.
+4. `PGPORT` - the port for the RDS instance, typically 5432.
+
+![db-env-group-vars](https://user-images.githubusercontent.com/288007/151534357-b15e0234-4033-410e-8012-98d6ad405fb5.png)
+
+
+## Connecting to an AWS RDS instance
+
+Once your database instance is up and running, you can inject the RDS environment group mentioned above into any applications that require database access. As an example, let's connect to the database using `postgres-toolbox`, a basic app that ships with Porter's community addons for easy access to Postgres databases using `psql` from within your cluster.
+
+First, we'll spin up an instance of the `postgres-toolbox` app with the RDS environment group.
+
+![pgtoolbox](https://user-images.githubusercontent.com/288007/151534760-adbef808-5479-4b0a-9d5f-f9777a395506.png)
+
+Once the application is running, you can confirm the connection details are being injected:
+
+![app-db-envs](https://user-images.githubusercontent.com/288007/151534357-b15e0234-4033-410e-8012-98d6ad405fb5.png)
+
+You can now use these environment variables to access your RDS Postgres instance; in this example, we use `psql` to connect to our RDS instance:
+
+![psql](https://user-images.githubusercontent.com/288007/151535462-58ea78d2-ea8a-4422-94af-24115b8fa2af.png)
+
+
+## Deleting AWS RDS instances
+
+AWS RDS instances provisioned through Porter can also be deleted through Porter. We do recommend deleting such an instance from the Porter dashboard instead of the AWS RDS console.
+
+:::warning Data Loss
+Please note that destroying an AWS RDS database will also lead to _all_ data inside the database being deleted, along with all backups; this process is not reversible. Please proceed with the following steps with caution.
+:::
+
+To delete an AWS RDS instance provisioned through Porter, navigate to `Databases` within your Porter project, and click the `Delete` icon for the cluster in question:
+
+![rds-delete-icon](https://user-images.githubusercontent.com/288007/151528402-74bdfc69-5d51-4082-bb8b-cae285abeda7.png)
+
+Next, confirm whether you'd like to destroy the instance. Please note that this is irreversible, and any database backups will _not_ be saved.
+
+![rds-confirm-delete](https://user-images.githubusercontent.com/288007/151528415-ec7bf808-eb6c-4ac1-adcc-4e9b10dcbfa1.png)
+
+The `Databases` section will now show the RDS instance as being destroyed; note that this may take a few minutes.
+
+![rds-destroy](https://user-images.githubusercontent.com/288007/151528419-a9939c0c-9b46-4c07-b22e-d7fdd865ab12.png)
