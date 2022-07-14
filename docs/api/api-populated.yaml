@@ -959,6 +959,298 @@ paths:
           source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{revision_id}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{revision_id}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_application:
+    patch:
+      description: Adds an application to an existing stack
+      operationId: addApplication
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The stack id
+          in: path
+          name: stack_id
+          required: true
+          schema:
+            type: string
+            x-go-name: StackID
+          x-go-name: StackID
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/addApplication_request'
+        description: The application to add
+        required: false
+      responses:
+        "200":
+          content: {}
+          description: Successfully added the application to the stack
+        "400":
+          content: {}
+          description: Stack does not have any revisions
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Add an application to a stack
+      tags:
+        - Stacks
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_application \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_application';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_application\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\"\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_application\"\n\npayload = {\n    \"name\": \"string\",\n    \"source_config_name\": \"string\",\n    \"template_name\": \"string\",\n    \"template_repo_url\": \"string\",\n    \"template_version\": \"string\",\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_application\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: AddApplicationToStack
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_env_group:
+    patch:
+      description: Adds an environment group to an existing stack
+      operationId: addEnvGroup
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The stack id
+          in: path
+          name: stack_id
+          required: true
+          schema:
+            type: string
+            x-go-name: StackID
+          x-go-name: StackID
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/addEnvGroup_request'
+        description: The environment group to add
+        required: false
+      responses:
+        "200":
+          content: {}
+          description: Successfully added the environment group to the stack
+        "400":
+          content: {}
+          description: Stack does not have any revisions
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Add an environment group to a stack
+      tags:
+        - Stacks
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_env_group \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_env_group';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_env_group\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}\"\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_env_group\"\n\npayload = {\n    \"linked_applications\": [\"string\"],\n    \"name\": \"string\",\n    \"secret_variables\": {\n        \"property1\": \"string\",\n        \"property2\": \"string\"\n    },\n    \"variables\": {\n        \"property1\": \"string\",\n        \"property2\": \"string\"\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/add_env_group\"\n\n\tpayload := strings.NewReader(\"{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: AddEnvGroupToStack
+  ? /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_application/{app_resource_name}
+  : delete:
+      description: Removes an existing application from a stack
+      operationId: removeApplication
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The stack id
+          in: path
+          name: stack_id
+          required: true
+          schema:
+            type: string
+            x-go-name: StackID
+          x-go-name: StackID
+        - description: The name of the application
+          in: path
+          name: app_resource_name
+          required: true
+          schema:
+            type: string
+            x-go-name: AppResourceName
+          x-go-name: AppResourceName
+      responses:
+        "200":
+          content: {}
+          description: Successfully deleted the application from the stack
+        "400":
+          content: {}
+          description: Stack does not have any revisions
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Remove an application from a stack
+      tags:
+        - Stacks
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request DELETE \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_application/{app_resource_name} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_application/{app_resource_name}';\n\nlet options = {method: 'DELETE', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_application/{app_resource_name}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_application/{app_resource_name}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_application/{app_resource_name}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_env_group/{env_group_name}:
+    delete:
+      description: Removes an existing environment group from a stack
+      operationId: removeEnvGroup
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The stack id
+          in: path
+          name: stack_id
+          required: true
+          schema:
+            type: string
+            x-go-name: StackID
+          x-go-name: StackID
+        - description: The name of the environment group
+          in: path
+          name: env_group_name
+          required: true
+          schema:
+            type: string
+            x-go-name: EnvGroupName
+          x-go-name: EnvGroupName
+      responses:
+        "200":
+          content: {}
+          description: Successfully deleted the environment group from the stack
+        "400":
+          content: {}
+          description: Stack does not have any revisions
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Remove an environment group from a stack
+      tags:
+        - Stacks
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request DELETE \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_env_group/{env_group_name} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_env_group/{env_group_name}';\n\nlet options = {method: 'DELETE', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_env_group/{env_group_name}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_env_group/{env_group_name}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/remove_env_group/{env_group_name}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/revisions:
     get:
       operationId: listStackRevisions
@@ -4811,6 +5103,72 @@ components:
         - app_resources
         - name
         - source_configs
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    addApplication_request:
+      properties:
+        name:
+          description: The name of the resource.
+          type: string
+          x-go-name: Name
+        source_config_name:
+          description: The name of the source config (must exist inside `source_configs`).
+          type: string
+          x-go-name: SourceConfigName
+        template_name:
+          description: "The name of the template in the Helm registry, such as `web`"
+          type: string
+          x-go-name: TemplateName
+        template_repo_url:
+          description: "The URL of the Helm registry to pull the template from. If not set, this defaults to `https://charts.getporter.dev`."
+          type: string
+          x-go-name: TemplateRepoURL
+        template_version:
+          description: "The version of the template in the Helm registry, such as `v0.50.0`"
+          type: string
+          x-go-name: TemplateVersion
+        values:
+          additionalProperties:
+            properties: {}
+            type: object
+          description: The values to pass in to the template.
+          type: object
+          x-go-name: Values
+      required:
+        - name
+        - source_config_name
+        - template_name
+        - template_version
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    addEnvGroup_request:
+      properties:
+        linked_applications:
+          description: "The list of applications that this env group should be synced to. These applications **must** be present\nin the stack - if an env group is created from a stack, syncing to applications which are not in the stack\nis not supported"
+          items:
+            type: string
+          type: array
+          x-go-name: LinkedApplications
+        name:
+          description: The name of the env group
+          type: string
+          x-go-name: Name
+        secret_variables:
+          additionalProperties:
+            type: string
+          description: The secret variables to set in the env group
+          type: object
+          x-go-name: SecretVariables
+        variables:
+          additionalProperties:
+            type: string
+          description: The non-secret variables to set in the env group
+          type: object
+          x-go-name: Variables
+      required:
+        - name
+        - secret_variables
+        - variables
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     rollbackStack_request:
