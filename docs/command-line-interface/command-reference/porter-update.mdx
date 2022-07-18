@@ -17,7 +17,7 @@ A detailed guide on updating applications from the CLI can be found [here](../..
 
 :::
 
-<br></br>
+## Applications
 
 `porter update` builds and updates a specified application given by the `--app` flag. For example:
 
@@ -64,3 +64,44 @@ porter update --app example-app --method docker --dockerfile ./docker/prod.Docke
 - `--stream` (string) stream update logs to porter dashboard
 - `-t, --tag` (string) the specified tag to use, if not "latest"
 - `-v, --values` (string) Filepath to a values.yaml file
+
+## Env groups
+
+`porter update env-group` updates an existing env group denoted with the `--name` flag. For example:
+
+```
+porter update env-group set foo=bar --name prod-env
+```
+
+:::info
+
+Updating an env group's existing variable will always overwrite its previous value and type. This means that a previous secret variable will turn into a non-secret one if the `--type` is not `secret`.
+
+:::
+
+### Examples
+
+To add a new variable, or update an existing one, to an env group named `prod-env` in the namespace `prod`, you can do the following:
+
+```
+porter update env-group set VAR=VALUE --name prod-env --namespace prod
+```
+
+To add a new secret variable, or update an existing one, to an env group named `prod-env` in the namespace `prod`, you can do the following:
+
+```
+porter update env-group set VAR=VALUE --name prod-env --namespace prod --type secret
+```
+
+To delete a variable from an env group named `prod-env` in the namespace `prod`, you can do the following:
+
+```
+porter update env-group unset VAR --name prod-env --namespace prod
+```
+
+### Flags
+
+- `--name` (string) name of the env group
+- `--version` (uint) version of the env group to fork off of (default "0" which means the latest version)
+- `--namespace` (string) namespace of the env group (default "default")
+- `--type` (string) type of variable when setting a new one ("normal" or "secret") (default "normal")
