@@ -113,6 +113,7 @@ const sidebars = {
         },
         "deploying-applications/using-other-ci-tools",
         "deploying-applications/zero-downtime-deployments",
+        "deploying-applications/blue-green-deployments",
         "deploying-applications/environment-groups",
         {
           type: "category",
