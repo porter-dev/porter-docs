@@ -4,9 +4,9 @@ slug: /deploying-applications/blue-green-deployments
 title: Blue/Green Deployments
 ---
 
-You can configure your apps to be deployed using a blue/green strategy, where Porter will keep the older version of your app running(the "blue" version), while it spins up an identical number of replicas for your app using a new build(the "green" version), and waits for the entire environment to be up and running, before switching traffic from the old version("blue") to the new version("green"). Setting up B/G deployments for your app involves modifying your app's configuration, as well as your build step in your CI system that's reponsible for updating the Porter app after a successful build.
+You can configure your apps to be deployed using a blue/green strategy, where Porter will keep the older version of your app running (the "blue" version), while it spins up an identical number of replicas for your app using a new build (the "green" version), and waits for the entire environment to be up and running, before switching traffic from the old version ("blue") to the new version ("green"). Setting up B/G deployments for your app involves modifying your app's configuration, as well as your build step in your CI system that's responsible for updating the Porter app after a successful build.
 
-:::warning Setup Sequence
+:::info Setup Sequence
 Please note - this process needs to followed in the same sequence as presented below, and it is a good idea to complete the second step for tweaking your build step right after you've made changes to the Porter app; this will ensure any other builds/revisions will not conflict with B/G deployments.
 :::
 
@@ -42,7 +42,7 @@ As an example, let's consider the following Github Action workflow step, that cu
             - name: Set Github tag
               id: vars
               run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-            - name: Update configuration for webserver-dev
+            - name: Update configuration for web-sample
               uses: porter-dev/porter-cli-action@v0.1.0
               with:
                   command: update config --app web-sample --tag ${{ steps.vars.outputs.sha_short }} --stream
@@ -64,7 +64,7 @@ To enable B/G deployments in this case, we'll just add an additional step at the
             - name: Set Github tag
               id: vars
               run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-            - name: Update configuration for webserver-dev
+            - name: Update configuration for web-sample
               uses: porter-dev/porter-cli-action@v0.1.0
               with:
                   command: update config --app web-sample --tag ${{ steps.vars.outputs.sha_short }} --stream
@@ -73,7 +73,7 @@ To enable B/G deployments in this case, we'll just add an additional step at the
                   PORTER_CLUSTER: 0000
                   PORTER_PROJECT: 0000
                   PORTER_TOKEN: ${{ secrets.PORTER_TOKEN_0000 }}
-            - name: Switch traffic to the new app once ready for frontend-dev
+            - name: Switch traffic to the new app once ready for web-sample
               uses: porter-dev/porter-cli-action@v0.1.0
               with:
                 command: deploy blue-green-switch --app web-sample --tag ${{ steps.vars.outputs.sha_short }}
@@ -86,7 +86,7 @@ To enable B/G deployments in this case, we'll just add an additional step at the
 
 Once you've saved this and triggered a new set of builds, your CI runner will be able to specify a "green" version of your app, and switch traffic to it once the "green" version is ready. 
 
-:::warning Environment
+:::info Environment
 You'll need to ensure that `PORTER_HOST`, `PORTER_CLUSTER`, `PORTER_PROJECT` and `PORTER_TOKEN` are set correctly - you can reuse the same values as in your existing CI definition. 
 :::
 
