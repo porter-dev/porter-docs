@@ -1,7 +1,7 @@
 ---
 id: blue-green-deployments
 slug: /deploying-applications/blue-green-deployments
-title: Blue/Green deployments
+title: Blue/Green Deployments
 ---
 
 You can configure your apps to be deployed using a blue/green strategy, where Porter will keep the older version of your app running(the "blue" version), while it spins up an identical number of replicas for your app using a new build(the "green" version), and waits for the entire environment to be up and running, before switching traffic from the old version("blue") to the new version("green"). Setting up B/G deployments for your app involves modifying your app's configuration, as well as your build step in your CI system that's reponsible for updating the Porter app after a successful build.
