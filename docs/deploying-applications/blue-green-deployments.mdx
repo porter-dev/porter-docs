@@ -4,7 +4,7 @@ slug: /deploying-applications/blue-green-deployments
 title: Blue/Green deployments
 ---
 
-You can configure your apps to be deployed using a blue/green strategy, where Porter spins up an identical number of replicas for your app(the "blue" environment) using a new build, and waits for the entire environment to be up and running, before switching traffic to the new version(the "green" environment). Setting up B/G deployments for your app involves modifying your app's configuration, as well as your build step in your CI system that's reponsible for updating the Porter app after a successful build.
+You can configure your apps to be deployed using a blue/green strategy, where Porter will keep the older version of your app running(the "blue" version), while it spins up an identical number of replicas for your app using a new build(the "green" version), and waits for the entire environment to be up and running, before switching traffic from the old version("blue") to the new version("green"). Setting up B/G deployments for your app involves modifying your app's configuration, as well as your build step in your CI system that's reponsible for updating the Porter app after a successful build.
 
 :::warning Setup Sequence
 Please note - this process needs to followed in the same sequence as presented below, and it is a good idea to complete the second step for tweaking your build step right after you've made changes to the Porter app; this will ensure any other builds/revisions will not conflict with B/G deployments.
@@ -29,7 +29,9 @@ For `<tag>`, you'll need to specify the image tag you noted down earlier. Once d
 
 ## Step 2: Modify your build process
 
-This step involves modifying your CI build process to ensure that instead of using the Porter CLI to simply update the Porter app. In your current build process, you'll see sections that use `porter update config` to update the image tag being used for the app; we need to add an additional step right after this update, which tell Porter to switch traffic to the new version. As an example, let's consider the following Github Action workflow step, that currently simply updates an app on Porter called `web-sample` with the new image tag:
+This step involves modifying your CI build process to ensure that instead of using the Porter CLI to simply update the Porter app. In your current build process, you'll see sections that use `porter update config` to update the image tag being used for the app; we need to add an additional step right after this update, which tells Porter to switch traffic to the new version. 
+
+As an example, let's consider the following Github Action workflow step, that currently simply updates an app on Porter called `web-sample` with the new image tag:
 
 ```yaml
     porter-deploy-app:
@@ -51,7 +53,7 @@ This step involves modifying your CI build process to ensure that instead of usi
                   PORTER_TOKEN: ${{ secrets.PORTER_TOKEN_0000 }}
 ```
 
-To enable B/G deployments in this case, we'll simply add an additional step at the end of this block to switch traffic, like so:
+To enable B/G deployments in this case, we'll just add an additional step at the end of this block to switch traffic, like so:
 
 ```yaml
     porter-deploy-app:
@@ -90,7 +92,7 @@ You'll need to ensure that `PORTER_HOST`, `PORTER_CLUSTER`, `PORTER_PROJECT` and
 
 ## Multiple Revisions
 
-When your app's being deploued using the B/G deployment strategy, you'll notice that each deployment causes your app to jump by three revisions:
+When your app's being deployed using the B/G deployment strategy, you'll notice that each deployment causes your app to jump by three revisions:
 
 1. The first revision runs both "blue" and "green" versions in parallel, with traffic being directed towards the "blue" version.
 2. The second revision runs both "blue" and "green" versions in parallel, with traffic being directed towards the "green" version.
