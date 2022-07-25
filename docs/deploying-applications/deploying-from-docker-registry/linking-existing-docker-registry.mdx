@@ -11,6 +11,7 @@ Porter supports linking a private Docker container registry to your project. Thi
 
 - [Amazon Elastic Container Registry (ECR)](#amazon-elastic-container-registry-ecr)
 - [Google Container Registry (GCR)](#google-container-registry-gcr)
+- [Google Artifact Registry (GAR)](#google-artifact-registry-gar)
 - [DigitalOcean Container Registry](#digital-ocean-container-registry)
 - [Docker Hub](#docker-hub)
 - [Other registries](#customprivate-registries) which implement the [Registry HTTP API v2](https://docs.docker.com/registry/spec/api/)
@@ -100,6 +101,37 @@ import GCRCLISection from "./_gcr-cli-section.mdx";
     <GCRCLISection />
   </TabItem>
 </Tabs>
+
+## Google Artifact Registry (GAR)
+
+### Creating a GCP Service Account for GAR
+
+Before you can connect to an existing GAR instance, you must create a service account with permission to push/pull from GAR. To do this, follow the steps below.
+
+1. First, go to your [Google Cloud console](https://console.cloud.google.com/) and navigate to **IAM & Admin** -> **Service Accounts**:
+
+![GCP service accounts](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/485c7084-6bac-401e-2732-7053881e8a00/large "Screen Shot 2021-02-26 at 8.34.21 AM.png")
+
+2. Select **Create Service Account**:
+
+![Create SA](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/5e21c881-34ae-4b35-df45-3b97a4ea6900/large "Screen Shot 2021-02-26 at 8.36.48 AM.png")
+
+3. Name your service account (for example, "porter-gar-access"), grant the service account **Artifact Registry Administrator** permissions, then select **Done**:
+
+![Storage admin permissions](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/61b4c08f-e91a-405d-9acc-e0cd3d0a2200/large "Screen Shot 2021-02-26 at 8.39.58 AM.png")
+
+4. After creating the service account, you will be redirected to the list of service accounts. Find the row with the newly created service account, and select "Manage keys" in the "Actions" column:
+
+![Manage keys SA](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/befa54da-4482-4d16-a3c4-79d9d0e34100/large "Screen Shot 2021-02-26 at 8.44.08 AM.png")
+
+5. Finally, press the "Add key" dropdown and select "Create new key". After choosing the **JSON** key type, your key file will be **automatically** downloaded:
+
+![JSON key download](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/3e24731a-f307-4871-f6a7-1deb2b1e9000/large "Screen Shot 2021-02-26 at 8.45.48 AM.png")
+
+### Linking GAR
+
+Now that you have a service account and JSON key downloaded, linking GCR can either be done from the dashboard or the CLI:
+
 
 ## Digital Ocean Container Registry
 
