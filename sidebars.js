@@ -293,6 +293,24 @@ const sidebars = {
         "preview-environments/porter-yaml-reference",
         {
           type: "category",
+          label: "Drivers",
+          className: "expandable-subdoc",
+          link: {
+            type: "doc",
+            id: "preview-environments/drivers",
+          },
+          items: [
+            "preview-environments/drivers/deploy",
+            "preview-environments/drivers/build-image",
+            "preview-environments/drivers/push-image",
+            "preview-environments/drivers/update-config",
+            "preview-environments/drivers/random-string",
+            "preview-environments/drivers/env-group",
+            "preview-environments/drivers/os-env",
+          ],
+        },
+        {
+          type: "category",
           label: "Examples",
           className: "expandable-subdoc",
           link: {

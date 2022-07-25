@@ -1,0 +1,36 @@
+---
+id: os-env
+slug: /preview-environments/drivers/os-env
+title: os-env
+---
+
+This preview environments driver can be used to read environment variables that contain the prefix `PORTER_APPLY_`.
+
+For example, to read in all the environment variables that start with `PORTER_APPLY_`:
+
+```yaml
+---
+resources:
+  - name: my-os-env
+    driver: os-env
+```
+
+### Outputs
+
+This driver outputs all the environment variables that start with `PORTER_APPLY_`. This means that if an environment variable is named `PORTER_APPLY_my_secret`, this driver will output a `my_secret` identifier:
+
+```yaml
+---
+resources:
+  - name: my-os-env
+    driver: os-env
+  - name: my-deployment
+    depends_on:
+      - my-os-env
+    config:
+      container:
+        env:
+          normal:
+            - name: MY_SECRET_VALUE
+              value: {{ .my-os-env.my_secret }}
+```

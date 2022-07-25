@@ -8,9 +8,11 @@ This document contains a full reference file for `porter.yaml`. Each `porter.yam
 
 - [`version`](#version) - the version of the `porter.yaml` file reference to use.
 - [`resources`](#resources) - a list of resources to create.
-  - [`name`](#resourcename) - the name of the resource.
+  - [`name`](#resourcename) - the unique ID of the resource.
+  - [`driver`](#resourcedriver) - the name of the driver to use for the resource.
   - [`depends_on`](#resourcedepends_on) - the resources that the target resources depends on.
   - [`source`](#resourcesource) - the source configuration, specifying the application/addon to use.
+  - [`target`](#resourcetarget) - the target configuration, specifying the specifics of the project, cluster, etc., the application/addon should be deployed to.
   - [`config`](#resourceconfig) - the build and runtime configuration for the addon or application.
 
 ## `version`
@@ -41,6 +43,10 @@ resources:
 ### `<resource>.name`
 
 The name of the resource to create.
+
+### `<resource>.driver`
+
+The name of the driver the resource should use. For more about drivers, see the [Drivers section](./drivers) of the documentation.
 
 ### `<resource>.depends_on`
 
@@ -84,6 +90,35 @@ resources:
     source:
       name: "postgresql"
       repo: "https://chart-addons.getporter.dev"
+```
+
+### `<resource>.target`
+
+The target specifies the specifics of the project, cluster, etc., the application/addon should be deployed to. More specifically, it contains the following fields:
+
+- `project` \[`Integer`, optional\] - the Porter project ID to deploy the resource to. This is resolved in the following manner:
+  - Checks for the `PORTER_PROJECT` environment variable and uses it if it is set to a non-zero value.
+  - Next, checks for the value of `target.project` in the `porter.yaml` file and uses it if it is set to a non-zero value.
+  - Lastly, defaults back to the CLI configuration value for the project, set by using the `porter config set-project` command.
+- `cluster` \[`Integer`, optional\] - the Porter cluster ID in the project to deploy the resource to. This is resolved in the following manner:
+  - Checks for the `PORTER_CLUSTER` environment variable and uses it if it is set to a non-zero value.
+  - Next, checks for the value of `target.cluster` in the `porter.yaml` file and uses it if it is set to a non-zero value.
+  - Lastly, defaults back to the CLI configuration value for the cluster, set by using the `porter config set-cluster` command.
+- `namespace` \[`String`, optional\] - the namespace in the cluster to deploy the resource to. This is resolved in the following manner:
+  - Checks for the `PORTER_NAMESPACE` environment variable and uses it if it is set to a non-empty string.
+  - Next, checks for the value of `target.namespace` in the `porter.yaml` file and uses it if it is set to a non-empty string.
+  - Lastly, uses the `default` namespace if the above steps do not resolve to a non-empty string value.
+
+For example, to deploy a resource to a specific project, cluster, and namespace:
+
+```yaml
+---
+resources:
+  - name: "web-example"
+    target:
+      project: 1
+      cluster: 1
+      namespace: "dev"
 ```
 
 ### `<resource>.config`
