@@ -27,10 +27,12 @@ resources:
   - name: my-deployment
     depends_on:
       - my-os-env
+    source:
+      name: web
     config:
-      container:
-        env:
-          normal:
-            - name: MY_SECRET_VALUE
-              value: {{ .my-os-env.my_secret }}
+      values:
+        container:
+          env:
+            normal:
+              MY_SECRET_VALUE: {{ .my-os-env.my_secret }}
 ```
