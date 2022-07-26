@@ -109,6 +109,8 @@ The target specifies the specifics of the project, cluster, etc., the applicatio
   - Next, checks for the value of `target.namespace` in the `porter.yaml` file and uses it if it is set to a non-empty string.
   - Lastly, uses the `default` namespace if the above steps do not resolve to a non-empty string value.
 
+**Note:** In some cases, the `target` section can also contain the `app_name` field to denote the Porter release name.
+
 For example, to deploy a resource to a specific project, cluster, and namespace:
 
 ```yaml
