@@ -289,6 +289,8 @@ const sidebars = {
       type: "category",
       label: "Preview Environments",
       items: [
+        "preview-environments/overview",
+        "preview-environments/concepts",
         "preview-environments/setup",
         "preview-environments/porter-yaml-reference",
         {
