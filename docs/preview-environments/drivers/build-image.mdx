@@ -26,7 +26,7 @@ This preview environments driver can be used to build a Docker image locally by 
   - `name` [`String`, required] - the name of the env group
   - `namespace` [`String`, required] - the namespace to use for the env group
   - `version` [`Integer`, optional] - the version of the env group
-- `values` [`Map of String keys to Object values`, optional] - the Helm chart values to use for the app or addon
+- `values` [`Map of String keys to Object values`, optional] - the Helm chart values to use for the app or addon. For a detailed explanation, please read the section on [Runtime Configuration](/preview-environments/porter-yaml-reference#runtime-configuration).
 
 For example, to build a Docker image locally using the `pack` method, you can use the following:
 
