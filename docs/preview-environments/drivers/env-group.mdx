@@ -55,6 +55,6 @@ resources:
         container:
           env:
             normal:
-              MY_KEY: {{ .my-env-groups.some-env-group.variables.MY_KEY }}
-              ANOTHER_KEY: {{ .my-env-groups.some-env-group.variables.ANOTHER_KEY }}
+              MY_KEY: "{ .my-env-groups.some-env-group.variables.MY_KEY }"
+              ANOTHER_KEY: "{ .my-env-groups.some-env-group.variables.ANOTHER_KEY }"
 ```

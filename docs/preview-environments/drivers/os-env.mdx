@@ -34,7 +34,7 @@ resources:
         container:
           env:
             normal:
-              MY_SECRET_VALUE: {{ .my-os-env.my_secret }}
+              MY_SECRET_VALUE: "{ .my-os-env.my_secret }"
 ```
 
 ### Example GitHub workflow file

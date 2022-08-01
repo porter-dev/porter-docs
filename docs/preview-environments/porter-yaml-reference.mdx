@@ -133,7 +133,7 @@ If the resource is a `web`, `worker`, or `job` application, the `config` block e
 
 - `build` \[required\] - the build configuration to use.
   - `method` \[`docker`, `pack`, or `registry`\] - the build/deploy method to use: the Docker daemon, cloud-native buildpacks or deployment from a Docker registry.
-  - `dockerfile` \[`String`, optional\] - if the build method is `docker`, the path to the Dockerfile. Defaults to `./Dockerfile`.
+  - `dockerfile` \[`String`, optional\] - if the build method is `docker`, the path to the Dockerfile
   - `builder` \[`String`, optional\] - if the build method is `pack`, the builder to use. Leaving this blank will default to `paketobuildpacks/builder:full`. Other well-supported options are `heroku/buildpacks:20` and `heroku/buildpacks:18`.
   - `buildpacks` \[`String`, optional\] - if the build method is `pack`, the buildpacks to use. Leaving this empty will default to the buildpacks supported by `paketo` and `heroku`, depending on the builder.
   - `context` \[`String`, optional\] - if the build method is `docker` or `pack`, the path to the application directory. Defaults to the current (root) directory.
