@@ -629,15 +629,15 @@ paths:
         - Releases
       x-codeSamples:
         - lang: Shell
-          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'"
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"latest_revision\":0,\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"latest_revision\":0,\"values\":{\"property1\":{},\"property2\":{}},\"version\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"latest_revision\\\":0,\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\npayload = {\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    },\n    \"version\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\npayload = {\n    \"latest_revision\": 0,\n    \"values\": {\n        \"property1\": {},\n        \"property2\": {}\n    },\n    \"version\": \"string\"\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\tpayload := strings.NewReader(\"{\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases/{name}/{version}\"\n\n\tpayload := strings.NewReader(\"{\\\"latest_revision\\\":0,\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}},\\\"version\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: UpdateReleaseRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks:
     get:
@@ -749,15 +749,15 @@ paths:
         - Stacks
       x-codeSamples:
         - lang: Shell
-          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'"
+          source: "curl --request POST \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"display_name\":\"string\",\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks';\n\nlet options = {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"app_resources\":[{\"name\":\"string\",\"source_config_name\":\"string\",\"template_name\":\"string\",\"template_repo_url\":\"string\",\"template_version\":\"string\",\"values\":{\"property1\":{},\"property2\":{}}}],\"env_groups\":[{\"linked_applications\":[\"string\"],\"name\":\"string\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}],\"name\":\"string\",\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"display_name\":\"string\",\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Post.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"display_name\\\":\\\"string\\\",\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\npayload = {\n    \"app_resources\": [\n        {\n            \"name\": \"string\",\n            \"source_config_name\": \"string\",\n            \"template_name\": \"string\",\n            \"template_repo_url\": \"string\",\n            \"template_version\": \"string\",\n            \"values\": {\n                \"property1\": {},\n                \"property2\": {}\n            }\n        }\n    ],\n    \"env_groups\": [\n        {\n            \"linked_applications\": [\"string\"],\n            \"name\": \"string\",\n            \"secret_variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            },\n            \"variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            }\n        }\n    ],\n    \"name\": \"string\",\n    \"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"image_repo_uri\": \"string\",\n            \"image_tag\": \"string\",\n            \"name\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\npayload = {\n    \"app_resources\": [\n        {\n            \"name\": \"string\",\n            \"source_config_name\": \"string\",\n            \"template_name\": \"string\",\n            \"template_repo_url\": \"string\",\n            \"template_version\": \"string\",\n            \"values\": {\n                \"property1\": {},\n                \"property2\": {}\n            }\n        }\n    ],\n    \"env_groups\": [\n        {\n            \"linked_applications\": [\"string\"],\n            \"name\": \"string\",\n            \"secret_variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            },\n            \"variables\": {\n                \"property1\": \"string\",\n                \"property2\": \"string\"\n            }\n        }\n    ],\n    \"name\": \"string\",\n    \"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"display_name\": \"string\",\n            \"image_repo_uri\": \"string\",\n            \"image_tag\": \"string\",\n            \"name\": \"string\"\n        }\n    ]\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"POST\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\n\tpayload := strings.NewReader(\"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks\"\n\n\tpayload := strings.NewReader(\"{\\\"app_resources\\\":[{\\\"name\\\":\\\"string\\\",\\\"source_config_name\\\":\\\"string\\\",\\\"template_name\\\":\\\"string\\\",\\\"template_repo_url\\\":\\\"string\\\",\\\"template_version\\\":\\\"string\\\",\\\"values\\\":{\\\"property1\\\":{},\\\"property2\\\":{}}}],\\\"env_groups\\\":[{\\\"linked_applications\\\":[\\\"string\\\"],\\\"name\\\":\\\"string\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}],\\\"name\\\":\\\"string\\\",\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"display_name\\\":\\\"string\\\",\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"POST\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: CreateStackRequest
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}:
     delete:
@@ -885,6 +885,74 @@ paths:
           source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    patch:
+      operationId: updateStack
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The stack id
+          in: path
+          name: stack_id
+          required: true
+          schema:
+            type: string
+            x-go-name: StackID
+          x-go-name: StackID
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/updateStack_request'
+        description: The stack to update
+        required: false
+      responses:
+        "200":
+          content: {}
+          description: Successfully updated the stack
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Update Stack
+      tags:
+        - Stacks
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"string\"}'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}\"\n\npayload = {\"name\": \"string\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: UpdateStack
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{revision_id}:
     get:
       description: Gets a stack revision
@@ -1451,15 +1519,15 @@ paths:
         - Stacks
       x-codeSamples:
         - lang: Shell
-          source: "curl --request PUT \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'"
+          source: "curl --request PUT \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"display_name\":\"string\",\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'"
         - lang: Node
-          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source';\n\nlet options = {\n  method: 'PUT',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source';\n\nlet options = {\n  method: 'PUT',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"source_configs\":[{\"build\":{\"buildpack\":{\"builder\":\"string\",\"buildpacks\":[\"string\"]},\"dockerfile\":{\"dockerfile_path\":\"string\"},\"folder_path\":\"string\",\"git\":{\"git_branch\":\"string\",\"git_integration_id\":0,\"git_integration_kind\":\"string\",\"git_repo\":\"string\"},\"method\":\"string\"},\"display_name\":\"string\",\"image_repo_uri\":\"string\",\"image_tag\":\"string\",\"name\":\"string\"}]}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
         - lang: Ruby
-          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Put.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Put.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"display_name\\\":\\\"string\\\",\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\"\n\nresponse = http.request(request)\nputs response.read_body"
         - lang: Python
-          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source\"\n\npayload = {\"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"image_repo_uri\": \"string\",\n            \"image_tag\": \"string\",\n            \"name\": \"string\"\n        }\n    ]}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PUT\", url, json=payload, headers=headers)\n\nprint(response.text)"
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source\"\n\npayload = {\"source_configs\": [\n        {\n            \"build\": {\n                \"buildpack\": {\n                    \"builder\": \"string\",\n                    \"buildpacks\": [\"string\"]\n                },\n                \"dockerfile\": {\"dockerfile_path\": \"string\"},\n                \"folder_path\": \"string\",\n                \"git\": {\n                    \"git_branch\": \"string\",\n                    \"git_integration_id\": 0,\n                    \"git_integration_kind\": \"string\",\n                    \"git_repo\": \"string\"\n                },\n                \"method\": \"string\"\n            },\n            \"display_name\": \"string\",\n            \"image_repo_uri\": \"string\",\n            \"image_tag\": \"string\",\n            \"name\": \"string\"\n        }\n    ]}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PUT\", url, json=payload, headers=headers)\n\nprint(response.text)"
         - lang: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source\"\n\n\tpayload := strings.NewReader(\"{\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"PUT\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/source\"\n\n\tpayload := strings.NewReader(\"{\\\"source_configs\\\":[{\\\"build\\\":{\\\"buildpack\\\":{\\\"builder\\\":\\\"string\\\",\\\"buildpacks\\\":[\\\"string\\\"]},\\\"dockerfile\\\":{\\\"dockerfile_path\\\":\\\"string\\\"},\\\"folder_path\\\":\\\"string\\\",\\\"git\\\":{\\\"git_branch\\\":\\\"string\\\",\\\"git_integration_id\\\":0,\\\"git_integration_kind\\\":\\\"string\\\",\\\"git_repo\\\":\\\"string\\\"},\\\"method\\\":\\\"string\\\"},\\\"display_name\\\":\\\"string\\\",\\\"image_repo_uri\\\":\\\"string\\\",\\\"image_tag\\\":\\\"string\\\",\\\"name\\\":\\\"string\\\"}]}\")\n\n\treq, _ := http.NewRequest(\"PUT\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
       x-codegen-request-body-name: PutStackSourceConfigRequest
   /api/v1/projects/{project_id}/registries:
     get:
@@ -1836,14 +1904,6 @@ components:
   schemas:
     BuildConfig:
       description: The build configuration for this release when using buildpacks
-      example:
-        buildpacks:
-          - buildpacks
-          - buildpacks
-        builder: builder
-        config:
-          - 0
-          - 0
       properties:
         builder:
           type: string
@@ -1865,8 +1925,8 @@ components:
       description: "Chart is a helm package that contains metadata, a default config, zero or more\noptionally parameterizable templates, and zero or more charts (dependencies)."
       example:
         schema:
-          - 1
-          - 1
+          - 6
+          - 6
         metadata:
           maintainers:
             - name: name
@@ -1922,23 +1982,23 @@ components:
           name: name
         templates:
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
         values:
           key: "{}"
         files:
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
           - data:
-              - 6
-              - 6
+              - 0
+              - 0
             name: name
         lock:
           generated: 2000-01-23T04:56:07.000+00:00
@@ -2106,7 +2166,7 @@ components:
         image_repo_uri: image_repo_uri
       properties:
         image_repo_uri:
-          description: The URL to the repository of a registry (**ECR only**)
+          description: "The URL to the repository of a registry (ECR, GAR)"
           type: string
           x-go-name: ImageRepoURI
       required:
@@ -2403,6 +2463,7 @@ components:
               folder_path: folder_path
             name: name
             image_tag: image_tag
+            display_name: display_name
           - image_repo_uri: image_repo_uri
             build:
               git:
@@ -2421,6 +2482,7 @@ components:
               folder_path: folder_path
             name: name
             image_tag: image_tag
+            display_name: display_name
         app_resources:
           - template_name: template_name
             template_version: template_version
@@ -2505,9 +2567,13 @@ components:
           folder_path: folder_path
         name: name
         image_tag: image_tag
+        display_name: display_name
       properties:
         build:
           $ref: '#/components/schemas/StackSourceConfigBuild'
+        display_name:
+          type: string
+          x-go-name: DisplayName
         image_repo_uri:
           type: string
           x-go-name: ImageRepoURI
@@ -2518,6 +2584,7 @@ components:
           type: string
           x-go-name: Name
       required:
+        - display_name
         - image_repo_uri
         - image_tag
         - name
@@ -2592,8 +2659,8 @@ components:
       description: "By convention, name is a relative path within the scope of the chart's\nbase directory."
       example:
         data:
-          - 6
-          - 6
+          - 0
+          - 0
         name: name
       properties:
         data:
@@ -2612,26 +2679,6 @@ components:
       x-go-package: helm.sh/helm/v3/pkg/chart
     FormContent:
       description: FormContent is a form's atomic unit
-      example:
-        settings:
-          default: "{}"
-          unit: "{}"
-          docs: docs
-          options: "{}"
-          placeholder: placeholder
-          disableAfterLaunch: true
-          omitUnitFromValue: true
-        context:
-          type: type
-          config:
-            key: config
-        name: name
-        variable: variable
-        label: label
-        placeholder: placeholder
-        type: type
-        value: "{}"
-        required: true
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -2663,10 +2710,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormContext:
       description: FormContext is the target context
-      example:
-        type: type
-        config:
-          key: config
       properties:
         config:
           additionalProperties:
@@ -2680,52 +2723,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormSection:
       description: FormSection is a section of a form
-      example:
-        contents:
-          - settings:
-              default: "{}"
-              unit: "{}"
-              docs: docs
-              options: "{}"
-              placeholder: placeholder
-              disableAfterLaunch: true
-              omitUnitFromValue: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            variable: variable
-            label: label
-            placeholder: placeholder
-            type: type
-            value: "{}"
-            required: true
-          - settings:
-              default: "{}"
-              unit: "{}"
-              docs: docs
-              options: "{}"
-              placeholder: placeholder
-              disableAfterLaunch: true
-              omitUnitFromValue: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            variable: variable
-            label: label
-            placeholder: placeholder
-            type: type
-            value: "{}"
-            required: true
-        show_if: "{}"
-        context:
-          type: type
-          config:
-            key: config
-        name: name
       properties:
         contents:
           items:
@@ -2745,106 +2742,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormTab:
       description: FormTab is a tab rendered in a form
-      example:
-        settings:
-          omitFromLaunch: true
-        context:
-          type: type
-          config:
-            key: config
-        name: name
-        label: label
-        sections:
-          - contents:
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-            show_if: "{}"
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-          - contents:
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-              - settings:
-                  default: "{}"
-                  unit: "{}"
-                  docs: docs
-                  options: "{}"
-                  placeholder: placeholder
-                  disableAfterLaunch: true
-                  omitUnitFromValue: true
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-                variable: variable
-                label: label
-                placeholder: placeholder
-                type: type
-                value: "{}"
-                required: true
-            show_if: "{}"
-            context:
-              type: type
-              config:
-                key: config
-            name: name
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -2865,215 +2762,6 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormYAML:
       description: FormYAML represents a chart's values.yaml form abstraction
-      example:
-        hasSource: hasSource
-        icon: icon
-        isClusterScoped: true
-        name: name
-        tabs:
-          - settings:
-              omitFromLaunch: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            label: label
-            sections:
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-          - settings:
-              omitFromLaunch: true
-            context:
-              type: type
-              config:
-                key: config
-            name: name
-            label: label
-            sections:
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-              - contents:
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                  - settings:
-                      default: "{}"
-                      unit: "{}"
-                      docs: docs
-                      options: "{}"
-                      placeholder: placeholder
-                      disableAfterLaunch: true
-                      omitUnitFromValue: true
-                    context:
-                      type: type
-                      config:
-                        key: config
-                    name: name
-                    variable: variable
-                    label: label
-                    placeholder: placeholder
-                    type: type
-                    value: "{}"
-                    required: true
-                show_if: "{}"
-                context:
-                  type: type
-                  config:
-                    key: config
-                name: name
-        description: description
-        includeHiddenFields: includeHiddenFields
-        tags:
-          - tags
-          - tags
       properties:
         description:
           type: string
@@ -3111,14 +2799,6 @@ components:
       $ref: '#/components/schemas/Release'
     GitActionConfig:
       description: The git configuration for this release (when deployed from a git repository)
-      example:
-        image_repo_uri: image_repo_uri
-        git_repo: git_repo
-        git_repo_id: 5
-        git_branch: git_branch
-        dockerfile_path: dockerfile_path
-        gitlab_integration_id: 5
-        folder_path: folder_path
       properties:
         dockerfile_path:
           description: The path to the dockerfile in the git repo
@@ -3158,7 +2838,7 @@ components:
         kind: kind
         manifest: manifest
         name: name
-        weight: 2
+        weight: 1
         last_run:
           phase: phase
           completed_at: 2000-01-23T04:56:07.000+00:00
@@ -3717,6 +3397,7 @@ components:
           description: The integration service for this registry
           enum:
             - gcr
+            - gar
             - ecr
             - acr
             - docr
@@ -3754,249 +3435,15 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     Release:
-      description: Release is a helm release with a form attached
+      description: "Release describes a deployment of a chart, together with the chart\nand the variables used to deploy that chart."
       example:
-        git_action_config:
-          image_repo_uri: image_repo_uri
-          git_repo: git_repo
-          git_repo_id: 5
-          git_branch: git_branch
-          dockerfile_path: dockerfile_path
-          gitlab_integration_id: 5
-          folder_path: folder_path
         manifest: manifest
-        webhook_token: webhook_token
-        version: 9
-        tags:
-          - tags
-          - tags
-        form:
-          hasSource: hasSource
-          icon: icon
-          isClusterScoped: true
-          name: name
-          tabs:
-            - settings:
-                omitFromLaunch: true
-              context:
-                type: type
-                config:
-                  key: config
-              name: name
-              label: label
-              sections:
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-            - settings:
-                omitFromLaunch: true
-              context:
-                type: type
-                config:
-                  key: config
-              name: name
-              label: label
-              sections:
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-                - contents:
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                    - settings:
-                        default: "{}"
-                        unit: "{}"
-                        docs: docs
-                        options: "{}"
-                        placeholder: placeholder
-                        disableAfterLaunch: true
-                        omitUnitFromValue: true
-                      context:
-                        type: type
-                        config:
-                          key: config
-                      name: name
-                      variable: variable
-                      label: label
-                      placeholder: placeholder
-                      type: type
-                      value: "{}"
-                      required: true
-                  show_if: "{}"
-                  context:
-                    type: type
-                    config:
-                      key: config
-                  name: name
-          description: description
-          includeHiddenFields: includeHiddenFields
-          tags:
-            - tags
-            - tags
-        image_repo_uri: image_repo_uri
-        latest_version: latest_version
-        stack_id: stack_id
         name: name
         namespace: namespace
-        build_config:
-          buildpacks:
-            - buildpacks
-            - buildpacks
-          builder: builder
-          config:
-            - 0
-            - 0
-        id: 7
         chart:
           schema:
-            - 1
-            - 1
+            - 6
+            - 6
           metadata:
             maintainers:
               - name: name
@@ -4052,23 +3499,23 @@ components:
             name: name
           templates:
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
           values:
             key: "{}"
           files:
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
             - data:
-                - 6
-                - 6
+                - 0
+                - 0
               name: name
           lock:
             generated: 2000-01-23T04:56:07.000+00:00
@@ -4105,7 +3552,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 2
+            weight: 1
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -4120,7 +3567,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 2
+            weight: 1
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -4131,6 +3578,7 @@ components:
             delete_policies:
               - null
               - null
+        version: 5
         info:
           last_deployed: 2000-01-23T04:56:07.000+00:00
           deleted: 2000-01-23T04:56:07.000+00:00
@@ -4139,8 +3587,6 @@ components:
           description: description
           status: status
       properties:
-        build_config:
-          $ref: '#/components/schemas/BuildConfig'
         chart:
           $ref: '#/components/schemas/Chart'
         config:
@@ -4152,31 +3598,14 @@ components:
             These values override the default values inside of the chart.
           type: object
           x-go-name: Config
-        form:
-          $ref: '#/components/schemas/FormYAML'
-        git_action_config:
-          $ref: '#/components/schemas/GitActionConfig'
         hooks:
           description: Hooks are all of the hooks declared for this release.
           items:
             $ref: '#/components/schemas/Hook'
           type: array
           x-go-name: Hooks
-        id:
-          description: The ID of this Porter release
-          format: uint64
-          type: integer
-          x-go-name: ID
-        image_repo_uri:
-          description: The complete image repository URI for this release
-          type: string
-          x-go-name: ImageRepoURI
         info:
           $ref: '#/components/schemas/Info'
-        latest_version:
-          description: The latest version of this Porter release
-          type: string
-          x-go-name: LatestVersion
         manifest:
           description: Manifest is the string representation of the rendered template.
           type: string
@@ -4189,27 +3618,13 @@ components:
           description: Namespace is the kubernetes namespace of the release.
           type: string
           x-go-name: Namespace
-        stack_id:
-          description: Whether this release is tied to a stack or not
-          type: string
-          x-go-name: StackID
-        tags:
-          description: The list of tags for this release
-          items:
-            type: string
-          type: array
-          x-go-name: Tags
         version:
           description: Version is an int which represents the revision of the release.
           format: int64
           type: integer
           x-go-name: Version
-        webhook_token:
-          description: The webhook token used to secure Github repository webhooks
-          type: string
-          x-go-name: WebhookToken
       type: object
-      x-go-package: github.com/porter-dev/porter/api/types
+      x-go-package: helm.sh/helm/v3/pkg/release
     Stack:
       example:
         updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4263,6 +3678,7 @@ components:
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 image_tag: image_tag
+                display_name: display_name
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
             - stack_app_data:
@@ -4297,6 +3713,7 @@ components:
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 image_tag: image_tag
+                display_name: display_name
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
           id: 1
@@ -4325,6 +3742,7 @@ components:
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
+              display_name: display_name
             - image_repo_uri: image_repo_uri
               updated_at: 2000-01-23T04:56:07.000+00:00
               build:
@@ -4348,6 +3766,7 @@ components:
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
+              display_name: display_name
           env_groups:
             - env_group_version: 0
               updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4480,6 +3899,7 @@ components:
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           image_tag: image_tag
+          display_name: display_name
         created_at: 2000-01-23T04:56:07.000+00:00
         id: id
       properties:
@@ -4574,6 +3994,7 @@ components:
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
+              display_name: display_name
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
           - stack_app_data:
@@ -4608,6 +4029,7 @@ components:
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               image_tag: image_tag
+              display_name: display_name
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
         id: 1
@@ -4636,6 +4058,7 @@ components:
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             image_tag: image_tag
+            display_name: display_name
           - image_repo_uri: image_repo_uri
             updated_at: 2000-01-23T04:56:07.000+00:00
             build:
@@ -4659,6 +4082,7 @@ components:
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             image_tag: image_tag
+            display_name: display_name
         env_groups:
           - env_group_version: 0
             updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4783,6 +4207,7 @@ components:
         created_at: 2000-01-23T04:56:07.000+00:00
         id: id
         image_tag: image_tag
+        display_name: display_name
       properties:
         build:
           $ref: '#/components/schemas/StackSourceConfigBuild'
@@ -4791,6 +4216,10 @@ components:
           format: date-time
           type: string
           x-go-name: CreatedAt
+        display_name:
+          description: Display name for the stack source
+          type: string
+          x-go-name: DisplayName
         id:
           description: The unique id of the stack source config
           type: string
@@ -4804,7 +4233,7 @@ components:
           type: string
           x-go-name: ImageTag
         name:
-          description: The display name of the stack source
+          description: Unique name for the source config
           type: string
           x-go-name: Name
         stack_id:
@@ -4925,7 +4354,13 @@ components:
         values:
           key: "{}"
         version: version
+        latest_revision: 0
       properties:
+        latest_revision:
+          description: "(optional) if set, the backend will validate that the user was upgrading from the revision specified by\nLatestRevision, and there hasn't been an upgrade in the meantime."
+          format: uint64
+          type: integer
+          x-go-name: LatestRevision
         values:
           additionalProperties:
             properties: {}
@@ -4941,6 +4376,15 @@ components:
         - values
       type: object
       x-go-name: V1UpgradeReleaseRequest
+      x-go-package: github.com/porter-dev/porter/api/types
+    UpdateStackRequest:
+      example:
+        name: name
+      properties:
+        name:
+          type: string
+          x-go-name: Name
+      type: object
       x-go-package: github.com/porter-dev/porter/api/types
     UpdateStackSourceConfigRequest:
       properties:
@@ -5056,6 +4500,11 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     updateRelease_request:
       properties:
+        latest_revision:
+          description: "(optional) if set, the backend will validate that the user was upgrading from the revision specified by\nLatestRevision, and there hasn't been an upgrade in the meantime."
+          format: uint64
+          type: integer
+          x-go-name: LatestRevision
         values:
           additionalProperties:
             properties: {}
@@ -5103,6 +4552,13 @@ components:
         - app_resources
         - name
         - source_configs
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    updateStack_request:
+      properties:
+        name:
+          type: string
+          x-go-name: Name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     addApplication_request:
@@ -5250,7 +4706,7 @@ components:
     createRegistryRepository_request:
       properties:
         image_repo_uri:
-          description: The URL to the repository of a registry (**ECR only**)
+          description: "The URL to the repository of a registry (ECR, GAR)"
           type: string
           x-go-name: ImageRepoURI
       required:
@@ -5258,14 +4714,6 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     FormContent_settings:
-      example:
-        default: "{}"
-        unit: "{}"
-        docs: docs
-        options: "{}"
-        placeholder: placeholder
-        disableAfterLaunch: true
-        omitUnitFromValue: true
       properties:
         default:
           properties: {}
@@ -5294,8 +4742,6 @@ components:
       type: object
       x-go-name: Settings
     FormTab_settings:
-      example:
-        omitFromLaunch: true
       properties:
         omitFromLaunch:
           type: boolean
