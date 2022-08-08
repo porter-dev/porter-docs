@@ -419,6 +419,9 @@ definitions:
     properties:
       build:
         $ref: '#/definitions/StackSourceConfigBuild'
+      display_name:
+        type: string
+        x-go-name: DisplayName
       image_repo_uri:
         type: string
         x-go-name: ImageRepoURI
@@ -429,6 +432,7 @@ definitions:
         type: string
         x-go-name: Name
     required:
+    - display_name
     - name
     - image_repo_uri
     - image_tag
@@ -1447,6 +1451,10 @@ definitions:
         format: date-time
         type: string
         x-go-name: CreatedAt
+      display_name:
+        description: Display name for the stack source
+        type: string
+        x-go-name: DisplayName
       id:
         description: The unique id of the stack source config
         type: string
@@ -1460,7 +1468,7 @@ definitions:
         type: string
         x-go-name: ImageTag
       name:
-        description: The display name of the stack source
+        description: Unique name for the source config
         type: string
         x-go-name: Name
       stack_id:
@@ -1575,6 +1583,13 @@ definitions:
     - values
     type: object
     x-go-name: V1UpgradeReleaseRequest
+    x-go-package: github.com/porter-dev/porter/api/types
+  UpdateStackRequest:
+    properties:
+      name:
+        type: string
+        x-go-name: Name
+    type: object
     x-go-package: github.com/porter-dev/porter/api/types
   UpdateStackSourceConfigRequest:
     properties:
@@ -2643,6 +2658,52 @@ paths:
         "403":
           description: Forbidden
       summary: Get a stack
+      tags:
+      - Stacks
+    patch:
+      operationId: updateStack
+      parameters:
+      - description: The project id
+        format: uint64
+        in: path
+        minimum: 1
+        name: project_id
+        required: true
+        type: integer
+        x-go-name: ProjectID
+      - description: The cluster id
+        format: uint64
+        in: path
+        minimum: 1
+        name: cluster_id
+        required: true
+        type: integer
+        x-go-name: ClusterID
+      - description: The namespace
+        in: path
+        name: namespace
+        required: true
+        type: string
+        x-go-name: Namespace
+      - description: The stack id
+        in: path
+        name: stack_id
+        required: true
+        type: string
+        x-go-name: StackID
+      - description: The stack to update
+        in: body
+        name: UpdateStack
+        schema:
+          $ref: '#/definitions/UpdateStackRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated the stack
+        "403":
+          description: Forbidden
+      summary: Update Stack
       tags:
       - Stacks
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/stacks/{stack_id}/{revision_id}:
