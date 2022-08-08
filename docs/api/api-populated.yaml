@@ -234,6 +234,483 @@ paths:
           source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
         - lang: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups:
+    get:
+      description: "Gets all env groups in the namespace denoted by `namespace`. The namespace should belong to the cluster denoted by\n`cluster_id`, which in turn should belong to the project denoted by `project_id`."
+      operationId: listAllEnvGroups
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1ListAllEnvGroupsResponse'
+          description: Successfully fetched the env group
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Get all env groups
+      tags:
+        - Env groups
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    put:
+      description: "Note:** If updating an existing env group, the linked releases with the env group will all be updated as well."
+      operationId: createOrUpdateEnvGroup
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/createOrUpdateEnvGroup_request'
+        description: The env group to create or update
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1EnvGroupResponse'
+          description: Successfully created a new namespace
+        "403":
+          content: {}
+          description: Forbidden
+      summary: Create or update an env group
+      tags:
+        - Env groups
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request PUT \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"name\":\"prod-env-group\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups';\n\nlet options = {\n  method: 'PUT',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"name\":\"prod-env-group\",\"secret_variables\":{\"property1\":\"string\",\"property2\":\"string\"},\"variables\":{\"property1\":\"string\",\"property2\":\"string\"}}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Put.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"name\\\":\\\"prod-env-group\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}\"\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups\"\n\npayload = {\n    \"name\": \"prod-env-group\",\n    \"secret_variables\": {\n        \"property1\": \"string\",\n        \"property2\": \"string\"\n    },\n    \"variables\": {\n        \"property1\": \"string\",\n        \"property2\": \"string\"\n    }\n}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PUT\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups\"\n\n\tpayload := strings.NewReader(\"{\\\"name\\\":\\\"prod-env-group\\\",\\\"secret_variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"},\\\"variables\\\":{\\\"property1\\\":\\\"string\\\",\\\"property2\\\":\\\"string\\\"}}\")\n\n\treq, _ := http.NewRequest(\"PUT\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: CreateEnvGroupRequest
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}:
+    delete:
+      description: "Deletes the env group denoted by `name` in the namespace denoted by `namespace`. The namespace should belong to the cluster denoted by\n`cluster_id`, which in turn should belong to the project denoted by `project_id`."
+      operationId: deleteEnvGroup
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The env group name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+      responses:
+        "200":
+          content: {}
+          description: Successfully deleted the env group
+        "403":
+          content: {}
+          description: Forbidden
+        "412":
+          content: {}
+          description: Env group is linked to one or more releases
+      summary: Delete an env group
+      tags:
+        - Env groups
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request DELETE \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}';\n\nlet options = {method: 'DELETE', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Delete.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"DELETE\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}\"\n\n\treq, _ := http.NewRequest(\"DELETE\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+    get:
+      description: "Gets all versions of an env group denoted by `name` in the namespace denoted by `namespace`. The namespace should belong to the cluster denoted by\n`cluster_id`, which in turn should belong to the project denoted by `project_id`."
+      operationId: getEnvGroupAllVersions
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The env group name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1EnvGroupsAllVersionsResponse'
+          description: Successfully fetched the env group
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Env group not found
+      summary: Get all versions of an env group
+      tags:
+        - Env groups
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/add_release:
+    patch:
+      description: "Adds a release to the env group denoted by `name` in the namespace denoted by `namespace`. The namespace should belong to the cluster denoted by\n`cluster_id`, which in turn should belong to the project denoted by `project_id`."
+      operationId: addReleaseToEnvGroup
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The env group name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/addReleaseToEnvGroup_request'
+        description: The name of the release to add
+        required: false
+      responses:
+        "200":
+          content: {}
+          description: Successfully added the release
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Env group not found
+      summary: Add a release to an env group
+      tags:
+        - Env groups
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/add_release \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"release_name\":\"string\"}'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/add_release';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"release_name\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/add_release\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"release_name\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/add_release\"\n\npayload = {\"release_name\": \"string\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/add_release\"\n\n\tpayload := strings.NewReader(\"{\\\"release_name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: V1EnvGroupReleaseRequest
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/remove_release:
+    patch:
+      description: "Removes a release from the env group denoted by `name` in the namespace denoted by `namespace`. The namespace should belong to the cluster denoted by\n`cluster_id`, which in turn should belong to the project denoted by `project_id`."
+      operationId: removeReleaseFromEnvGroup
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The env group name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/addReleaseToEnvGroup_request'
+        description: The name of the release to remove
+        required: false
+      responses:
+        "200":
+          content: {}
+          description: Successfully removed the release
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Env group not found
+      summary: Remove a release from an env group
+      tags:
+        - Env groups
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request PATCH \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/remove_release \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN' \\\n  --header 'content-type: application/json' \\\n  --data '{\"release_name\":\"string\"}'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/remove_release';\n\nlet options = {\n  method: 'PATCH',\n  headers: {\n    Authorization: 'Bearer REPLACE_BEARER_TOKEN',\n    'content-type': 'application/json'\n  },\n  body: '{\"release_name\":\"string\"}'\n};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/remove_release\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Patch.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\nrequest[\"content-type\"] = 'application/json'\nrequest.body = \"{\\\"release_name\\\":\\\"string\\\"}\"\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/remove_release\"\n\npayload = {\"release_name\": \"string\"}\nheaders = {\n    \"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\",\n    \"content-type\": \"application/json\"\n}\n\nresponse = requests.request(\"PATCH\", url, json=payload, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/remove_release\"\n\n\tpayload := strings.NewReader(\"{\\\"release_name\\\":\\\"string\\\"}\")\n\n\treq, _ := http.NewRequest(\"PATCH\", url, payload)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\treq.Header.Add(\"content-type\", \"application/json\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
+      x-codegen-request-body-name: V1EnvGroupReleaseRequest
+  /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/versions/{version}:
+    get:
+      description: "Gets an env group denoted by `name` and `version` in the namespace denoted by `namespace`. The namespace should belong to the cluster denoted by\n`cluster_id`, which in turn should belong to the project denoted by `project_id`. **Note:** To get the latest version of an env group, set `version` to `0`."
+      operationId: getEnvGroup
+      parameters:
+        - description: The project id
+          in: path
+          name: project_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ProjectID
+          x-go-name: ProjectID
+        - description: The cluster id
+          in: path
+          name: cluster_id
+          required: true
+          schema:
+            format: uint64
+            minimum: 1
+            type: integer
+            x-go-name: ClusterID
+          x-go-name: ClusterID
+        - description: The namespace name
+          in: path
+          name: namespace
+          required: true
+          schema:
+            type: string
+            x-go-name: Namespace
+          x-go-name: Namespace
+        - description: The env group name
+          in: path
+          name: name
+          required: true
+          schema:
+            type: string
+            x-go-name: Name
+          x-go-name: Name
+        - description: The version of the env group. 0 means latest version.
+          in: path
+          name: version
+          required: true
+          schema:
+            format: uint64
+            minimum: 0
+            type: integer
+            x-go-name: Version
+          x-go-name: Version
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1EnvGroupResponse'
+          description: Successfully fetched the env group
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Env group not found
+      summary: Get an env group
+      tags:
+        - Env groups
+      x-codeSamples:
+        - lang: Shell
+          source: "curl --request GET \\\n  --url https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/versions/{version} \\\n  --header 'Authorization: Bearer REPLACE_BEARER_TOKEN'"
+        - lang: Node
+          source: "const fetch = require('node-fetch');\n\nlet url = 'https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/versions/{version}';\n\nlet options = {method: 'GET', headers: {Authorization: 'Bearer REPLACE_BEARER_TOKEN'}};\n\nfetch(url, options)\n  .then(res => res.json())\n  .then(json => console.log(json))\n  .catch(err => console.error('error:' + err));"
+        - lang: Ruby
+          source: "require 'uri'\nrequire 'net/http'\nrequire 'openssl'\n\nurl = URI(\"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/versions/{version}\")\n\nhttp = Net::HTTP.new(url.host, url.port)\nhttp.use_ssl = true\nhttp.verify_mode = OpenSSL::SSL::VERIFY_NONE\n\nrequest = Net::HTTP::Get.new(url)\nrequest[\"Authorization\"] = 'Bearer REPLACE_BEARER_TOKEN'\n\nresponse = http.request(request)\nputs response.read_body"
+        - lang: Python
+          source: "import requests\n\nurl = \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/versions/{version}\"\n\nheaders = {\"Authorization\": \"Bearer REPLACE_BEARER_TOKEN\"}\n\nresponse = requests.request(\"GET\", url, headers=headers)\n\nprint(response.text)"
+        - lang: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"net/http\"\n\t\"io/ioutil\"\n)\n\nfunc main() {\n\n\turl := \"https://dashboard.getporter.dev/api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/env_groups/{name}/versions/{version}\"\n\n\treq, _ := http.NewRequest(\"GET\", url, nil)\n\n\treq.Header.Add(\"Authorization\", \"Bearer REPLACE_BEARER_TOKEN\")\n\n\tres, _ := http.DefaultClient.Do(req)\n\n\tdefer res.Body.Close()\n\tbody, _ := ioutil.ReadAll(res.Body)\n\n\tfmt.Println(res)\n\tfmt.Println(string(body))\n\n}"
   /api/v1/projects/{project_id}/clusters/{cluster_id}/namespaces/{namespace}/releases:
     get:
       description: |-
@@ -1904,6 +2381,14 @@ components:
   schemas:
     BuildConfig:
       description: The build configuration for this release when using buildpacks
+      example:
+        buildpacks:
+          - buildpacks
+          - buildpacks
+        builder: builder
+        config:
+          - 0
+          - 0
       properties:
         builder:
           type: string
@@ -1925,8 +2410,8 @@ components:
       description: "Chart is a helm package that contains metadata, a default config, zero or more\noptionally parameterizable templates, and zero or more charts (dependencies)."
       example:
         schema:
-          - 6
-          - 6
+          - 1
+          - 1
         metadata:
           maintainers:
             - name: name
@@ -1982,23 +2467,23 @@ components:
           name: name
         templates:
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
         values:
           key: "{}"
         files:
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
           - data:
-              - 0
-              - 0
+              - 6
+              - 6
             name: name
         lock:
           generated: 2000-01-23T04:56:07.000+00:00
@@ -2090,6 +2575,28 @@ components:
           x-go-name: Config
       required:
         - builder
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    CreateEnvGroupRequest:
+      description: CreateEnvGroupRequest represents the request body to create or update an env group
+      properties:
+        name:
+          description: the name of the env group to create or update
+          example: prod-env-group
+          type: string
+          x-go-name: Name
+        secret_variables:
+          additionalProperties:
+            type: string
+          description: the secret variables to include in the env group
+          type: object
+          x-go-name: SecretVariables
+        variables:
+          additionalProperties:
+            type: string
+          description: the variables to include in the env group
+          type: object
+          x-go-name: Variables
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     CreateGitActionConfigRequest:
@@ -2659,8 +3166,8 @@ components:
       description: "By convention, name is a relative path within the scope of the chart's\nbase directory."
       example:
         data:
-          - 0
-          - 0
+          - 6
+          - 6
         name: name
       properties:
         data:
@@ -2679,6 +3186,26 @@ components:
       x-go-package: helm.sh/helm/v3/pkg/chart
     FormContent:
       description: FormContent is a form's atomic unit
+      example:
+        settings:
+          default: "{}"
+          unit: "{}"
+          docs: docs
+          options: "{}"
+          placeholder: placeholder
+          disableAfterLaunch: true
+          omitUnitFromValue: true
+        context:
+          type: type
+          config:
+            key: config
+        name: name
+        variable: variable
+        label: label
+        placeholder: placeholder
+        type: type
+        value: "{}"
+        required: true
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -2710,6 +3237,10 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormContext:
       description: FormContext is the target context
+      example:
+        type: type
+        config:
+          key: config
       properties:
         config:
           additionalProperties:
@@ -2723,6 +3254,52 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormSection:
       description: FormSection is a section of a form
+      example:
+        contents:
+          - settings:
+              default: "{}"
+              unit: "{}"
+              docs: docs
+              options: "{}"
+              placeholder: placeholder
+              disableAfterLaunch: true
+              omitUnitFromValue: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            variable: variable
+            label: label
+            placeholder: placeholder
+            type: type
+            value: "{}"
+            required: true
+          - settings:
+              default: "{}"
+              unit: "{}"
+              docs: docs
+              options: "{}"
+              placeholder: placeholder
+              disableAfterLaunch: true
+              omitUnitFromValue: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            variable: variable
+            label: label
+            placeholder: placeholder
+            type: type
+            value: "{}"
+            required: true
+        show_if: "{}"
+        context:
+          type: type
+          config:
+            key: config
+        name: name
       properties:
         contents:
           items:
@@ -2742,6 +3319,106 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormTab:
       description: FormTab is a tab rendered in a form
+      example:
+        settings:
+          omitFromLaunch: true
+        context:
+          type: type
+          config:
+            key: config
+        name: name
+        label: label
+        sections:
+          - contents:
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+            show_if: "{}"
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+          - contents:
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+              - settings:
+                  default: "{}"
+                  unit: "{}"
+                  docs: docs
+                  options: "{}"
+                  placeholder: placeholder
+                  disableAfterLaunch: true
+                  omitUnitFromValue: true
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+                variable: variable
+                label: label
+                placeholder: placeholder
+                type: type
+                value: "{}"
+                required: true
+            show_if: "{}"
+            context:
+              type: type
+              config:
+                key: config
+            name: name
       properties:
         context:
           $ref: '#/components/schemas/FormContext'
@@ -2762,6 +3439,215 @@ components:
       x-go-package: github.com/porter-dev/porter/api/types
     FormYAML:
       description: FormYAML represents a chart's values.yaml form abstraction
+      example:
+        hasSource: hasSource
+        icon: icon
+        isClusterScoped: true
+        name: name
+        tabs:
+          - settings:
+              omitFromLaunch: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            label: label
+            sections:
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+          - settings:
+              omitFromLaunch: true
+            context:
+              type: type
+              config:
+                key: config
+            name: name
+            label: label
+            sections:
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+              - contents:
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                  - settings:
+                      default: "{}"
+                      unit: "{}"
+                      docs: docs
+                      options: "{}"
+                      placeholder: placeholder
+                      disableAfterLaunch: true
+                      omitUnitFromValue: true
+                    context:
+                      type: type
+                      config:
+                        key: config
+                    name: name
+                    variable: variable
+                    label: label
+                    placeholder: placeholder
+                    type: type
+                    value: "{}"
+                    required: true
+                show_if: "{}"
+                context:
+                  type: type
+                  config:
+                    key: config
+                name: name
+        description: description
+        includeHiddenFields: includeHiddenFields
+        tags:
+          - tags
+          - tags
       properties:
         description:
           type: string
@@ -2799,6 +3685,14 @@ components:
       $ref: '#/components/schemas/Release'
     GitActionConfig:
       description: The git configuration for this release (when deployed from a git repository)
+      example:
+        image_repo_uri: image_repo_uri
+        git_repo: git_repo
+        git_repo_id: 5
+        git_branch: git_branch
+        dockerfile_path: dockerfile_path
+        gitlab_integration_id: 5
+        folder_path: folder_path
       properties:
         dockerfile_path:
           description: The path to the dockerfile in the git repo
@@ -2838,7 +3732,7 @@ components:
         kind: kind
         manifest: manifest
         name: name
-        weight: 1
+        weight: 2
         last_run:
           phase: phase
           completed_at: 2000-01-23T04:56:07.000+00:00
@@ -3435,15 +4329,249 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     Release:
-      description: "Release describes a deployment of a chart, together with the chart\nand the variables used to deploy that chart."
+      description: Release is a helm release with a form attached
       example:
+        git_action_config:
+          image_repo_uri: image_repo_uri
+          git_repo: git_repo
+          git_repo_id: 5
+          git_branch: git_branch
+          dockerfile_path: dockerfile_path
+          gitlab_integration_id: 5
+          folder_path: folder_path
         manifest: manifest
+        webhook_token: webhook_token
+        version: 9
+        tags:
+          - tags
+          - tags
+        form:
+          hasSource: hasSource
+          icon: icon
+          isClusterScoped: true
+          name: name
+          tabs:
+            - settings:
+                omitFromLaunch: true
+              context:
+                type: type
+                config:
+                  key: config
+              name: name
+              label: label
+              sections:
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+            - settings:
+                omitFromLaunch: true
+              context:
+                type: type
+                config:
+                  key: config
+              name: name
+              label: label
+              sections:
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+                - contents:
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                    - settings:
+                        default: "{}"
+                        unit: "{}"
+                        docs: docs
+                        options: "{}"
+                        placeholder: placeholder
+                        disableAfterLaunch: true
+                        omitUnitFromValue: true
+                      context:
+                        type: type
+                        config:
+                          key: config
+                      name: name
+                      variable: variable
+                      label: label
+                      placeholder: placeholder
+                      type: type
+                      value: "{}"
+                      required: true
+                  show_if: "{}"
+                  context:
+                    type: type
+                    config:
+                      key: config
+                  name: name
+          description: description
+          includeHiddenFields: includeHiddenFields
+          tags:
+            - tags
+            - tags
+        image_repo_uri: image_repo_uri
+        latest_version: latest_version
+        stack_id: stack_id
         name: name
         namespace: namespace
+        build_config:
+          buildpacks:
+            - buildpacks
+            - buildpacks
+          builder: builder
+          config:
+            - 0
+            - 0
+        id: 7
         chart:
           schema:
-            - 6
-            - 6
+            - 1
+            - 1
           metadata:
             maintainers:
               - name: name
@@ -3499,23 +4627,23 @@ components:
             name: name
           templates:
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
           values:
             key: "{}"
           files:
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
             - data:
-                - 0
-                - 0
+                - 6
+                - 6
               name: name
           lock:
             generated: 2000-01-23T04:56:07.000+00:00
@@ -3552,7 +4680,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 1
+            weight: 2
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -3567,7 +4695,7 @@ components:
             kind: kind
             manifest: manifest
             name: name
-            weight: 1
+            weight: 2
             last_run:
               phase: phase
               completed_at: 2000-01-23T04:56:07.000+00:00
@@ -3578,7 +4706,6 @@ components:
             delete_policies:
               - null
               - null
-        version: 5
         info:
           last_deployed: 2000-01-23T04:56:07.000+00:00
           deleted: 2000-01-23T04:56:07.000+00:00
@@ -3587,6 +4714,8 @@ components:
           description: description
           status: status
       properties:
+        build_config:
+          $ref: '#/components/schemas/BuildConfig'
         chart:
           $ref: '#/components/schemas/Chart'
         config:
@@ -3598,14 +4727,31 @@ components:
             These values override the default values inside of the chart.
           type: object
           x-go-name: Config
+        form:
+          $ref: '#/components/schemas/FormYAML'
+        git_action_config:
+          $ref: '#/components/schemas/GitActionConfig'
         hooks:
           description: Hooks are all of the hooks declared for this release.
           items:
             $ref: '#/components/schemas/Hook'
           type: array
           x-go-name: Hooks
+        id:
+          description: The ID of this Porter release
+          format: uint64
+          type: integer
+          x-go-name: ID
+        image_repo_uri:
+          description: The complete image repository URI for this release
+          type: string
+          x-go-name: ImageRepoURI
         info:
           $ref: '#/components/schemas/Info'
+        latest_version:
+          description: The latest version of this Porter release
+          type: string
+          x-go-name: LatestVersion
         manifest:
           description: Manifest is the string representation of the rendered template.
           type: string
@@ -3618,13 +4764,27 @@ components:
           description: Namespace is the kubernetes namespace of the release.
           type: string
           x-go-name: Namespace
+        stack_id:
+          description: Whether this release is tied to a stack or not
+          type: string
+          x-go-name: StackID
+        tags:
+          description: The list of tags for this release
+          items:
+            type: string
+          type: array
+          x-go-name: Tags
         version:
           description: Version is an int which represents the revision of the release.
           format: int64
           type: integer
           x-go-name: Version
+        webhook_token:
+          description: The webhook token used to secure Github repository webhooks
+          type: string
+          x-go-name: WebhookToken
       type: object
-      x-go-package: helm.sh/helm/v3/pkg/release
+      x-go-package: github.com/porter-dev/porter/api/types
     Stack:
       example:
         updated_at: 2000-01-23T04:56:07.000+00:00
@@ -4403,6 +5563,92 @@ components:
         - name
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
+    V1EnvGroupMeta:
+      example:
+        stack_id: stack_id
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        created_at:
+          description: the UTC timestamp in RFC 3339 format indicating the creation time of the env group
+          format: date-time
+          type: string
+          x-go-name: CreatedAt
+        name:
+          description: the name of the env group
+          type: string
+          x-go-name: Name
+        stack_id:
+          description: the ID of the stack containing this env group (if any)
+          type: string
+          x-go-name: StackID
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    V1EnvGroupReleaseRequest:
+      description: V1EnvGroupReleaseRequest represents the request body to add or remove a release in an env group
+      properties:
+        release_name:
+          type: string
+          x-go-name: ReleaseName
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    V1EnvGroupResponse:
+      description: V1EnvGroupResponse defines an env group
+      example:
+        variables:
+          key: variables
+        stack_id: stack_id
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        version: 0
+        releases:
+          - releases
+          - releases
+      properties:
+        created_at:
+          description: the UTC timestamp in RFC 3339 format indicating the creation time of the env group
+          format: date-time
+          type: string
+          x-go-name: CreatedAt
+        name:
+          description: the name of the env group
+          type: string
+          x-go-name: Name
+        releases:
+          description: the list of releases linked to this env group
+          items:
+            type: string
+          type: array
+          x-go-name: Releases
+        stack_id:
+          description: the ID of the stack containing this env group (if any)
+          type: string
+          x-go-name: StackID
+        variables:
+          additionalProperties:
+            type: string
+          description: the variables contained in this env group
+          type: object
+          x-go-name: Variables
+        version:
+          description: the version of the env group
+          format: uint64
+          type: integer
+          x-go-name: Version
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    V1EnvGroupsAllVersionsResponse:
+      description: V1EnvGroupsAllVersionsResponse represents the response body containing all versions of an env group
+      items:
+        $ref: '#/components/schemas/V1EnvGroupResponse'
+      type: array
+      x-go-package: github.com/porter-dev/porter/api/types
+    V1ListAllEnvGroupsResponse:
+      description: V1ListAllEnvGroupsResponse represents the response body containing the list of env groups
+      items:
+        $ref: '#/components/schemas/V1EnvGroupMeta'
+      type: array
+      x-go-package: github.com/porter-dev/porter/api/types
     V1ListImageResponse:
       example:
         next: next
@@ -4444,6 +5690,36 @@ components:
           example: sampleNS
           type: string
           x-go-name: Name
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    createOrUpdateEnvGroup_request:
+      description: CreateEnvGroupRequest represents the request body to create or update an env group
+      properties:
+        name:
+          description: the name of the env group to create or update
+          example: prod-env-group
+          type: string
+          x-go-name: Name
+        secret_variables:
+          additionalProperties:
+            type: string
+          description: the secret variables to include in the env group
+          type: object
+          x-go-name: SecretVariables
+        variables:
+          additionalProperties:
+            type: string
+          description: the variables to include in the env group
+          type: object
+          x-go-name: Variables
+      type: object
+      x-go-package: github.com/porter-dev/porter/api/types
+    addReleaseToEnvGroup_request:
+      description: V1EnvGroupReleaseRequest represents the request body to add or remove a release in an env group
+      properties:
+        release_name:
+          type: string
+          x-go-name: ReleaseName
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     createRelease_request:
@@ -4714,6 +5990,14 @@ components:
       type: object
       x-go-package: github.com/porter-dev/porter/api/types
     FormContent_settings:
+      example:
+        default: "{}"
+        unit: "{}"
+        docs: docs
+        options: "{}"
+        placeholder: placeholder
+        disableAfterLaunch: true
+        omitUnitFromValue: true
       properties:
         default:
           properties: {}
@@ -4742,6 +6026,8 @@ components:
       type: object
       x-go-name: Settings
     FormTab_settings:
+      example:
+        omitFromLaunch: true
       properties:
         omitFromLaunch:
           type: boolean
