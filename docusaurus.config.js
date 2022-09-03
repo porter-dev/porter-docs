@@ -36,12 +36,12 @@ docusaurusConfig = {
           docId: "default",
           label: "Porter Cloud",
         },
-        {
-          type: "doc",
-          position: "left",
-          docId: "self-hosted/self-hosted-default",
-          label: "Self-Hosted",
-        },
+//         {
+//           type: "doc",
+//           position: "left",
+//           docId: "self-hosted/self-hosted-default",
+//           label: "Self-Hosted",
+//         },
         {
           position: "right",
           label: "Dashboard",
