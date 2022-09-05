@@ -67,15 +67,23 @@ porter update --app example-app --method docker --dockerfile ./docker/prod.Docke
 
 ## Env groups
 
+:::info
+
+For an introduction to Env groups, please refer to the [Environment Groups documentation](/deploying-applications/environment-groups)
+
+:::
+
 `porter update env-group` updates an existing env group denoted with the `--name` flag. For example:
 
 ```
-porter update env-group set foo=bar --name prod-env
+porter update env-group set -n foo=bar -n por=ter -s api_key=supersecret --name prod-env
 ```
+
+The `-n` flag is used to denote a normal (or non-secret) variable in an env group. The `-s` flag is used to denote a secret variable in an env group.
 
 :::info
 
-Updating an env group's existing variable will always overwrite its previous value and type. This means that a previous secret variable will turn into a non-secret one if the `--type` is not `secret`.
+Updating an env group's existing variable will always overwrite its previous value and type. This means that a previous secret variable will turn into a non-secret one if it is set by using the `-n` flag.
 
 :::
 
@@ -84,24 +92,25 @@ Updating an env group's existing variable will always overwrite its previous val
 To add a new variable, or update an existing one, to an env group named `prod-env` in the namespace `prod`, you can do the following:
 
 ```
-porter update env-group set VAR=VALUE --name prod-env --namespace prod
+porter update env-group set -n VAR=VALUE [-n VAR=VALUE ...] --name prod-env --namespace prod
 ```
 
 To add a new secret variable, or update an existing one, to an env group named `prod-env` in the namespace `prod`, you can do the following:
 
 ```
-porter update env-group set VAR=VALUE --name prod-env --namespace prod --type secret
+porter update env-group set -s VAR=VALUE [-s VAR=VALUE ...] --name prod-env --namespace prod
 ```
 
 To delete a variable from an env group named `prod-env` in the namespace `prod`, you can do the following:
 
 ```
-porter update env-group unset VAR --name prod-env --namespace prod
+porter update env-group unset VAR [VAR ...] --name prod-env --namespace prod
 ```
 
 ### Flags
 
 - `--name` (string) name of the env group
 - `--version` (uint) version of the env group to fork off of (default "0" which means the latest version)
+- `-n` or `--normal` (stringArray) list of normal variables, in the form VAR=VALUE, to set
+- `-s` or `--secret` (stringArray) list of secret variables, in the form VAR=VALUE, to set
 - `--namespace` (string) namespace of the env group (default "default")
-- `--type` (string) type of variable when setting a new one ("normal" or "secret") (default "normal")
