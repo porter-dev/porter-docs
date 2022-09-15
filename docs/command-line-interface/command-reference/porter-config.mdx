@@ -10,10 +10,6 @@ title: porter config
 
 Running `porter config` with no subcommands will output the current configuration file to the terminal. Note that this configuration may be overwritten through a combination of flags and environment variables.
 
-### `porter config set-cluster [CLUSTER_ID]`
-
-Saves the cluster ID in the default configuration.
-
 ### `porter config set-host [HOSTNAME]`
 
 Saves the host in the default configuration. Note this host must include the protocol and should not contain trailing slashes. For example:
@@ -22,10 +18,14 @@ Saves the host in the default configuration. Note this host must include the pro
 porter config set-host https://dashboard.getporter.dev
 ```
 
-### `porter config set-project [PROJECT_ID]`
+### `porter config set-project`
 
-Saves the project ID in the default configuration.
+Saves the project ID in the default configuration from a list of projects that you have access to.
 
-### `porter config set-registry [REGISTRY_ID]`
+### `porter config set-cluster`
 
-Saves the registry ID in the default configuration.
+Saves the cluster ID in the default configuration from a list of clusters that the current project has access to.
+
+### `porter config set-registry`
+
+Saves the registry ID in the default configuration from a list of registries that the current project has access to.
