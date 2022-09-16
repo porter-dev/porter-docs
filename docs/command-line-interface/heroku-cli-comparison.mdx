@@ -1,0 +1,20 @@
+---
+id: heroku-cli-comparison
+slug: /cli/heroku-cli-comparison
+title: Comparison with the Heroku CLI
+---
+
+Following is the one-to-one comparison of some of the commands supported by the Heroku CLI and their nearest Porter counterparts.
+
+| Heroku | Porter |
+| --- | --- |
+| heroku apps  | [porter list](./command-reference/porter-list)  |
+| heroku apps:create | [porter create](./command-reference/porter-create) |
+| heroku apps:destroy | [porter delete app](./command-reference/porter-delete) |
+| heroku auth:login | [porter auth login](./command-reference/porter-auth) |
+| heroku auth:logout | [porter auth logout](./command-reference/porter-auth) |
+| heroku auth:token | [porter config](./command-reference/porter-config) |
+| heroku config:set | [porter update env-group set](./command-reference/porter-update) |
+| heroku config:set | [porter update env-group unset](./command-reference/porter-update) |
+| heroku ps:forward | [porter port-forward](./command-reference/porter-port-forward) |
+| heroku run | [porter run](./command-reference/porter-run) |
