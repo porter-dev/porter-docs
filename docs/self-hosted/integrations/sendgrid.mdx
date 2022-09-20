@@ -1,0 +1,45 @@
+---
+id: sendgrid
+slug: /self-hosted/integrations/sendgrid
+title: SendGrid
+---
+
+import SendgridProjectInviteURL from "@site/static/sendgrid/project_invite_template.html.zip";
+
+The Sendgrid integration currently supports emailing project invites to users on self-hosted instances of Porter. You must have an existing Sendgrid account set up with an inbox - for more information, see the [Sendgrid setup documentation](https://docs.sendgrid.com/onboarding/email-api/build-and-test-your-application). The Porter integration uses Sendgrid's [dynamic templates](https://docs.sendgrid.com/ui/sending-email/how-to-send-an-email-with-dynamic-transactional-templates).
+
+## Setting up Dynamic Templates
+
+<div>
+  Download the following HTML template:{" "}
+  <a href={SendgridProjectInviteURL} download target="_blank">
+    Project Invite Template
+  </a>
+</div>
+<br />
+
+Go to your Sendgrid [dynamic templates](https://mc.sendgrid.com/dynamic-templates) and select **Create a Dynamic Template**. Call this template `Project Invite` and select **Add Version**. Start with a blank template, and then select the **Code Editor** option. Upload the contents of the downloaded HTML file. If you'd like to test the template, you can add the following test data:
+
+```json
+{
+  "sender_email": "test@test.com",
+  "project": "test",
+  "url": "example.com"
+}
+```
+
+Save this template, and navigate back to the dynamic template list. Copy the template ID which is shown under the "Project Invite" template (it will look something like `d-123...`).
+
+## Generating a Sendgrid API Token
+
+Create a SendGrid API key by following [this documentation](https://docs.sendgrid.com/ui/account-and-settings/api-keys). The API key only needs the `Full Access` permission for `Mail Send`.
+
+## Adding Environment Variables
+
+Finally, add the following environment variables to Porter:
+
+```
+SENDGRID_API_KEY=<your-api-key>
+SENDGRID_INVITE_TEMPLATE_ID=<d-123...>
+SENDGRID_SENDER_EMAIL=<your-sender-email>
+```

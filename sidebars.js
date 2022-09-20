@@ -388,6 +388,7 @@ const sidebars = {
         "self-hosted/integrations/google-sign-in",
         "self-hosted/integrations/github",
         "self-hosted/integrations/slack",
+        "self-hosted/integrations/sendgrid",
         // "self-hosted/integrations/helm-registries",
       ],
       collapsible: false,
