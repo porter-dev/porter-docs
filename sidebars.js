@@ -260,6 +260,7 @@ const sidebars = {
             "command-line-interface/command-reference/porter-project",
             "command-line-interface/command-reference/porter-registry",
             "command-line-interface/command-reference/porter-run",
+            "command-line-interface/command-reference/porter-stack",
             "command-line-interface/command-reference/porter-update",
           ],
         },

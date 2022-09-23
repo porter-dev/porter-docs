@@ -1,0 +1,64 @@
+---
+id: porter-stack
+slug: /cli/command-reference/porter-stack
+title: porter stack
+---
+
+:::info Prerequisites
+
+- You've logged in to the Porter CLI after running [`porter auth login`](./porter-auth)
+- You're connected to the correct project by running [`porter config set-project`](./porter-config)
+- You're connected to the correct cluster by running [`porter config set-cluster`](./porter-config)
+- The project has Stacks enabled
+
+:::
+
+`porter stack` contains commands to interact with Porter Stacks.
+
+## Env groups
+
+- To add an env group to a stack, the following command is used:
+
+    ```bash
+    porter stack env-group add [name] --name <stack name> --namespace <stack namespace>
+    ```
+
+- To remove an existing env group from a stack, the following command is used:
+
+    ```bash
+    porter stack env-group remove [name] --name <stack name> --namespace <stack namespace>
+    ```
+
+:::info
+
+Once an env group has been created and added to a stack using this command, it can be updated using the [`porter env-group update`](./porter-update#env-groups) command.
+
+:::
+
+### Examples
+
+- To add a new env group to a stack named `my-stack` in the `prod` namespace, run the following command:
+
+    ```bash
+    porter stack env-group add my-env-group --name my-stack --namespace prod -n VAR=VALUE [-n VAR=VALUE ...]
+    ```
+
+- To add a new env group to a stack named `my-stack` in the `prod` namespace with secret variables, run the following command:
+
+    ```bash
+    porter stack env-group add my-env-group --name my-stack --namespace prod -s VAR=VALUE [-s VAR=VALUE ...]
+    ```
+
+- To add a new env group to a stack named `my-stack` in the `prod` namespace and link it to the `my-web-app` in the same stack, run the following command:
+
+    ```bash
+    porter stack env-group add my-env-group --name my-stack --namespace prod -n VAR=VALUE [-n VAR=VALUE ...] --linked-apps my-web-app
+    ```
+
+### Flags
+
+- `--name` (string) name of the stack
+- `-n` or `--normal` (stringArray) list of normal variables, in the form VAR=VALUE, to set
+- `-s` or `--secret` (stringArray) list of secret variables, in the form VAR=VALUE, to set
+- `--linked-apps` (stringArray) list of apps in the stack to link the env group to
+- `--namespace` (string) namespace of the stack (default "default")
