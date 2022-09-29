@@ -8,7 +8,10 @@ Following is the one-to-one comparison of some of the commands supported by the 
 
 | Heroku | Porter |
 | --- | --- |
-| heroku apps  | [porter list](./command-reference/porter-list)  |
+| heroku addons | [porter list addons](./command-reference/porter-list#porter-list-addons) |
+| heroku addons:create | [porter create](./command-reference/porter-create) |
+| heroku addons:destroy | [porter delete addon](./command-reference/porter-delete#porter-delete-addon) |
+| heroku apps | [porter list applications](./command-reference/porter-list#porter-list-applications)  |
 | heroku apps:create | [porter create](./command-reference/porter-create) |
 | heroku apps:destroy | [porter delete app](./command-reference/porter-delete) |
 | heroku auth:login | [porter auth login](./command-reference/porter-auth) |
@@ -16,5 +19,7 @@ Following is the one-to-one comparison of some of the commands supported by the 
 | heroku auth:token | [porter config](./command-reference/porter-config) |
 | heroku config:set | [porter update env-group set](./command-reference/porter-update) |
 | heroku config:set | [porter update env-group unset](./command-reference/porter-update) |
+| heroku logs | [porter logs](./command-reference/porter-logs) |
 | heroku ps:forward | [porter port-forward](./command-reference/porter-port-forward) |
-| heroku run | [porter run](./command-reference/porter-run) |
+| heroku run | [porter run -e](./command-reference/porter-run) |
+| heroku run:detached | [porter run](./command-reference/porter-run) |
