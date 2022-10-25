@@ -10,6 +10,15 @@ title: Application Troubleshooting
 
 One of the most common issues for application restarts is that your applications continuously runs out of memory. You can try to allocate more memory to your application, and check the **Metrics** tab to view the memory consumption. If the memory usage continues to hit the memory limit (which is set in the **Resources** tab), increase the memory limit.
 
+### Failing Liveness or Startup Probes
+
+As documented in the [zero-downtime deployments doc](https://docs.porter.run/deploying-applications/zero-downtime-deployments), enabling health checks via liveness probes are a good way to ensure that traffic only reaches healthy application instances. When the liveness probe or startup probes fail, the application will be restarted. There are a few common reasons why the application may fail its health check:
+
+- The liveness probe or startup probe are misconfigured.
+- Your application is experiencing resource pressure, and does not respond to an HTTP probe within 1 second. This is common for runtimes which share a single thread, like Rails or Node. In high-traffic scenarios, the latency of the health check can exceed 1 second, and thus the application will be restarted.
+- You have not give your application enough time to start up, and thus the application fails its startup probe.
+- The health check depends on an external service, like a database connection, which is currently unavailable.
+
 ### Start Command
 
 When the start command isn't set correctly, application logs will never show in the dashboard, and you will see a message in the "System" logs stating that the OCI container runtime is unable to start the process. Make sure that you've set the start command correctly.
@@ -50,6 +59,14 @@ If your application is killed due to a non-zero exit code, it typically indicate
 
 **Note:** Normally, an exit code of `128+n` denotes the fatal signal `n` from the standard [Linux interruption signals](https://man7.org/linux/man-pages/man7/signal.7.html).
 
+## Image Pull Errors
+
+Under the hood, every application which runs on Porter is running a [Docker image](https://docs.docker.com/get-started/overview/#images). This Docker image is pulled from a registry, which typically requires authentication credentials. If you are facing an image pull error, make sure you've checked the following items:
+
+- The image repository exists in the registry, and the image repository contains an image with the image tag set on Porter
+- You have connected an image registry to Porter. For more information, see the [getting started guide](https://docs.porter.run/getting-started/overview) or the doc on [deploying from a Docker registry](https://docs.porter.run/deploying-applications/deploying-from-docker-registry)
+- Your authentication credentials have not been revoked and have not expired. To check this, navigate to the **Integrations** tab on Porter, and select **Docker Registry**. If you are able to view the list of images for your registry, Porter is able to access that image registry.
+
 ## Networking Issues
 
 ### Frequent Connection Resets/Dropped Connections
@@ -57,7 +74,8 @@ If your application is killed due to a non-zero exit code, it typically indicate
 This can be caused by a number of issues, which can either be at the application level, or at the networking level:
 
 - If your requests take longer than 30 seconds to resolve, or you are running a websocket-based application, the default read and write timeouts may not be long enough. See the [networking configuration doc](./network-configuration-options#setting-custom-readwrite-timeouts) for how to increase the read/write timeouts.
-- If you are seeing dropped connections while redeployed, follow the instructions for [zero-downtime deployments](../deploying-applications/zero-downtime-deployments).
+- If your application sends very large headers as part of the response body, consider increasing the response header size, as documented [here](https://docs.porter.run/managing-applications/network-configuration-options#header-size).
+- If you are seeing dropped connections while redeploying, follow the instructions for [zero-downtime deployments](https://docs.porter.run/deploying-applications/zero-downtime-deployments).
 - If you are seeing `recv` errors in your NGINX logs, the application is sending sending a connection reset message before a response is sent. This can usually be resolved by increasing the `keepalive` value in your application code.
 
 ### `413 Request Entity Too Large`
@@ -70,4 +88,4 @@ You will see `502 Bad Gateway` when your application is not starting correctly. 
 
 ### `503 Temporarily Unavailable`
 
-The most common cause of this error is not setting the port number correctly. If not set correctly, your application will often show `503 Temporarily Unavailable` permanently when visiting the public URL. Make sure that you've set the port number correctly in the `Main` application tab. If the port number is set correctly, this may be shown when there is an application restart: [see below](#application-restarts) for more information.
+The most common cause of this error is not setting the port number correctly. If not set correctly, your application will often show `503 Temporarily Unavailable` permanently when visiting the public URL. Make sure that you've set the port number correctly in the `Main` application tab. If the port number is set correctly, this may be shown when there is an application restart: [see above](#application-restarts) for more information.
