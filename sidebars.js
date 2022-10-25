@@ -153,7 +153,6 @@ const sidebars = {
           items: [
             "managing-applications/alerting/slack-notifications",
             "managing-applications/alerting/advanced-monitoring",
-            "managing-applications/alerting/pod-exit-codes",
           ],
         },
         "managing-applications/network-configuration-options",
