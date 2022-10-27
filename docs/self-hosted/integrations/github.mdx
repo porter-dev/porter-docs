@@ -58,16 +58,21 @@ Navigate to your organization settings page (alternately, you can navigate to yo
 - Webhook URL: `<protocol>://<your-domain>/api/integrations/github-app/webhook`
 - Webhook secret: generate a random webhook secret for your domain, for example by running `cat /dev/urandom | base64 | head -c 32`.
 - Permissions:
-  - Repository Permissions:
-    - `Actions`: `Read and Write`
-    - Contents: Read and Write
-    - Metadata: Read-Only
-    - Secrets: Read and Write
-    - Workflows: Read and Write
-  - Organization Permissions:
-    - Members: Read-Only
-  - User Permissions:
-    - Email Addresses: Read-Only
+  - **Repository:**
+    - **Actions (Read & write):** required for Porter to write Github actions YAML files to the repository.
+    - **Administration (Read & write):** required for Porter to create a new Github environment called `Preview` for deployments. The administration API isn't used otherwise.
+    - **Contents (Read & write):** required for Porter to write Github actions YAML files to the repository.
+    - **Deployments (Read & write):** required for Porter to request Github deployments to the `Preview` environment.
+    - **Environments (Read & write):** required for Porter to create a new Github environment called `Preview` for deployments.
+    - **Metadata (Read-only):** mandatory, required for Github apps that integrate with repositories.
+    - **Pull Requests (Read & write):** required for Porter to add comments to Github PRs.
+    - **Secrets (Read & write):** required for Porter to write a `PORTER_TOKEN` secret to the repository automatically. We **do not** read any secrets from the repository beyond those prefixed with `PORTER_`.
+    - **Webhooks (Read & write):** required for Porter to create a Github repository webhook to trigger new preview environment runs.
+    - **Workflows (Read & write):** required for Porter to write Github actions YAML files to the repository.
+  - **Organization:**
+    - **Members (read-only)**: required for Porter to create a new Github environment called `Preview` for deployments.
+  - **Account:**
+    - **Email addresses (read-only)**: required for Porter to read your Github email address for authentication.
 
 ### Step 2: Downloading a Private Key
 

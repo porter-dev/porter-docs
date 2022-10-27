@@ -76,8 +76,14 @@ The Porter Github App requires several Github permissions in order to operate pr
 
 **Secrets (Read & write):** required for Porter to write a `PORTER_TOKEN` secret to the repository automatically. We **do not** read any secrets from the repository beyond those prefixed with `PORTER_`.
 
+**Webhooks (Read & write):** required for Porter to create a Github repository webhook to trigger new preview environment runs.
+
 **Workflows (Read & write):** required for Porter to write Github actions YAML files to the repository.
 
-### User Permissions
+### Organization permissions
+
+**Members (read-only)**: required for Porter to create a new Github environment called `Preview` for deployments.
+
+### Account Permissions
 
 **Email addresses (read-only)**: required for Porter to read your Github email address for authentication.
