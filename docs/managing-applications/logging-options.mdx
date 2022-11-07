@@ -22,6 +22,30 @@ You can also stream logs to your terminal by running the [`porter logs`](../cli/
 
 :::
 
+### Persistent Logs with Loki
+
+In release `v0.40.0`, Porter added support for storing persistent logs via `loki` for EKS clusters. This feature is gradually being rolled out to clusters and will become generally available by December 1st, 2022. By default, the installation is set up to store logs on an EBS volume with a retention period of 1 week, but this is configurable.
+
+#### Configurating the retention period
+
+Navigate to the `porter-agent` application in the `porter-agent-system` namespace. Select the **Log Configuration** tab, and input your desired retention period. Then hit **Deploy**:
+
+![Events](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/5d676b59-af24-4816-6e80-7799b960e600/large "Events")
+
+#### Storing logs on S3
+
+:::info
+
+S3 storage for logs is still a `beta` feature, and will require some additional configuration in your AWS. A future release of Porter will automate the creation of the S3 bucket and S3 user.
+
+:::
+
+For setups that may generate more than 100GB of logs per week, we recommend using an S3 bucket as a logging storage backend. To set this up, you must first create an S3 bucket in your AWS account, and create an IAM user which has access to read and write to this storage bucket. Generate an access key ID and secret key for this user.
+
+Next, navigate to the `porter-agent` application in the `porter-agent-system` namespace. Select the **Log Configuration** tab, and select **S3 Bucket** for the backend storage config. Then, fill out the corresponding fields and hit **Deploy**:
+
+![Events](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/5d676b59-af24-4816-6e80-7799b960e600/large "Events")
+
 ### Logs for Failed Applications
 
 :::info Prerequisites
