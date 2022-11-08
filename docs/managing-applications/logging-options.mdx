@@ -42,6 +42,8 @@ S3 storage for logs is still a `beta` feature, and will require some additional 
 
 For setups that may generate more than 100GB of logs per week, we recommend using an S3 bucket as a logging storage backend. To set this up, you must first create an S3 bucket in your AWS account, and create an IAM user which has access to read and write to this storage bucket. Generate an access key ID and secret key for this user.
 
+Note that if you would like to set a retention period for S3, you will need to configure a separate lifecycle policy for expiry. See [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-expire-general-considerations.html) for more information. 
+
 Next, navigate to the `porter-agent` application in the `porter-agent-system` namespace. Select the **Log Configuration** tab, and select **S3 Bucket** for the backend storage config. Then, fill out the corresponding fields and hit **Deploy**:
 
 ![S3 Log Configuration](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/2833efac-f079-470d-6872-6d442d423200/large "S3 Log Configuration")
