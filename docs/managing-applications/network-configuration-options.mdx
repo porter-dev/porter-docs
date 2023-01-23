@@ -148,10 +148,10 @@ kubernetes.io/ingress.global-static-ip-name: porter-ip-address # IMPORTANT: repl
 
 It should look something like this:
 
-![Deployment config](https://user-images.githubusercontent.com/10238219/214150268-7f483621-497f-46ca-b9e9-5974bbfc398e.png "Screenshot showing Porter UI rendering Ingress Annotations")
+![Deployment config](https://user-images.githubusercontent.com/10238219/214151691-31f1631b-479e-43e9-bc47-1f2dd6e07bbe.png "Screenshot showing Porter UI rendering Ingress Annotations")
 
 - Still in the "Advanced" tab, you must set up a custom health check at an application endpoint. This is by default set to `/healthz`, but you can choose whichever path you'd like. This endpoint must return a `200 OK` status when it is pinged.
 
-![Healthz config](https://user-images.githubusercontent.com/10238219/214150570-cc5d8c27-61f0-4d97-bada-81555c5b77a8.png "Readiness checks on Porter")
+![Healthz config](https://user-images.githubusercontent.com/10238219/214151795-355b0a66-f011-4978-89d5-48765e1ef7eb.png "Readiness checks on Porter")
 
 5. Click "Deploy". It can take up to 10-15 minutes for the load balancer to be created and the certificates to be issued.
