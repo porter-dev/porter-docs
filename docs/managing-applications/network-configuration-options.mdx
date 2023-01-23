@@ -139,17 +139,19 @@ Copy the created IP address to the clipboard.
 - Go to the "Advanced" tab. In the "Ingress Custom Annotations" section, add the following three parameters:
 
 ```yaml
+acme.cert-manager.io/http01-edit-in-place: "true"
 cert-manager.io/cluster-issuer: letsencrypt-prod-gce
+cert-manager.io/issue-temporary-certificate: "true"
 kubernetes.io/ingress.class: gce
 kubernetes.io/ingress.global-static-ip-name: porter-ip-address # IMPORTANT: replace this with the name of your static ip address!
 ```
 
 It should look something like this:
 
-![Deployment config](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/66b77f56-b352-4b93-ed11-a7907284e500/large "Screen Shot 2021-05-10 at 4.24.01 PM.png")
+![Deployment config](https://user-images.githubusercontent.com/10238219/214150268-7f483621-497f-46ca-b9e9-5974bbfc398e.png "Screenshot showing Porter UI rendering Ingress Annotations")
 
 - Still in the "Advanced" tab, you must set up a custom health check at an application endpoint. This is by default set to `/healthz`, but you can choose whichever path you'd like. This endpoint must return a `200 OK` status when it is pinged.
 
-![Healthz config](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/464a064d-ac58-436d-1d45-03a97b768100/large "Screen Shot 2021-05-10 at 4.24.13 PM.png")
+![Healthz config](https://user-images.githubusercontent.com/10238219/214150570-cc5d8c27-61f0-4d97-bada-81555c5b77a8.png "Readiness checks on Porter")
 
-5. Click "Deploy". It will take 10-15 minutes for the load balancer to be created and the certificates to be issued.
+5. Click "Deploy". It can take up to 10-15 minutes for the load balancer to be created and the certificates to be issued.
