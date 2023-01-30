@@ -188,6 +188,7 @@ Copy and paste the below JSON to the field.
         "logs:PutRetentionPolicy",
         "kms:CreateAlias",
         "kms:CreateGrant",
+        "kms:Get*",
         "kms:CreateKey",
         "kms:DeleteAlias",
         "kms:DescribeKey",
@@ -215,6 +216,12 @@ Copy and paste the below JSON to the field.
   ]
 }
 ```
+
+:::info
+
+`kms:Get*` is only required if you have enabled KMS secret encryption whilst creating the cluster
+
+:::
 
 Click on **Create a Policy** and give it a name to create a custom policy.
 
