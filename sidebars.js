@@ -255,7 +255,6 @@ const sidebars = {
             "command-line-interface/command-reference/porter-kubectl",
             "command-line-interface/command-reference/porter-list",
             "command-line-interface/command-reference/porter-logs",
-            "command-line-interface/command-reference/porter-port-forward",
             "command-line-interface/command-reference/porter-project",
             "command-line-interface/command-reference/porter-registry",
             "command-line-interface/command-reference/porter-run",
