@@ -35,19 +35,27 @@ This command is namespace-scoped and uses the default namespace. To specify a di
 porter job update-images --namespace custom-namespace --image-repo-uri my-image.registry.io --tag newtag
 ```
 
+### `porter job run`
+
+Manually runs a job and waits for it to complete. If the job completes successfully, this command exits with exit code 0. Otherwise, this command exits with exit code 1.
+
+#### Examples
+
+Run a job named `job-example`:
+
+```
+porter job run --name job-example
+```
+
+This command is namespace-scoped and uses the default namespace. To specify a different namespace, use the `--namespace` flag:
+
+```
+porter job run --name job-example --namespace custom-namespace
+```
+
 ### `porter job wait`
 
-Waits for a job with a given name and namespace to complete a run. If the job completes successfully, this command exits with exit code 0. Otherwise, this command exits with exit code 1. This command is most useful when run after `porter update config`. For example:
-
-```sh
-# write a values.yaml file to ensure a job run does not occur
-echo '
-paused: false
-' > values-job.yaml
-
-porter update config --app <JOB_NAME> --namespace <NAMESPACE> --values ./values-job.yaml
-porter job wait --name <JOB_NAME> --namespace <NAMESPACE>
-```
+Waits for a job with a given name and namespace to complete a run. If the job completes successfully, this command exits with exit code 0. Otherwise, this command exits with exit code 1.
 
 #### Examples
 
