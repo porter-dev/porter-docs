@@ -1,11 +1,11 @@
 ---
 id: deploying-first-application
 slug: /getting-started/deploying-first-application
-title: Creating your First Application
+title: Deploying your First Application
 ---
 
 Now that you've created your Porter cluster, you can deploy your first application to it. In this example, we'll create a fun Tetris application to verify that everything is working correctly.
-## Create a new application
+## Deploy a new application
 
 On the Porter dashboard, navigate to the **Applications** tab. From here, click on **New application**, and you will be redirected to the application launch view, where you can configure everything about your application:
 
@@ -13,12 +13,12 @@ On the Porter dashboard, navigate to the **Applications** tab. From here, click 
 
 Give your app a name (e.g. 'porter-tetris'), and then select **Docker registry** as the deployment method. Specify **uzyexe/tetris** as the container image.
 
-Next, add a new service of type **Web**, and give it a name (e.g. 'web'). Once you see your web service appear in the list of services, change its **Container port** to 80. We won't need to change anything else about this service for now, but don't worry - all these settings can be changed later.
+Next, add a new service of type **Web**, and give it a name (e.g. 'web'). Once you see your web service appear in the list of services, change its **Container port** to 80, if it isn't already. We won't need to change anything else about this service for now, but don't worry - all these settings can be changed later.
 
 Finally, simply hit **Deploy app** to finish creating your application.
 ## View your Application
 
-You will be redirected to the dashboard of your application, where you can reconfigure everything from the application launch view, as well as view status and metrics for your application:
+You will be redirected to the dashboard of your application, where you can reconfigure everything from the application launch view, as well as view events and metrics for your application:
 
 ![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/7443b5f4-2e81-4116-1bd7-043ddafdb400/large)
 
