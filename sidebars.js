@@ -57,6 +57,7 @@ const sidebars = {
           },
           items: [
             "deploying-applications/deploying-from-github/adding-updating-gh-app",
+            "deploying-applications/deploying-from-github/writing-a-porter-yaml",
             "deploying-applications/deploying-from-github/selecting-application-and-build-method",
             "deploying-applications/deploying-from-github/customizing-github-workflow",
           ],
@@ -115,6 +116,7 @@ const sidebars = {
         "deploying-applications/zero-downtime-deployments",
         "deploying-applications/blue-green-deployments",
         "deploying-applications/environment-groups",
+        "deploying-applications/application-porter-yaml-reference",
         {
           type: "category",
           label: "Runtime Configuration Options",

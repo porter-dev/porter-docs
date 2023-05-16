@@ -1,0 +1,37 @@
+---
+id: writing-a-porter-yaml
+slug: /deploying-applications/deploying-from-github/writing-a-porter-yaml
+title: (Optional) Writing a porter.yaml
+---
+
+Before creating a new application in Porter, you can specify configuration for your application services by writing a `porter.yaml` file and adding it to your repository. Though this file is not required, it can reduce the time it takes to get started with a Porter application. Once you start creating your application in Porter and select your Github repository, Porter will automatically read your `porter.yaml` to prepopulate settings for your application services. 
+
+## Writing your first `porter.yaml` file
+
+The structure of a `porter.yaml` file is very simple. Application services are specified via the `apps` key, and each service is given a `run` command as such:
+
+```yaml
+apps:
+  my-app-web:
+    run: "python app.py" 
+  my-app-worker:
+    run: "python start-worker.py"     
+```
+
+In the file above, we have defined two application services, named `my-app-web` and `my-app-worker`. By default, every service whose name includes 'web' will be inferred to be a **Web** type service, and everything else will be inferred to be a **Worker** type service. See [here](../overview#types-of-applications) for more information about the difference between service types. 
+
+You can also explicitly define the type of a service using the `type` key:
+
+```yaml
+apps:
+  my-app-web:
+    type: web
+    run: "python app.py" 
+  my-app-worker:
+    type: worker
+    run: "python start-worker.py"     
+```
+
+This is enough to get you started with using a `porter.yaml`. For information on additional settings you can include in your `porter.yaml`, including resource allocation and pre-deploy jobs, consult the [Application Porter YAML reference](../application-porter-yaml-reference#writing-your-second-and-nth-porteryaml-file).
+
+After writing a file like the above, naming it `porter.yaml`, and adding it to your Github repository, you are all set to create an application in Porter! 

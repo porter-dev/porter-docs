@@ -1,64 +1,41 @@
 ---
 id: selecting-application-and-build-method
 slug: /deploying-applications/deploying-from-github/selecting-application-and-build-method
-title: Selecting an Application and Build Method
+title: Deploying a New Application from Github
 ---
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-To deploy your application, first navigate to the "Launch" tab, where you will see three types of applications to deploy: web, worker, or job. To understand the difference between these three application types, see the description of the [types of applications](../overview#types-of-applications). Then follow the four steps below to get your application linked up.
+To deploy a new application from Github, first navigate to the **Applications** page in Porter, and click **New application**. Here you will find a form titled **Deploy a new application**:
 
-## Selecting an Application and Build Method
+### Step 1: Select a Github Repository
 
-### Step 1: Selecting an application
+After giving your application a name, you will see two options for launching your application: **Git Repository** and **Docker Registry**. Select **Git Repository**. Search for your connected repositories and select one. If you are not seeing your desired repository, consult the [Adding/Updating the Porter Github App](./adding-updating-gh-app) guide.
 
-After selecting an application type and clicking "Launch template," you should see two options for launching your application: **Git Repository** and **Docker Registry**. Select **Git Repository**. You should then be able to search for your connected repositories: if you are not seeing your desired repository, see the [Adding/Updating the Porter Github App](./adding-updating-gh-app) guide.
+### Step 2: Select a Branch
 
-### Step 2: Selecting a Branch
+Once you select a repository, you will be asked to select a **source branch** for that repository. When pushes are made to the **source branch**, Porter will automatically build the branch's code and re-deploy your application. For example, if you are setting up a production cluster, you might want your application to be deployed on pushes to the `production` branch.
 
-Once you click on a repository, you will be asked to select a branch for that repository. This branch is **the source branch where you want your application to be deployed from on pushes to that branch.** For example, if you are setting up a production cluster, you might want your applications to be deployed on pushes to the `production` branch. If your branches are protected using Github's branch protection rules, see the [working with protected branches](#working-with-protected-branches) section below.
+### Step 3: Select a Root Path
 
-### Step 3: Selecting a Build Method
+After selecting a branch, you will need to specify the root path of your Github repository. This is commonly `./`; however, if your repository is a monorepo, you will need to specify the path to the subdirectory from which you would like your Porter application to be built (e.g. `./backend`).
 
-After you select a branch, you will see your repository contents listed. What you select in this case depends on if you already have a Dockerfile, or if you'd like for Porter to detect and build your application automatically using a buildpack.
+### Step 4: (Optional) Specify a Build Method
 
-import DockerfileSection from "./_dockerfile-section.mdx";
-import BuildpackSection from "./_buildpack-section.mdx";
+After you select a branch, Porter will automatically detect whether your repository contains a Dockerfile, as well as the buildpacks needed to build your application. You can make changes to these settings by expanding the **Configure buildpacks/Dockerfile settings** section. For more information on how Porter builds your code, see here.
 
-<Tabs>
-  <TabItem value="dockerfile" label="Dockerfile" default>
-    <DockerfileSection />
-  </TabItem>
-  <TabItem value="buildpack" label="Buildpack">
-    <BuildpackSection />
-  </TabItem>
-</Tabs>
+### Step 5: Add Application Services 
 
-### Step 4: Deploy your Application
+You can now add services to your application, which will be deployed together once your code is built. They are divided into three types: **Web**, **Worker** and **Job**. See [here](../overview#types-of-applications) for more information about the difference between service types.
 
-The last step is to set the runtime configuration for your application, and deploy it to your Porter cluster! This configuration varies by application type -- for example, for web applications you can set the port that the application should be listening on, whether to expose this application to external traffic on a custom domain, and override the start command. For a detailed explanation of these configuration options for each application type, see the following guides:
+If you had written a `porter.yaml` file as outlined in the [Writing a porter.yaml](./writing-a-porter-yaml) guide, you should see this list populated with the services you defined in your `porter.yaml`. **Any settings you specify for your services in your `porter.yaml` will be read-only in the Porter UI.** If you would like to make changes to your services, you will need to make them in your `porter.yaml` and push them to your repository.
 
-- [Web Applications](../runtime-configuration-options/web-applications)
-- [Worker Applications](../runtime-configuration-options/worker-applications)
-- [Jobs and Cron Jobs](../../running-jobs/overview)
+### Step 6: (Optional) Add Environment Variables
+After adding services, you can add environment variables to your application. These environment variables will be available to all services in your application. In addition, if there are any environment variables required to build your code, specify them here.
 
-After clicking **Deploy**, you can navigate to your application, your deployment will use a placeholder Docker image until the Github Action that deploys your application has completed for the first time:
+### Step 7: (Optional) Add a Pre-Deploy Job
+You can also add a pre-deploy job to your application. This job will run its start command before your application services are deployed, and can be used to run database migrations, seed your database, or perform any other tasks that need to be completed before your application services are deployed.
 
-![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/4fba0ab7-bb80-4b82-452f-818909a79d00/large)
-
-You can monitor the status of the generated GitHub Action by checking the **Actions** tab in your linked repository.
-
-## Working with Protected Branches
-
-At the moment, it is recommended that you turn off the branch protection rule so that Porter can write the file to the repository, and then turn it back on immediately afterwards. Porter will have built-in support for working with protected branches in a future version.
-
-## Customizing Buildpacks
-
-Porter has built-in support `Heroku` and `Paketo` builders. The `Heroku` builder can use either the [`Heroku-18`](https://devcenter.heroku.com/articles/heroku-18-stack) stack or the [`Heroku-20`](https://devcenter.heroku.com/articles/heroku-20-stack), while the `Paketo` builder uses the [Paketo Full Builder](https://paketo.io/docs/concepts/builders/#full) to build your application. If your application fails to build using one builder, it is recommended that you attempt the other builders which may detect configuration parameters slightly differently.
-
-If Porter detects the runtime for your application, it will always use the detected buildpack to build your application. If your application requires multiple buildpacks (for example, a `rails` app that uses `npm` to compile static assets), you can add multiple buildpacks to the configuration that will be attempted.
-
-If your runtime isn't supported in any of these builders, you can input the URL to an open-source buildpack hosted on a public Github repository.
-
-![image](https://imagedelivery.net/l4LYM_vOYKe7O1NCT_Nc_g/5435c6ce-4dd1-4c41-3b07-931373df7a00/large)
+### Step 8: Set Up CI/CD through Github Actions
+After clicking the **Deploy app** button at the bottom of the form, you will see instructions for setting up CI/CD through Github Actions. This will allow you to automatically build and deploy your application on pushes to your source branch. Follow the instructions, then click **Deploy app** to deploy your application!
